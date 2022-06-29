@@ -52,8 +52,6 @@ spnhppzi<-function(formula,
   time <- resp[,1]
   event <- resp[,2]
   id <- resp[,3]
-  # print(length(id))
-  # print(max(id))
   IndRec<- resp[,4]
 
   data1<-as.data.frame(cbind(time,event,id,IndRec,X)) %>%

@@ -106,20 +106,17 @@ spsimrec <- function(N,
     for (i in 1:nr.cov) {
       dist.x[i] <- match.arg(dist.x[i], choices = c("binomial", "normal"))
       if (dist.x[i] == "binomial") {
-        #set.seed(1)
         x[, i] <- c(rbinom(N, 1, par.x[[i]]))
-        #set.seed(NULL)
+
       } else { # normally distributed covariate
         mu.x <- par.x[[i]][1]
         sigma.x <- par.x[[i]][2]
-        #set.seed(1)
         x[, i] <- c(rnorm(N, mean = mu.x, sd = sigma.x))
-        # set.seed(NULL)
-        #print(colMeans(x))
       }
     }
     return(x)
   }
+
   set.seed(123)
   if(nr.cov!=0){
     x<-gen_cov(N,
@@ -170,16 +167,17 @@ spsimrec <- function(N,
   else{colnames(rnd_ef1)<-c("ID","w")}
 
   ## Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
-  set.seed(123)
+  #set.seed(123)
   recurr <- t(rbinom(N, 1, pi))
   recurr1<-as.data.frame(t(rbind(ID,recurr)))
   colnames(recurr1)<-c("ID","recurr")
   # if(logist==1){
   #  pi<-1/(1+exp(-(1+x %*% beta.x)))
   # }
-  set.seed(NULL)
+ # print(recurr1)
+ # set.seed(NULL)
 
-  ## gen_data - Gera tempos de recorrências dos eventos  ====
+  ## gen_data - Gera tempos de ocorrência dos eventos  ====
   gen_data<-function(ID,
                      N,
                      dist.rec,
@@ -206,15 +204,29 @@ spsimrec <- function(N,
 
     ## Definição dos tempos de ocorrência dos primeiros eventos ====
     T<-NULL
+    T1<-NULL
+    IND<-NULL
     for (i in 1:N) {
+      t<-NULL
       U <- runif(1)
       if (dist.rec == "weibull") {
         t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) #Inversa da função acumulada (veja artigo Generating survival times to simulate pag 1717 tabela II)
+        ind<-0
+        if (t>fu[i]){
+          t<-fu[i]
+         # ind<-1
+          }
       }
       T1 <- cbind(ID[i],t)
-
+      # IND<-rbind(IND,cbind(ID[i],ind))
+      # print(IND)
+      # print(ID[i])
+      # print(recurr[i])
+      # print(T1)
       ## Definição dos tempos de ocorrência dos eventos subsequentes ====
-      if (recurr[i]==0){
+      if (recurr[i]==0 & t<fu[i]){
+        # print(ID[i])
+        # print(recurr[i])
         while (t < fu[i]) {
           U <- runif(1)
           t1 <- t
@@ -224,7 +236,7 @@ spsimrec <- function(N,
           #print(t)
           if (t >= fu[i]) break
           T1 <- rbind(T1,c(ID[i],t))
-          # print(T1)
+         # print(T1)
         }
       }
       T<-as.data.frame(rbind(T,T1))
@@ -240,9 +252,11 @@ spsimrec <- function(N,
       mutate(#individuo = group_indices(),
         ngroup=n(),
         rep=row_number(),
-        expand=case_when(ngroup==rep~2,TRUE~1)) %>%
+        expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu.max)))~2,TRUE~1),
+        expand1=expand)%>%
       expandRows("expand") %>%
       mutate(ngroup1=n(),
+             IndRec=case_when(ngroup1>2~1, TRUE~0),
              rep1=row_number(),
              begin=case_when(rep1==1~0,TRUE~lag(time)),
              end=case_when(ngroup1==rep1~fu.max, TRUE~time),
@@ -251,12 +265,17 @@ spsimrec <- function(N,
       left_join(x1,by="ID") %>%
       left_join(rnd_ef1,by="ID") %>%
       left_join(recurr1,by="ID") %>%
-      mutate(IndRec=1-recurr) %>%
-      select(-c(time,ngroup,rep))
+      #mutate(IndRec=1-recurr) %>%
+      select(-c(time,ngroup))
+      #filter(begin!=fu.max)
+    #return(list(tab=tab,IND=IND))
     return(tab)
     #set.seed(NULL)
   }
 
   tab <-gen_data(ID, N, dist.rec, par.rec, fu, x,rnd_ef)
   return(tab)
+  # tab1<-tab[1]
+  # IND<-tab[2]
+  # return(list(tab1=tab1,IND=IND))
 }

@@ -65,7 +65,7 @@ spsimrec <- function(N,
                       beta.x = NULL,
                       dist.z = c("gamma","lognormal"),
                       random.ef=0,
-                      ent.dist.z=0,
+                      tp_rnd_ef=0,
                       par.z=0,
                       dist.rec,
                       par.rec=0,
@@ -108,7 +108,7 @@ spsimrec <- function(N,
       if (dist.x[i] == "binomial") {
         x[, i] <- c(rbinom(N, 1, par.x[[i]]))
 
-      } else { # normally distributed covariate
+      } else {
         mu.x <- par.x[[i]][1]
         sigma.x <- par.x[[i]][2]
         x[, i] <- c(rnorm(N, mean = mu.x, sd = sigma.x))
@@ -124,30 +124,30 @@ spsimrec <- function(N,
                par.x,
                beta.x)
     x1<-as.data.frame(cbind(ID,x))
-    colnames(x1)<-c("ID","X1","X2")
+    colnames(x1)<-c("ID",paste("X",c(1:nr.cov),sep=""))
   }else{x<-rep(0,N)
   x1<-as.data.frame(cbind(ID,x))
   colnames(x1)<-c("ID","X")}
   set.seed(NULL)
 
   ## gen_rnd_ef - Gera efeitos aleatórios  ====
-  gen_rnd_ef<-function(N, ID, dist.z, ent.dist.z, par.z,mu.omega,sigma.omega){
-    if (ent.dist.z==0){
+  gen_rnd_ef<-function(N, ID, dist.z, tp_rnd_ef, par.z,mu.omega,sigma.omega){
+    if (tp_rnd_ef==0){ #Entra com parâmetros para Z. {Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
       if(par.z==0){# if par.z=0 then frailty=1 for all
         z <- rep(1, N)}
       else{
-        dist.z <- match.arg(dist.z, choices = c("gamma", "lognormal"))
-        if (dist.z == "gamma") { # gamma-frailty  -- #{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
-          aGamma <- 1 / par.z
-          rnd_ef <- rgamma(N, shape = aGamma, scale = 1 / aGamma)}
-        else { # lognormal  -- E(Z)=1
-          mu <- log(1 / sqrt(par.z + 1))
-          sigma <- sqrt(log(par.z + 1))
-          rnd_ef <- exp(rnorm(N, mean = mu, sd = sigma))
+         dist.z <- match.arg(dist.z, choices = c("gamma", "lognormal"))
+         if (dist.z == "gamma") { # gamma-frailty
+           aGamma <- 1 / par.z
+           rnd_ef <- rgamma(N, shape = aGamma, scale = 1 / aGamma)}
+         else { # lognormal  -- E(Z)=1
+           mu <- log(1 / sqrt(par.z + 1))
+           sigma <- sqrt(log(par.z + 1))
+           rnd_ef <- exp(rnorm(N, mean = mu, sd = sigma))
         }
       }
     }
-    else{ # lognormal  #{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
+    else{ #Entra com parâmetros para \omega. {Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
       rnd_ef <- rnorm(N, mean = mu.omega, sd = sigma.omega)
     }
     return(rnd_ef)
@@ -155,27 +155,33 @@ spsimrec <- function(N,
 
   if(random.ef!=0){
     set.seed(321)
-    rnd_ef<- gen_rnd_ef(N, ID, dist.z, ent.dist.z, par.z,mu.omega,sigma.omega)
+    rnd_ef<- gen_rnd_ef(N, ID, dist.z, tp_rnd_ef, par.z,mu.omega,sigma.omega)
     set.seed(NULL)
   }else{
     rnd_ef<-rep(1,N)
-    ent.dist.z<-0
+    tp_rnd_ef<-0
   }
 
   rnd_ef1<-as.data.frame(cbind(ID,rnd_ef))
-  if(ent.dist.z==0){colnames(rnd_ef1)<-c("ID","z")}
+  if(tp_rnd_ef==0){colnames(rnd_ef1)<-c("ID","z")}
   else{colnames(rnd_ef1)<-c("ID","w")}
 
   ## Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
-  #set.seed(123)
+
+  gen_zi<-function(ID,N,pi){
   recurr <- t(rbinom(N, 1, pi))
+  }
+  set.seed(234)
+  recurr<-gen_zi(ID,N,pi)
+  set.seed(NULL)
+
   recurr1<-as.data.frame(t(rbind(ID,recurr)))
   colnames(recurr1)<-c("ID","recurr")
+
   # if(logist==1){
   #  pi<-1/(1+exp(-(1+x %*% beta.x)))
   # }
- # print(recurr1)
- # set.seed(NULL)
+
 
   ## gen_data - Gera tempos de ocorrência dos eventos  ====
   gen_data<-function(ID,
@@ -194,7 +200,7 @@ spsimrec <- function(N,
     ## Cálculo de alpha1_este e exp_eta ====
     # Considera a forma utilizada para introdução de efeitos aleatórios
     if(nr.cov==0){exp_eta=rep(1,N)}
-    else if(ent.dist.z==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
+    else if(tp_rnd_ef==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
       exp_eta <- exp(x %*% beta.x) * rnd_ef
     }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
       exp_eta <- exp(x %*% beta.x + rnd_ef)
@@ -218,11 +224,7 @@ spsimrec <- function(N,
           }
       }
       T1 <- cbind(ID[i],t)
-      # IND<-rbind(IND,cbind(ID[i],ind))
-      # print(IND)
-      # print(ID[i])
-      # print(recurr[i])
-      # print(T1)
+
       ## Definição dos tempos de ocorrência dos eventos subsequentes ====
       if (recurr[i]==0 & t<fu[i]){
         # print(ID[i])
@@ -246,8 +248,6 @@ spsimrec <- function(N,
 
     ## Consolida tabela contendo os dados de saída ====
     tab <-T %>%
-      # pivot_longer(!ID, names_to = "EVENT", values_to = "time") %>%
-      # filter(!is.na(time)) %>%
       group_by(ID)%>%
       mutate(#individuo = group_indices(),
         ngroup=n(),
@@ -265,17 +265,11 @@ spsimrec <- function(N,
       left_join(x1,by="ID") %>%
       left_join(rnd_ef1,by="ID") %>%
       left_join(recurr1,by="ID") %>%
-      #mutate(IndRec=1-recurr) %>%
       select(-c(time,ngroup))
-      #filter(begin!=fu.max)
-    #return(list(tab=tab,IND=IND))
     return(tab)
     #set.seed(NULL)
   }
 
   tab <-gen_data(ID, N, dist.rec, par.rec, fu, x,rnd_ef)
   return(tab)
-  # tab1<-tab[1]
-  # IND<-tab[2]
-  # return(list(tab1=tab1,IND=IND))
 }

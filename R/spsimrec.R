@@ -167,15 +167,21 @@ spsimrec <- function(N,
   else{colnames(rnd_ef1)<-c("ID","w")}
 
   ## Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
-  #set.seed(123)
+
+  gen_zi<-function(ID,N,pi){
   recurr <- t(rbinom(N, 1, pi))
+  }
+  set.seed(234)
+  recurr<-gen_zi(ID,N,pi)
+  set.seed(NULL)
+
   recurr1<-as.data.frame(t(rbind(ID,recurr)))
   colnames(recurr1)<-c("ID","recurr")
+
   # if(logist==1){
   #  pi<-1/(1+exp(-(1+x %*% beta.x)))
   # }
- # print(recurr1)
- # set.seed(NULL)
+
 
   ## gen_data - Gera tempos de ocorrência dos eventos  ====
   gen_data<-function(ID,
@@ -218,11 +224,7 @@ spsimrec <- function(N,
           }
       }
       T1 <- cbind(ID[i],t)
-      # IND<-rbind(IND,cbind(ID[i],ind))
-      # print(IND)
-      # print(ID[i])
-      # print(recurr[i])
-      # print(T1)
+
       ## Definição dos tempos de ocorrência dos eventos subsequentes ====
       if (recurr[i]==0 & t<fu[i]){
         # print(ID[i])
@@ -246,8 +248,6 @@ spsimrec <- function(N,
 
     ## Consolida tabela contendo os dados de saída ====
     tab <-T %>%
-      # pivot_longer(!ID, names_to = "EVENT", values_to = "time") %>%
-      # filter(!is.na(time)) %>%
       group_by(ID)%>%
       mutate(#individuo = group_indices(),
         ngroup=n(),
@@ -265,17 +265,11 @@ spsimrec <- function(N,
       left_join(x1,by="ID") %>%
       left_join(rnd_ef1,by="ID") %>%
       left_join(recurr1,by="ID") %>%
-      #mutate(IndRec=1-recurr) %>%
       select(-c(time,ngroup))
-      #filter(begin!=fu.max)
-    #return(list(tab=tab,IND=IND))
     return(tab)
     #set.seed(NULL)
   }
 
   tab <-gen_data(ID, N, dist.rec, par.rec, fu, x,rnd_ef)
   return(tab)
-  # tab1<-tab[1]
-  # IND<-tab[2]
-  # return(list(tab1=tab1,IND=IND))
 }

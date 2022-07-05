@@ -7,8 +7,8 @@ data{
   int m;
   int id[N];
   int n_ind [n];
-  int begin_int [n];
-  int end_int[n];
+  int begin_ind [n];
+  int end_ind[n];
   vector [n] n_ind1;
   vector [N] event;
   vector [n] max_stop;
@@ -66,9 +66,9 @@ if(p>0){
   log_lambda0_event= event .*log_lambda0;
 
  for ( b in 1:n) {
-        sum_log_lambda0[b]=sum(log_lambda0_event[begin_int[b]:end_int[b]]);
+        sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
         if(p>0){
-       sum_eta[b]=sum(eta_event[begin_int[b]:end_int[b]]);
+       sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
                }
  }
 

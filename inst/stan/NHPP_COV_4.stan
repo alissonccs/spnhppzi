@@ -8,8 +8,8 @@ data{
   int m;
   int n_ind [n];
   int id[N];
-  int begin_int [n];
-  int end_int[n];
+  // int begin_int [n];
+  // int end_int[n];
   vector [N] event;
   vector [n] max_stop;
   vector [N] time;

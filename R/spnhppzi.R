@@ -45,8 +45,6 @@ spnhppzi<-function(formula,
   mf <- stats::model.frame(formula=formula, data=data)
   Terms <- stats::terms(mf)
   resp <- stats::model.response(mf)
-  #print(head(resp))
-
   X <- stats::model.matrix(formula, data = mf, rhs = 1)[,-1, drop = FALSE]
   Z <- stats::model.matrix(formula, data = mf, rhs = 2)#[,-1, drop = FALSE]
   time <- resp[,1]
@@ -74,12 +72,12 @@ spnhppzi<-function(formula,
   position_ind<-as.data.frame(id) %>%
     group_by(id) %>%
     summarise(n_ind=n()) %>%
-    mutate(end_int=cumsum(n_ind), begin_int=end_int-n_ind+1) %>%
-    select(n_ind,begin_int,end_int)
+    mutate(end_ind=cumsum(n_ind), begin_ind=end_ind-n_ind+1) %>%
+    select(n_ind,begin_ind,end_ind)
 
   n_ind<-as.vector(unlist(position_ind$n_ind))
-  begin_int<-as.vector(unlist(position_ind$begin_int))
-  end_int<-as.vector(unlist(position_ind$end_int))
+  begin_ind<-as.vector(unlist(position_ind$begin_ind))
+  end_ind<-as.vector(unlist(position_ind$end_ind))
 
   # print(head(n_ind))
 
@@ -149,7 +147,7 @@ spnhppzi<-function(formula,
 
   data_model <- list(id=id,evento=event,time=time, X=X, Z=Z, N=N, Xy=Xy, Z1=Z1,
                      max_stop=max_stop, n=n, p=p, q=q, IndR=IndRec, IndRec2=IndRec2, approach=approach, FR=FR, ZI=ZI,
-                     begin_int=begin_int,end_int=end_int,
+                     begin_ind=begin_ind,end_ind=end_ind,
                      n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega,shp_sigma_omega=shp_sigma_omega, scl_sigma_omega=scl_sigma_omega,
                      sigma_omega=sigma_omega,
                      shp_alpha1=shp_alpha1,
@@ -170,7 +168,8 @@ spnhppzi<-function(formula,
          #
         #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
       #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
-        mod<- stanmodels$NHPP_ZI_1_08_03_2022
+       # mod<- stanmodels$NHPP_ZI_1_08_03_2022
+        mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
       }
       else{
       #mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
@@ -195,7 +194,8 @@ spnhppzi<-function(formula,
       #
         #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_FRAT_09_03_2022.stan")
        # mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_FRAT_09_03_2022.stan")
-        mod<- stanmodels$NHPP_ZI_FRAT_09_03_2022
+       #mod<- stanmodels$NHPP_ZI_FRAT_09_03_2022
+        mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_FRAT_04_07_2022.stan")
       }
       else{
       #mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_FRAT_16_03_2022.stan")

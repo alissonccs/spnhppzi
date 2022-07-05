@@ -14,7 +14,7 @@ spsimrec(
   beta.x = NULL,
   dist.z = c("gamma", "lognormal"),
   random.ef = 0,
-  ent.dist.z = 0,
+  tp_rnd_ef = 0,
   par.z = 0,
   dist.rec,
   par.rec = 0,

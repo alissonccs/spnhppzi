@@ -211,13 +211,13 @@ spsimrec <- function(N,
     ## Definição dos tempos de ocorrência dos primeiros eventos ====
     T<-NULL
     T1<-NULL
-    IND<-NULL
+   # IND<-NULL
     for (i in 1:N) {
       t<-NULL
       U <- runif(1)
       if (dist.rec == "weibull") {
-        t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) #Inversa da função acumulada (veja artigo Generating survival times to simulate pag 1717 tabela II)
-        ind<-0
+        t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
+        #ind<-0
         if (t>fu[i]){
           t<-fu[i]
          # ind<-1

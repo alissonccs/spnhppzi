@@ -169,7 +169,8 @@ spnhppzi<-function(formula,
         #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
       #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
        # mod<- stanmodels$NHPP_ZI_1_08_03_2022
-        mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
+        #mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
+        mod<- stanmodels$NHPP_ZI_03_07_2022
       }
       else{
       #mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
@@ -195,7 +196,8 @@ spnhppzi<-function(formula,
         #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_FRAT_09_03_2022.stan")
        # mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_FRAT_09_03_2022.stan")
        #mod<- stanmodels$NHPP_ZI_FRAT_09_03_2022
-        mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_FRAT_04_07_2022.stan")
+        #mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_FRAT_04_07_2022.stan")
+        mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
       }
       else{
       #mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_FRAT_16_03_2022.stan")

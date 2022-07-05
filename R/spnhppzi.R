@@ -24,6 +24,7 @@ spnhppzi<-function(formula,
                        baseline = c("plp1", "plp2"),
                        approach = c("mle", "bayes"),
                        n_iter=4000,
+                       n_cores=1,
                        ZI = c("true","false"),
                        FR= c("true","false"),
                        initial,
@@ -215,14 +216,14 @@ spnhppzi<-function(formula,
 
     if(approach==1){
       #result_b<- sampling(mod, data = data_model, cores = 4, iter=4000)
-      result_b<- sampling(mod, data = data_model, cores = 4, iter=n_iter)
+      result_b<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter)
       # result_b<- sampling(mod, data = data_model, cores = 4, iter=4000,  control = list(max_treedepth = 50,adapt_delta = 0.999))
       return(result_b)
     }
   }
   else{
     #result_c<- sampling(mod, data = data_model, cores = 4, iter=4000)
-   result_c<- sampling(mod, data = data_model, cores = 4, iter=n_iter)
+   result_c<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter)
     #result_c<- sampling(mod, data = data_model, cores = 4, iter=4000, control = list(max_treedepth = 50,adapt_delta = 0.999))
     return(result_c)
   }

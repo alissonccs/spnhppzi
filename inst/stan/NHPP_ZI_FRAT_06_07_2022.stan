@@ -61,8 +61,6 @@ if(p>0){
      exp_etay = omega .*exp(Xy*beta);
         }
 
-<<<<<<< HEAD
-
 //         if(p>0){
 //   if (tp_rnd_ef==0){
 //   for (i in 1:N){
@@ -80,8 +78,6 @@ if(p>0){
 //         }
 // }
 
-=======
->>>>>>> 54b3659533daeda83cba63c59e07d7c576131021
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
   log_lambda0 = lambda_plp2(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;

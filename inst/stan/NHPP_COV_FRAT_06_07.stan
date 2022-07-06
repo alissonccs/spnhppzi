@@ -116,7 +116,8 @@ if(approach==1 && tp_prior==1){
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
             sigma_omega ~ gamma(shp_sigma_omega, scl_sigma_omega);
+             omega ~ gamma(sigma_omega,sigma_omega);
             //omega~ normal(mu_omega,sigma_omega);
-            omega~ normal(-(sigma_omega)^2/2,sigma_omega);
+            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
                                }
   }

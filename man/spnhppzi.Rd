@@ -10,6 +10,7 @@ spnhppzi(
   baseline = c("plp1", "plp2"),
   approach = c("mle", "bayes"),
   n_iter = 4000,
+  n_cores = 1,
   ZI = c("true", "false"),
   FR = c("true", "false"),
   initial,

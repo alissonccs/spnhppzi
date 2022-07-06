@@ -35,7 +35,7 @@ parameters{
   vector  <lower=0> [m] alpha;
   vector [p] beta;
   real <lower=0> sigma_omega;
-  vector [n] omega;
+  vector <lower=0> [n] omega;
             }
 
 transformed parameters {

@@ -516,7 +516,7 @@ public:
             omega(j_1__) = vals_r__[pos__++];
         }
         try {
-            writer__.vector_unconstrain(omega);
+            writer__.vector_lb_unconstrain(0, omega);
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable omega: ") + e.what()), current_statement_begin__, prog_reader__());
         }
@@ -570,9 +570,9 @@ public:
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> omega;
             (void) omega;  // dummy to suppress unused var warning
             if (jacobian__)
-                omega = in__.vector_constrain(n, lp__);
+                omega = in__.vector_lb_constrain(0, n, lp__);
             else
-                omega = in__.vector_constrain(n);
+                omega = in__.vector_lb_constrain(0, n);
             // transformed parameters
             current_statement_begin__ = 63;
             validate_non_negative_index("log_lik", "n", n);
@@ -792,7 +792,7 @@ public:
         }
         double sigma_omega = in__.scalar_lb_constrain(0);
         vars__.push_back(sigma_omega);
-        Eigen::Matrix<double, Eigen::Dynamic, 1> omega = in__.vector_constrain(n);
+        Eigen::Matrix<double, Eigen::Dynamic, 1> omega = in__.vector_lb_constrain(0, n);
         size_t omega_j_1_max__ = n;
         for (size_t j_1__ = 0; j_1__ < omega_j_1_max__; ++j_1__) {
             vars__.push_back(omega(j_1__));

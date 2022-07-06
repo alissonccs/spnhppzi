@@ -37,7 +37,11 @@ stan::io::program_reader prog_reader__() {
     reader.add_event(0, 0, "start", "/chunks/mylib.stan");
     reader.add_event(22, 22, "end", "/chunks/mylib.stan");
     reader.add_event(22, 1, "restart", "model_NHPP_ZI_FRAT_06_07_2022");
+<<<<<<< HEAD
     reader.add_event(165, 142, "end", "model_NHPP_ZI_FRAT_06_07_2022");
+=======
+    reader.add_event(147, 124, "end", "model_NHPP_ZI_FRAT_06_07_2022");
+>>>>>>> 54b3659533daeda83cba63c59e07d7c576131021
     return reader;
 }
 template <typename T0__, typename T1__>
@@ -665,6 +669,7 @@ public:
                 current_statement_begin__ = 82;
                 stan::math::assign(exp_etay, elt_multiply(omega, stan::math::exp(multiply(Xy, beta))));
             }
+<<<<<<< HEAD
             current_statement_begin__ = 103;
             stan::math::assign(Lambda0, Lambda_plp2(max_stop, alpha, n, pstream__));
             current_statement_begin__ = 104;
@@ -681,10 +686,29 @@ public:
                         lp_accum__.add(log_sum_exp(bernoulli_log(1, pii), (get_base1(Lambda0, i, "Lambda0", 1) + bernoulli_log(0, pii))));
                     } else {
                         current_statement_begin__ = 123;
+=======
+            current_statement_begin__ = 85;
+            stan::math::assign(Lambda0, Lambda_plp2(max_stop, alpha, n, pstream__));
+            current_statement_begin__ = 86;
+            stan::math::assign(log_lambda0, lambda_plp2(time, N, alpha, pstream__));
+            current_statement_begin__ = 87;
+            stan::math::assign(log_lambda0_event, elt_multiply(event, log_lambda0));
+            current_statement_begin__ = 97;
+            if (as_bool(logical_eq(p, 0))) {
+                current_statement_begin__ = 98;
+                for (int i = 1; i <= n; ++i) {
+                    current_statement_begin__ = 100;
+                    if (as_bool(logical_eq(get_base1(IndRec2, i, "IndRec2", 1), 0))) {
+                        current_statement_begin__ = 101;
+                        lp_accum__.add(log_sum_exp(bernoulli_log(1, pii), (get_base1(Lambda0, i, "Lambda0", 1) + bernoulli_log(0, pii))));
+                    } else {
+                        current_statement_begin__ = 105;
+>>>>>>> 54b3659533daeda83cba63c59e07d7c576131021
                         lp_accum__.add(((bernoulli_log(0, pii) + get_base1(Lambda0, i, "Lambda0", 1)) + sum(stan::model::rvalue(log_lambda0_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_ind, i, "begin_ind", 1), get_base1(end_ind, i, "end_ind", 1)), stan::model::nil_index_list()), "log_lambda0_event"))));
                     }
                 }
             } else {
+<<<<<<< HEAD
                 current_statement_begin__ = 129;
                 for (int i = 1; i <= n; ++i) {
                     current_statement_begin__ = 130;
@@ -693,10 +717,21 @@ public:
                         lp_accum__.add(log_sum_exp(bernoulli_log(1, pii), ((get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1)) + bernoulli_log(0, pii))));
                     } else {
                         current_statement_begin__ = 135;
+=======
+                current_statement_begin__ = 111;
+                for (int i = 1; i <= n; ++i) {
+                    current_statement_begin__ = 112;
+                    if (as_bool(logical_eq(get_base1(IndRec2, i, "IndRec2", 1), 0))) {
+                        current_statement_begin__ = 113;
+                        lp_accum__.add(log_sum_exp(bernoulli_log(1, pii), ((get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1)) + bernoulli_log(0, pii))));
+                    } else {
+                        current_statement_begin__ = 117;
+>>>>>>> 54b3659533daeda83cba63c59e07d7c576131021
                         lp_accum__.add((((bernoulli_log(0, pii) + (get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1))) + sum(stan::model::rvalue(log_lambda0_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_ind, i, "begin_ind", 1), get_base1(end_ind, i, "end_ind", 1)), stan::model::nil_index_list()), "log_lambda0_event"))) + sum(stan::model::rvalue(eta_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_ind, i, "begin_ind", 1), get_base1(end_ind, i, "end_ind", 1)), stan::model::nil_index_list()), "eta_event"))));
                     }
                 }
             }
+<<<<<<< HEAD
             current_statement_begin__ = 154;
             if (as_bool((primitive_value(logical_eq(approach, 1)) && primitive_value(logical_eq(tp_prior, 1))))) {
                 current_statement_begin__ = 155;
@@ -708,6 +743,19 @@ public:
                 current_statement_begin__ = 158;
                 lp_accum__.add(gamma_log<propto__>(sigma_omega, shp_sigma_omega, scl_sigma_omega));
                 current_statement_begin__ = 159;
+=======
+            current_statement_begin__ = 136;
+            if (as_bool((primitive_value(logical_eq(approach, 1)) && primitive_value(logical_eq(tp_prior, 1))))) {
+                current_statement_begin__ = 137;
+                lp_accum__.add(gamma_log<propto__>(get_base1(alpha, 1, "alpha", 1), shp_alpha1, scl_alpha1));
+                current_statement_begin__ = 138;
+                lp_accum__.add(gamma_log<propto__>(get_base1(alpha, 2, "alpha", 1), shp_alpha2, scl_alpha2));
+                current_statement_begin__ = 139;
+                lp_accum__.add(normal_log<propto__>(beta, mu_beta, sigma_beta));
+                current_statement_begin__ = 140;
+                lp_accum__.add(gamma_log<propto__>(sigma_omega, shp_sigma_omega, scl_sigma_omega));
+                current_statement_begin__ = 141;
+>>>>>>> 54b3659533daeda83cba63c59e07d7c576131021
                 lp_accum__.add(gamma_log<propto__>(omega, sigma_omega, sigma_omega));
             }
             }

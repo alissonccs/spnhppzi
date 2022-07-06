@@ -164,7 +164,7 @@ spnhppzi<-function(formula,
     }
     else{
       if(q==0){
-      mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
+    #  mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
            #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
       #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
        # mod<- stanmodels$NHPP_ZI_1_08_03_2022

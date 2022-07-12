@@ -37,7 +37,7 @@ stan::io::program_reader prog_reader__() {
     reader.add_event(0, 0, "start", "/chunks/mylib.stan");
     reader.add_event(22, 22, "end", "/chunks/mylib.stan");
     reader.add_event(22, 1, "restart", "model_NHPP_COV_FRAT_06_07");
-    reader.add_event(145, 122, "end", "model_NHPP_COV_FRAT_06_07");
+    reader.add_event(146, 123, "end", "model_NHPP_COV_FRAT_06_07");
     return reader;
 }
 template <typename T0__, typename T1__>
@@ -719,8 +719,8 @@ public:
                 lp_accum__.add(normal_log<propto__>(beta, mu_beta, sigma_beta));
                 current_statement_begin__ = 139;
                 lp_accum__.add(gamma_log<propto__>(sigma_omega, shp_sigma_omega, scl_sigma_omega));
-                current_statement_begin__ = 141;
-                lp_accum__.add(normal_log<propto__>(omega, (-(pow(sigma_omega, 2)) / 2), sigma_omega));
+                current_statement_begin__ = 140;
+                lp_accum__.add(gamma_log<propto__>(omega, sigma_omega, sigma_omega));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());

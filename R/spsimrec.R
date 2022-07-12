@@ -2,58 +2,14 @@
 #' @aliases spsimrec
 #' @export
 #' @description Recur:
-#' @param cens.prob  Gives the probability of being censored due to loss to follow-up before
-#'   \code{fu.max}. For a random set of individuals defined by a B(N,\code{cens.prob})-distribution,
-#'   the time to censoring is generated from a uniform
-#'   distribution on \code{[0, fu.max]}. Default is \code{cens.prob=0}, i.e. no censoring
-#'   due to loss to follow-up.
-#' @param dist.x     Distribution of the covariate(s) \eqn{X}. If there is more than one covariate,
-#'   \code{dist.x} must be a vector of distributions with one entry for each covariate. Possible
-#'   values are \code{"binomial"} and \code{"normal"}, default is \code{dist.x="binomial"}.
-#' @param par.x      Parameters of the covariate distribution(s). For \code{"binomial", par.x} is
-#'   the probability for \eqn{x=1}. For \code{"normal"}, \code{par.x=c(}\eqn{\mu, \sigma}\code{)}
-#'   where \eqn{\mu} is the mean and \eqn{\sigma} is the standard deviation of a normal distribution.
-#'   If one of the covariates is defined to be normally distributed, \code{par.x} must be a list,
-#'   e.g. \code{ dist.x <- c("binomial", "normal")} and \code{par.x  <- list(0.5, c(1,2))}.
-#'   Default is \code{par.x=0}, i.e. \eqn{x=0} for all individuals.
-#' @param beta.x  Regression coefficient(s) for the covariate(s) \eqn{x}. If there is more than one
-#'   covariate, \code{beta.x} must be a vector of coefficients with one entry for each covariate.
-#'   \code{simrec} generates as many covariates as there are entries in \code{beta.x}. Default is
-#'   \code{beta.x=0}, corresponding to no effect of the covariate \eqn{x}.
-#' @param dist.z     Distribution of the frailty variable \eqn{Z} with \eqn{E(Z)=1} and
-#'   \eqn{Var(Z)=\theta}. Possible values are \code{"gamma"} for a Gamma distributed frailty
-#'    and \code{"lognormal"} for a lognormal distributed frailty.
-#'    Default is \code{dist.z="gamma"}.
-#' @param par.z      Parameter \eqn{\theta} for the frailty distribution: this parameter gives
-#'   the variance of the frailty variable \eqn{Z}.
-#'   Default is \code{par.z=0}, which causes \eqn{Z=1}, i.e. no frailty effect.
-#' @param dist.rec   Form of the baseline hazard function. Possible values are \code{"weibull"} or
-#'   \code{"gompertz"} or \code{"lognormal"} or \code{"step"}.
-#' @param par.rec  Parameters for the distribution of the event data.
-#'   If \code{dist.rec="weibull"} the  hazard function is \deqn{\lambda_0(t)=\lambda*\nu* t^{\nu - 1},}
-#'   where \eqn{\lambda>0} is the scale and \eqn{\nu>0} is the shape parameter. Then
-#'   \code{par.rec=c(}\eqn{\lambda, \nu}\code{)}. A special case
-#'   of this is the exponential distribution for \eqn{\nu=1}.\\
-#'   If \code{dist.rec="gompertz"}, the hazard function is \deqn{\lambda_0(t)=\lambda*exp(\alpha t),}
-#'   where \eqn{\lambda>0} is the scale and \eqn{\alpha\in(-\infty,+\infty)} is the shape parameter.
-#'   Then \code{par.rec=c(}\eqn{\lambda, \alpha}\code{)}.\\
-#'   If \code{dist.rec="lognormal"}, the hazard function is
-#'   \deqn{\lambda_0(t)=[(1/(\sigma t))*\phi((ln(t)-\mu)/\sigma)]/[\Phi((-ln(t)-\mu)/\sigma)],}
-#'   where \eqn{\phi} is the probability density function and \eqn{\Phi} is the cumulative
-#'   distribution function of the standard normal distribution, \eqn{\mu\in(-\infty,+\infty)} is a
-#'   location parameter and \eqn{\sigma>0} is a shape parameter. Then \code{par.rec=c(}\eqn{\mu,\sigma}\code{)}.
-#'   Please note, that specifying \code{dist.rec="lognormal"} together with some covariates does not
-#'   specify the usual lognormal model (with covariates specified as effects on the parameters of the
-#'   lognormal distribution resulting in non-proportional hazards), but only defines the baseline
-#'   hazard and incorporates covariate effects using the proportional hazard assumption.\\
-#'   If \code{dist.rec="step"} the hazard function is \deqn{\lambda_0(t)=a, t<=t_1, and \lambda_0(t)=b, t>t_1}.
-#'   Then \code{par.rec=c(}\eqn{a,b,t_1}\code{)}.
-#' @param pfree Probability that after experiencing an event the individual is not at risk
-#'   for experiencing further events for a length of \code{dfree} time units.
-#'   Default is \code{pfree=0}.
-#' @param dfree Length of the risk-free interval. Must be in the same time unit as \code{fu.max}.
-#'  Default is \code{dfree=0}, i.e. the individual is continously at risk for experiencing
-#'  events until end of follow-up.
+#' @param cens.prob  Probabiidade de apresentar censura antes do período máximo de acompanhamento.
+#' @param dist.x     Distribuição das Covariáveis. Binomial ou normal.
+#' @param par.x      Parâmetros das distribuições das covariáveis.
+#' @param beta.x     Coeficiente de regressão das covariáveis.
+#' @param dist.z     Distribuição do efeito aleatório. Gamma ou lognormal.
+#' @param par.z      Parâmetros da distribuição do efeito aleatório.
+#' @param dist.rec   Forma da função de intensidade.  "Weibull" (Lei de potência)
+#' @param par.rec    Parâmetros da função de intensidade. Escala e forma
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
 spsimrec <- function(N,
@@ -117,7 +73,7 @@ spsimrec <- function(N,
     return(x)
   }
 
-  set.seed(123)
+  set.seed(1)
   if(nr.cov!=0){
     x<-gen_cov(N,
                dist.x,

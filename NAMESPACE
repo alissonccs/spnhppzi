@@ -2,6 +2,7 @@
 
 export(Recur)
 export(func_sim)
+export(gencovfu)
 export(simrec_sp)
 export(simrecev)
 export(spnhppzi)

@@ -6,12 +6,13 @@
 \usage{
 spsimrec(
   N,
-  fu.min,
-  fu.max,
-  cens.prob = 0,
-  dist.x = NULL,
-  par.x = NULL,
+  nr.cov,
   beta.x = NULL,
+  x,
+  x1,
+  fu,
+  fu.max,
+  fu.min,
   dist.z = c("gamma", "lognormal"),
   random.ef = 0,
   tp_rnd_ef = 0,
@@ -26,12 +27,6 @@ spsimrec(
 )
 }
 \arguments{
-\item{cens.prob}{Probabiidade de apresentar censura antes do período máximo de acompanhamento.}
-
-\item{dist.x}{Distribuição das Covariáveis. Binomial ou normal.}
-
-\item{par.x}{Parâmetros das distribuições das covariáveis.}
-
 \item{beta.x}{Coeficiente de regressão das covariáveis.}
 
 \item{dist.z}{Distribuição do efeito aleatório. Gamma ou lognormal.}

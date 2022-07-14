@@ -140,8 +140,8 @@ private:
         int tp_hf;
         int m;
         std::vector<int> n_ind;
-        std::vector<int> begin_int;
-        std::vector<int> end_int;
+        std::vector<int> begin_ind;
+        std::vector<int> end_ind;
         vector_d event;
         vector_d max_stop;
         vector_d time;
@@ -232,24 +232,24 @@ public:
                 n_ind[k_0__] = vals_i__[pos__++];
             }
             current_statement_begin__ = 30;
-            validate_non_negative_index("begin_int", "n", n);
-            context__.validate_dims("data initialization", "begin_int", "int", context__.to_vec(n));
-            begin_int = std::vector<int>(n, int(0));
-            vals_i__ = context__.vals_i("begin_int");
+            validate_non_negative_index("begin_ind", "n", n);
+            context__.validate_dims("data initialization", "begin_ind", "int", context__.to_vec(n));
+            begin_ind = std::vector<int>(n, int(0));
+            vals_i__ = context__.vals_i("begin_ind");
             pos__ = 0;
-            size_t begin_int_k_0_max__ = n;
-            for (size_t k_0__ = 0; k_0__ < begin_int_k_0_max__; ++k_0__) {
-                begin_int[k_0__] = vals_i__[pos__++];
+            size_t begin_ind_k_0_max__ = n;
+            for (size_t k_0__ = 0; k_0__ < begin_ind_k_0_max__; ++k_0__) {
+                begin_ind[k_0__] = vals_i__[pos__++];
             }
             current_statement_begin__ = 31;
-            validate_non_negative_index("end_int", "n", n);
-            context__.validate_dims("data initialization", "end_int", "int", context__.to_vec(n));
-            end_int = std::vector<int>(n, int(0));
-            vals_i__ = context__.vals_i("end_int");
+            validate_non_negative_index("end_ind", "n", n);
+            context__.validate_dims("data initialization", "end_ind", "int", context__.to_vec(n));
+            end_ind = std::vector<int>(n, int(0));
+            vals_i__ = context__.vals_i("end_ind");
             pos__ = 0;
-            size_t end_int_k_0_max__ = n;
-            for (size_t k_0__ = 0; k_0__ < end_int_k_0_max__; ++k_0__) {
-                end_int[k_0__] = vals_i__[pos__++];
+            size_t end_ind_k_0_max__ = n;
+            for (size_t k_0__ = 0; k_0__ < end_ind_k_0_max__; ++k_0__) {
+                end_ind[k_0__] = vals_i__[pos__++];
             }
             current_statement_begin__ = 32;
             validate_non_negative_index("event", "N", N);
@@ -598,7 +598,7 @@ public:
                         lp_accum__.add(log_sum_exp(bernoulli_log(1, pii), ((get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1)) + bernoulli_log(0, pii))));
                     } else {
                         current_statement_begin__ = 106;
-                        lp_accum__.add((((bernoulli_log(0, pii) + (get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1))) + sum(stan::model::rvalue(log_lambda0_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_int, i, "begin_int", 1), get_base1(end_int, i, "end_int", 1)), stan::model::nil_index_list()), "log_lambda0_event"))) + sum(stan::model::rvalue(eta_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_int, i, "begin_int", 1), get_base1(end_int, i, "end_int", 1)), stan::model::nil_index_list()), "eta_event"))));
+                        lp_accum__.add((((bernoulli_log(0, pii) + (get_base1(Lambda0, i, "Lambda0", 1) * get_base1(exp_etay, i, "exp_etay", 1))) + sum(stan::model::rvalue(log_lambda0_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_ind, i, "begin_ind", 1), get_base1(end_ind, i, "end_ind", 1)), stan::model::nil_index_list()), "log_lambda0_event"))) + sum(stan::model::rvalue(eta_event, stan::model::cons_list(stan::model::index_min_max(get_base1(begin_ind, i, "begin_ind", 1), get_base1(end_ind, i, "end_ind", 1)), stan::model::nil_index_list()), "eta_event"))));
                     }
                 }
             }

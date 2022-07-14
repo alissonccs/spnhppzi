@@ -6,8 +6,8 @@ data{
   int <lower=0> tp_hf;
   int m;
   int n_ind [n];
-  int begin_int [n];
-  int end_int[n];
+  int begin_ind [n];
+  int end_ind[n];
   vector [N] event;
   vector [n] max_stop;
   vector [N] time;
@@ -55,9 +55,9 @@ model{
 
 
  // for ( b in 1:n) {
- //        sum_log_lambda0[b]=sum(log_lambda0_event[begin_int[b]:end_int[b]]);
+ //        sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
  //        if(p>0){
- //       sum_eta[b]=sum(eta_event[begin_int[b]:end_int[b]]);
+ //       sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
  //               }
  // }
 
@@ -84,8 +84,8 @@ model{
        // for (j in 1:N[id[i]]){
          target +=  bernoulli_lpmf(0 | pii)+
                     Lambda0[i]*exp_etay[i] +
-                    sum(log_lambda0_event[begin_int[i]:end_int[i]])+
-                    sum(eta_event[begin_int[i]:end_int[i]]);
+                    sum(log_lambda0_event[begin_ind[i]:end_ind[i]])+
+                    sum(eta_event[begin_ind[i]:end_ind[i]]);
                      }
         }
 

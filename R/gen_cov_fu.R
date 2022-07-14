@@ -34,11 +34,13 @@ gencovfu <- function(N,
     }
     return(fu)
   }
+
   #set.seed(123)
   fu<-gen_fu(N,cens.prob,fu.min,fu.max)
   #set.seed(NULL)
 
-  ## gen_cov - Gera covariáveis  ====
+
+    ## gen_cov - Gera covariáveis  ====
   gen_cov<-function(N,
                     dist.x,
                     par.x,
@@ -59,6 +61,7 @@ gencovfu <- function(N,
     return(x)
   }
 
+
   #set.seed(1)
   if(nr.cov!=0){
     x<-gen_cov(N,
@@ -70,8 +73,8 @@ gencovfu <- function(N,
   }else{x<-rep(0,N)
   x1<-as.data.frame(cbind(ID,x))
   colnames(x1)<-c("ID","X")}
-  #set.seed(NULL)
 
+  #set.seed(NULL)
   #cov.fu<-cbind(x,fu)
   return(list(N=N,x=x,x1=x1,fu=fu,nr.cov=nr.cov,beta.x=beta.x,fu.max=fu.max,fu.min=fu.min))
 }

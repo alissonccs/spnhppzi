@@ -48,7 +48,7 @@ spnhppzi<-function(formula,
   Terms <- stats::terms(mf)
   resp <- stats::model.response(mf)
   X <- stats::model.matrix(formula, data = mf, rhs = 1)[,-1, drop = FALSE]
-  Z <- stats::model.matrix(formula, data = mf, rhs = 2)#[,-1, drop = FALSE]
+  Z <- stats::model.matrix(formula, data = mf, rhs = 2)[,-1, drop = FALSE]
   time <- resp[,1]
   event <- resp[,2]
   id <- resp[,3]

@@ -177,7 +177,7 @@ spnhppzi<-function(formula,
          #
         #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
         #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
-        mod<- stanmodels$NHPP_ZI_LOGISTCOV_09_03_2022
+        mod<- stanmodels$NHPP_ZI_LOGISTCOV_23_07_2022
       }
     }
   }

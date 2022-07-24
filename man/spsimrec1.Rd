@@ -10,7 +10,7 @@ spsimrec1(
   x,
   x1,
   cov.rec,
-  cov.log,
+  cov.log = NULL,
   beta.x.rec = NULL,
   beta.x.log = NULL,
   fu,

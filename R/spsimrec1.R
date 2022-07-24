@@ -16,7 +16,7 @@ spsimrec1 <- function(N,
                      x,
                      x1,
                      cov.rec,
-                     cov.log,
+                     cov.log = NULL,
                      beta.x.rec = NULL,
                      beta.x.log = NULL,
                      fu,
@@ -136,8 +136,9 @@ spsimrec1 <- function(N,
 
   gen_zi<-function(ID,N,pi,logist,cov.log,beta.x.log){
     if(logist==0){
-  recurr <- t(rbinom(N, 1, pi))
+  recurr <- rbinom(N, 1, pi)
   # recurr<-rbind(recurr,pi)
+  pi<-rep(pi,N)
   return(list(recurr=recurr,pi=pi))
   }
 
@@ -156,12 +157,16 @@ spsimrec1 <- function(N,
   }
 
   recurr<-gen_zi(ID,N,pi,logist,cov.log,beta.x.log)
-  recurr1<-as.data.frame(t(rbind(ID,recurr)))
-  print(recurr1)
+  pi<-recurr$pi
+  print(pi)
+  recurr<-recurr$recurr
+  print(recurr)
+  recurr1<-as.data.frame((cbind(ID,recurr,pi)))
+
   colnames(recurr1)<-c("ID","recurr","pi")
+  print(recurr1)
 
-
-print(recurr1)
+#print(recurr1)
 
   ## gen_data - Gera tempos de ocorrência dos eventos  ====
   gen_data<-function(ID,

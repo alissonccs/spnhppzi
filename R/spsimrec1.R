@@ -41,8 +41,8 @@ spsimrec1 <- function(N,
 
   cov.rec<-x1 %>% select(cov.rec)
   cov.log<-x1 %>% select(cov.log)
-  print(cov.rec)
-  print(cov.log)
+  #print(cov.rec)
+  #print(cov.log)
 
   ## gen_fu - Gera períodos de acompanhamento  ====
   # gen_fu<-function(N,cens.prob,fu.min,fu.max){
@@ -128,7 +128,7 @@ spsimrec1 <- function(N,
   }
 
   rnd_ef1<-as.data.frame(cbind(ID,rnd_ef))
-  print(rnd_ef1)
+  #print(rnd_ef1)
   if(tp_rnd_ef==0){colnames(rnd_ef1)<-c("ID","z")}
   else{colnames(rnd_ef1)<-c("ID","w")}
 
@@ -143,14 +143,15 @@ spsimrec1 <- function(N,
   }
 
   else {
-   pi<-1/(1+exp(-(1+as.matrix(cov.log) %*% beta.x.log)))
+   # pi<-1/(1+exp(-(1+as.matrix(cov.log) %*% beta.x.log)))
+   pi<-1/(1+exp(-(as.matrix(cov.log) %*% beta.x.log)))
    recurr<-NULL
    for (i in 1:N){
      recurr[i] <- rbinom(1, 1,pi[i])
    }
    # recurr<-rbind(recurr,pi)
   }
-    print(recurr)
+    #print(recurr)
     #return(list(N=N,x=x,x1=x1,fu=fu,nr.cov=nr.cov,beta.x=beta.x,fu.max=fu.max,fu.min=fu.min))
     return(list(recurr=recurr,pi=pi))
     #return(recurr)
@@ -158,9 +159,9 @@ spsimrec1 <- function(N,
 
   recurr<-gen_zi(ID,N,pi,logist,cov.log,beta.x.log)
   pi<-recurr$pi
-  print(pi)
+  #print(pi)
   recurr<-recurr$recurr
-  print(recurr)
+  #print(recurr)
   recurr1<-as.data.frame((cbind(ID,recurr,pi)))
 
   colnames(recurr1)<-c("ID","recurr","pi")
@@ -183,8 +184,8 @@ spsimrec1 <- function(N,
       alpha2 <- par.rec[2]
     }
 
-    print(cov.rec)
-    print(beta.x.rec)
+    #print(cov.rec)
+    #print(beta.x.rec)
     ## Cálculo de alpha1_este e exp_eta ====
     # Considera a forma utilizada para introdução de efeitos aleatórios
     if(nr.cov.rec==0){exp_eta=rep(1,N)}

@@ -165,7 +165,7 @@ spsimrec1 <- function(N,
   recurr1<-as.data.frame((cbind(ID,recurr,pi)))
 
   colnames(recurr1)<-c("ID","recurr","pi")
-  print(recurr1)
+ # print(recurr1)
 
 #print(recurr1)
 

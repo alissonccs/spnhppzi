@@ -53,7 +53,7 @@ parameters{
  vector [p == 0 ? 0 : N] eta_event ;
  vector[q == 0 ? 0 : n] eta2;
  //vector [N] eta2_ ;
- vector[n] omega;
+ vector[n] nu;
  vector[p == 0 ? 0 : n] exp_etay;
  vector [n] sum_log_lambda0 = rep_vector(0, n);
  vector [n] sum_eta = rep_vector(0, n);
@@ -88,21 +88,21 @@ if(q>0){
 //        break;
 //    }
 //  }
-for ( b in 1:n) {
-       sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
-       if(p>0){
-      sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
-              }
-}
+// for ( b in 1:n) {
+//        sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
+//        if(p>0){
+//       sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
+//               }
+// }
 if(p == 0){
    for (i in 1:n) {
-     omega[i] = inv_logit(eta2[i]);
+     nu[i] = inv_logit(eta2[i]);
       if(IndRec2[i] == 0)
-        target += log_sum_exp(bernoulli_lpmf(1| omega[i]),
+        target += log_sum_exp(bernoulli_lpmf(1| nu[i]),
                   Lambda0[i] +
-                  bernoulli_lpmf(0 | omega[i]));
+                  bernoulli_lpmf(0 | nu[i]));
       else
-        target += bernoulli_lpmf(0 | omega[i])+
+        target += bernoulli_lpmf(0 | nu[i])+
                   Lambda0[i] +
                   sum(log_lambda0_event[begin_ind[i]:end_ind[i]])
                   // sum_log_lambda0[i]
@@ -111,13 +111,13 @@ if(p == 0){
          }
    else{
      for (i in 1:n) {
-       omega[i] = inv_logit(eta2[i]);
+       nu[i] = inv_logit(eta2[i]);
       if(IndRec2[i] == 0)
-        target += log_sum_exp(bernoulli_lpmf(1| omega[i]),
+        target += log_sum_exp(bernoulli_lpmf(1| nu[i]),
                   Lambda0[i]*exp_etay[i] +
-                  bernoulli_lpmf(0 | omega[i]));
+                  bernoulli_lpmf(0 | nu[i]));
       else
-       target += bernoulli_lpmf(0 | omega[i])+
+       target += bernoulli_lpmf(0 | nu[i])+
                  Lambda0[i]*exp_etay[i] +
                  sum(log_lambda0_event[begin_ind[i]:end_ind[i]])+
                  sum(eta_event[begin_ind[i]:end_ind[i]])

@@ -31,7 +31,7 @@ spnhppzi2(
   mu_psi = 0,
   sigma_psi = 10,
   spatial = 0,
-  sp_model = c("CAR", "SPARSE", "ICAR"),
+  sp_model = c("car", "sparse", "icar"),
   nb_mat = NULL,
   shp_tau = 0,
   scl_tau = 0,

@@ -162,9 +162,9 @@ spnhppzi2<-function(formula,
   )
 
   sp_model<-switch(sp_model,
-                   "CAR" = 0,
-                   "SPARSE" = 1,
-                   "ICAR" = 2
+                   "car" = 0,
+                   "sparse" = 1,
+                   "icar" = 2
  )
 
   data_model <- list(id=id,evento=event,time=time, X=X, Z=Z, N=N, Xy=Xy, Z1=Z1,
@@ -233,9 +233,9 @@ spnhppzi2<-function(formula,
   }
   else{
     if(sp_model==0){
-    print("CAR model")
-    mod <- stanmodels$SPNHPP_COV_FRAT
-    }
+    # print("CAR model")
+     mod <- stanmodels$SPNHPP_COV_FRAT
+     }
     if(sp_model==1){
       print("CAR Sparse model")
       mod <- stanmodels$SPNHPP_SPARSE_COV_FRAT

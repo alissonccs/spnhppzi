@@ -242,7 +242,7 @@ spnhppzi2<-function(formula,
     }
     if(sp_model==2){
       print("ICAR model")
-    mod <- stanmodels$SPNHPP_ICAR_COV_FRAT_10
+    mod <- stanmodels$SPNHPP_ICAR_COV_FRAT
     }
    # mod <- stanmodels$SPNHPP_COV_FRAT_10
   }

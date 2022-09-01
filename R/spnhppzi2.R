@@ -37,7 +37,7 @@ spnhppzi2<-function(formula,
                        mu_beta=0,sigma_beta=10,
                        mu_psi=0,sigma_psi=10,
                        spatial=0,
-                       sp_model=c("CAR","SPARSE","ICAR"),
+                       sp_model = c("car","sparse","icar"),
                        nb_mat=NULL,
                        shp_tau=0,
                        scl_tau=0,
@@ -162,9 +162,9 @@ spnhppzi2<-function(formula,
   )
 
   sp_model<-switch(sp_model,
-                   "CAR"=0,
-                   "SPARSE"=1,
-                   "ICAR"=2
+                   "CAR" = 0,
+                   "SPARSE" = 1,
+                   "ICAR" = 2
  )
 
   data_model <- list(id=id,evento=event,time=time, X=X, Z=Z, N=N, Xy=Xy, Z1=Z1,
@@ -233,7 +233,7 @@ spnhppzi2<-function(formula,
   }
   else{
     if(sp_model==0){
-      print("CAR model")
+    print("CAR model")
     mod <- stanmodels$SPNHPP_COV_FRAT
     }
     if(sp_model==1){

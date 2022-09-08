@@ -15,6 +15,7 @@
 spsimrec2 <-  function(N,
                       nr.cov,
                       spatial,
+                      sp_model = c("car","icar"),
                       list_area,
                       SP_N,
                       nb_mat,
@@ -56,7 +57,12 @@ spsimrec2 <-  function(N,
   dist.z <- tolower(dist.z)
   dist.z <- match.arg(dist.z)
   #nr.cov <- length(beta.x)
+  sp_model<-tolower(sp_model)
+  sp_model<-match.arg(sp_model)
 
+  sp_model<-switch(sp_model,
+                   "car" = 1,
+                   "icar" = 2)
 
   ## gen_rnd_ef - Gera efeitos aleatórios  ====
 
@@ -84,11 +90,14 @@ spsimrec2 <-  function(N,
   }
 
   # Efeito espacial
-  gen_sp_rnd_ef<-function(SP_N, sp_tau, sp_alpha, nb_mat){
+  car_sp_rnd_ef<-function(SP_N, sp_tau, sp_alpha, nb_mat){
+      print("CAR")
       D<-diag(rowSums(nb_mat))
-      SIGMA<-sp_tau*(D-sp_alpha*nb_mat)
-      rnd_ef <- mvrnorm(n = 1, mu =rep(0,SP_N), Sigma = solve(SIGMA))
+      prec_mat<-sp_tau*(D-sp_alpha*nb_mat)
+      #rnd_ef <- mvrnorm(n = 1, mu =rep(0,SP_N), Sigma =(SIGMA))
+     rnd_ef <- mvrnorm(n = 1, mu =rep(0,SP_N), Sigma = solve(prec_mat))
       print(paste("rnd_ef: ", rnd_ef))
+      print(paste("rnd_ef mean: ", mean(rnd_ef)))
     return(rnd_ef)
   }
 
@@ -117,8 +126,12 @@ spsimrec2 <-  function(N,
       rnd_ef<- gen_rnd_ef(N, ID, dist.z, tp_rnd_ef, par.z,mu.omega,sigma.omega)
       }else{
       tp_rnd_ef<-1
-     # rnd_ef<-gen_sp_rnd_ef(SP_N=SP_N, sp_tau=sp_tau,sp_alpha=sp_alpha, nb_mat=nb_mat)
+      if (sp_model==1){
+      rnd_ef<-car_sp_rnd_ef(SP_N=SP_N, sp_tau=sp_tau,sp_alpha=sp_alpha, nb_mat=nb_mat)
+      }
+      if (sp_model==2){
       rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1)
+      }
       rnd_ef<-as.data.frame(cbind(as.numeric(row.names(nb_mat)),rnd_ef))
       colnames(rnd_ef)<-c("SP_ID","rnd_ef")
 
@@ -126,8 +139,8 @@ spsimrec2 <-  function(N,
         left_join(rnd_ef,by="SP_ID")
       rnd_ef<-rnd_ef$rnd_ef
       }
-  print(head(rnd_ef))
-  print(length(rnd_ef))
+  #print(head(rnd_ef))
+  #print(length(rnd_ef))
     #set.seed(NULL)
 
 
@@ -140,8 +153,8 @@ spsimrec2 <-  function(N,
     rnd_ef1<-as.data.frame(cbind(ID,SP_ID,rnd_ef))
     colnames(rnd_ef1)<-c("ID","SP_ID","w")}
 
-  print(head(rnd_ef1))
-  print(dim(rnd_ef1))
+  #print(head(rnd_ef1))
+  #print(dim(rnd_ef1))
 
   ## Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
 
@@ -185,17 +198,17 @@ spsimrec2 <-  function(N,
       exp_eta <- exp(x %*% beta.x + rnd_ef)
     }
     alpha1_eta <- alpha1*exp_eta
-    print(paste("alpha1_eta: ", dim(alpha1_eta)))
-    print(paste("exp_eta: ", dim(exp_eta)))
-    print(paste("N: ", N))
+   # print(paste("alpha1_eta: ", dim(alpha1_eta)))
+   # print(paste("exp_eta: ", dim(exp_eta)))
+   # print(paste("N: ", N))
     #print(alpha2)
 
     ## Definição dos tempos de ocorrência dos primeiros eventos ====
 
     T<-NULL
     T1<-NULL
-    print(paste("T: ", dim(T)))
-    print(paste("T1: ", dim(T1)))
+   # print(paste("T: ", dim(T)))
+   # print(paste("T1: ", dim(T1)))
    # IND<-NULL
     for (i in 1:N) {
       t<-NULL

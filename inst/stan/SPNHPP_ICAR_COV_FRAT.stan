@@ -145,7 +145,6 @@ if(approach==1 && tp_prior==1){
     omega_unscaled ~sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
     tau ~ gamma(shp_tau, scl_tau);
     sum(omega_unscaled) ~ normal(0, 0.001 * SP_N);
-    // sp_alpha ~ uniform(0,1);
     // omega ~ normal(mu_omega,sigma_omega);
   }
 }

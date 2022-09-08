@@ -9,6 +9,7 @@ spsimrec2(
   N,
   nr.cov,
   spatial,
+  sp_model = c("car", "icar"),
   list_area,
   SP_N,
   nb_mat,

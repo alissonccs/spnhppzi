@@ -233,7 +233,7 @@ spnhppzi2<-function(formula,
   }
   else{
     if(sp_model==0){
-    # print("CAR model")
+     print("CAR model")
      mod <- stanmodels$SPNHPP_COV_FRAT
      }
     if(sp_model==1){

@@ -15,7 +15,7 @@
 spsimrec2 <-  function(N,
                       nr.cov,
                       spatial,
-                      sp_model = c("car","icar"),
+                      sp_model = c("car","sparse","icar"),
                       list_area,
                       SP_N,
                       nb_mat,
@@ -62,7 +62,8 @@ spsimrec2 <-  function(N,
 
   sp_model<-switch(sp_model,
                    "car" = 1,
-                   "icar" = 2)
+                   "sparse"=2,
+                   "icar" = 3)
 
   ## gen_rnd_ef - Gera efeitos aleatórios  ====
 
@@ -101,7 +102,21 @@ spsimrec2 <-  function(N,
     return(rnd_ef)
   }
 
-  icar_sp_rnd_ef <- function(nb_mat,sig=1){
+  CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
+    print("CAR SPARSE")
+    D<-diag(rowSums(nb_mat))
+    B<-solve(D)%*%nb_mat
+    n <- nrow(B)
+    I <- diag.spam(1, n)
+    Q <- as.spam(sp_tau*D%*% (I - sp_alpha*B))
+    ## Simulate from N(0, Q)
+    cholR <- chol.spam(Q, pivot = "MMD", memory = list(nnzcolindices = 6.25 * n)) ## upper triagle
+    rnd_ef <- backsolve(cholR, rnorm(n))
+    ## return results
+    return(rnd_ef)
+  }
+
+   icar_sp_rnd_ef <- function(nb_mat,sig=1){
     print("ICAR")
     num <- rowSums(nb_mat)
     n <- ncol(nb_mat)
@@ -130,7 +145,10 @@ spsimrec2 <-  function(N,
       rnd_ef<-car_sp_rnd_ef(SP_N=SP_N, sp_tau=sp_tau,sp_alpha=sp_alpha, nb_mat=nb_mat)
       }
       if (sp_model==2){
-      rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1)
+        rnd_ef<-CAR.simWmat(sp_tau=sp_tau,sp_alpha = sp_alpha,nb_mat=nb_mat)
+      }
+      if (sp_model==3){
+         rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1/sp_tau)
       }
       rnd_ef<-as.data.frame(cbind(as.numeric(row.names(nb_mat)),rnd_ef))
       colnames(rnd_ef)<-c("SP_ID","rnd_ef")

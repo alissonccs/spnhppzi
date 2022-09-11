@@ -140,7 +140,7 @@ if(approach==1 && tp_prior==1){
     // omega ~ multi_normal_prec(zeros, tau * (D - sp_alpha * nb_mat));
     omega ~sparse_car(tau, sp_alpha, W_sparse, D_sparse, lambda, SP_N, W_n);
     tau ~ gamma(shp_tau, scl_tau);
-    sum(omega) ~ normal(0, 0.001 * SP_N);
+    // sum(omega) ~ normal(0, 0.001 * SP_N);
     // sp_alpha ~ uniform(0,1);
     // omega ~ normal(mu_omega,sigma_omega);
   }

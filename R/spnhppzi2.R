@@ -232,6 +232,7 @@ spnhppzi2<-function(formula,
   }
   }
   else{
+    if(ZI==0){
     if(sp_model==0){
      print("CAR model")
      mod <- stanmodels$SPNHPP_COV_FRAT
@@ -241,10 +242,15 @@ spnhppzi2<-function(formula,
       mod <- stanmodels$SPNHPP_SPARSE_COV_FRAT
     }
     if(sp_model==2){
-      print("ICAR model")
-    mod <- stanmodels$SPNHPP_ICAR_COV_FRAT
+     print("ICAR model")
+     mod <- stanmodels$SPNHPP_ICAR_COV_FRAT_15_09
     }
    # mod <- stanmodels$SPNHPP_COV_FRAT_10
+    }
+    else{
+      print("ICAR model ZI")
+      mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+    }
   }
   if(FR==0){
     #Optimizing

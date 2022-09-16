@@ -98,10 +98,12 @@ parameters{
 
 if(p>0){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+omega[id[i]];
+     eta[i] = X[i,]*beta+omega[SP_ID[i]];
      eta_event[i] = event[i]*eta[i];
   }
-     exp_etay = exp(Xy*beta+omega);
+     for (j in 1:n){
+      exp_etay[j] = exp(Xy[j,]*beta+omega[gr_SP_ID[j]]);
+    }
         }
 
   Lambda0 = Lambda_plp2(max_stop, alpha,n);

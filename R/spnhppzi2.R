@@ -248,8 +248,15 @@ spnhppzi2<-function(formula,
    # mod <- stanmodels$SPNHPP_COV_FRAT_10
     }
     else{
+      if(q==0){
       print("ICAR model ZI")
       mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+      }
+      else{
+      print("ICAR model ZI logistcov")
+      mod <- stanmodels$SPNHPP_ZI_LOGISTCOV_FRAT_23_09_2022
+
+      }
     }
   }
   if(FR==0){

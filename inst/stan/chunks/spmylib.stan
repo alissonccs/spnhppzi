@@ -20,39 +20,39 @@ vector lambda_plp2(vector time, int N, vector alpha){
       return lprob1;
     }
 
-real sparse_car_lpdf(vector phi, real tau, real alpha,
+real sparse_car_lpdf(vector omega, real tau, real alpha,
     int[,] W_sparse, vector D_sparse, vector lambda, int SP_N, int W_n) {
-      row_vector[SP_N] phit_D; // phi' * D
-      row_vector[SP_N] phit_W; // phi' * W
+      row_vector[SP_N] omegat_D; // omega' * D
+      row_vector[SP_N] omegat_W; // omega' * W
       vector[SP_N] ldet_terms;
 
-      phit_D = (phi .* D_sparse)';
-      phit_W = rep_row_vector(0, SP_N);
+      omegat_D = (omega .* D_sparse)';
+      omegat_W = rep_row_vector(0, SP_N);
       for (i in 1:W_n) {
-        phit_W[W_sparse[i, 1]] = phit_W[W_sparse[i, 1]] + phi[W_sparse[i, 2]];
-        phit_W[W_sparse[i, 2]] = phit_W[W_sparse[i, 2]] + phi[W_sparse[i, 1]];
+        omegat_W[W_sparse[i, 1]] = omegat_W[W_sparse[i, 1]] + omega[W_sparse[i, 2]];
+        omegat_W[W_sparse[i, 2]] = omegat_W[W_sparse[i, 2]] + omega[W_sparse[i, 1]];
       }
 
       for (i in 1:SP_N) ldet_terms[i] = log1m(alpha * lambda[i]);
       return 0.5 * (SP_N * log(tau)
                     + sum(ldet_terms)
-                    - tau * (phit_D * phi - alpha * (phit_W * phi)));
+                    - tau * (omegat_D * omega - alpha * (omegat_W * omega)));
   }
 
-real sparse_iar_lpdf(vector phi, real tau,
+real sparse_iar_lpdf(vector omega, real tau,
     int[,] W_sparse, vector D_sparse, vector lambda, int SP_N, int W_n) {
-      row_vector[SP_N] phit_D; // phi' * D
-      row_vector[SP_N] phit_W; // phi' * W
+      row_vector[SP_N] omegat_D; // omega' * D
+      row_vector[SP_N] omegat_W; // omega' * W
       vector[SP_N] ldet_terms;
 
-      phit_D = (phi .* D_sparse)';
-      phit_W = rep_row_vector(0, SP_N);
+      omegat_D = (omega .* D_sparse)';
+      omegat_W = rep_row_vector(0, SP_N);
       for (i in 1:W_n) {
-        phit_W[W_sparse[i, 1]] = phit_W[W_sparse[i, 1]] + phi[W_sparse[i, 2]];
-        phit_W[W_sparse[i, 2]] = phit_W[W_sparse[i, 2]] + phi[W_sparse[i, 1]];
+        omegat_W[W_sparse[i, 1]] = omegat_W[W_sparse[i, 1]] + omega[W_sparse[i, 2]];
+        omegat_W[W_sparse[i, 2]] = omegat_W[W_sparse[i, 2]] + omega[W_sparse[i, 1]];
       }
 
       return 0.5 * ((SP_N-1) * log(tau)
-                    - tau * (phit_D * phi - (phit_W * phi)));
+                    - tau * (omegat_D * omega - (omegat_W * omega)));
   }
 }

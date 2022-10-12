@@ -12,7 +12,7 @@
 #' @param par.rec    Parâmetros da função de intensidade. Escala e forma
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
-spsimrec4 <-  function(N,
+spsimrec5 <-  function(N,
                       spatial,
                       sp_model = c("car","sparse","icar"),
                       list_area,
@@ -27,6 +27,7 @@ spsimrec4 <-  function(N,
                       cov.log = NULL,
                       beta.x.rec = NULL,
                       beta.x.log = NULL,
+                      xi=NULL,
                       fu,
                       fu.max,
                       fu.min,
@@ -170,7 +171,7 @@ spsimrec4 <-  function(N,
 
    # Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
 
-   gen_zi<-function(ID,N,pi,logist,cov.log,beta.x.log){
+   gen_zi<-function(ID,N,pi,logist,cov.log,beta.x.log,xi,rnd_ef){
      if(logist==0){
        recurr <- rbinom(N, 1, pi)
        pi<-rep(pi,N)
@@ -182,7 +183,7 @@ spsimrec4 <-  function(N,
 
      else {
        # pi<-1/(1+exp(-(1+as.matrix(cov.log) %*% beta.x.log)))
-       pi<-1/(1+exp(-(as.matrix(cov.log) %*% beta.x.log)))
+       pi<-1/(1+exp(-(as.matrix(cov.log) %*% beta.x.log + xi*rnd_ef)))
        recurr<-NULL
        for (i in 1:N){
          recurr[i] <- rbinom(1, 1,pi[i])
@@ -195,7 +196,7 @@ spsimrec4 <-  function(N,
      #return(recurr)
    }
 
-   recurr<-gen_zi(ID,N,pi,logist,cov.log,beta.x.log)
+   recurr<-gen_zi(ID,N,pi,logist,cov.log,beta.x.log,xi,rnd_ef1$rnd_ef)
    pi<-recurr$pi
    #print(pi)
    recurr<-recurr$recurr
@@ -329,6 +330,5 @@ spsimrec4 <-  function(N,
    }
    tab <-gen_data(ID=input_gen_data$ID,N=N, dist.rec=dist.rec, par.rec=par.rec, fu=input_gen_data$fu, x=as.matrix(input_gen_data[,2:(1+nr.cov.rec)]),rnd_ef=input_gen_data$rnd_ef,input_gen_data$recurr)
   #tab <-gen_data(ID, N, dist.rec, par.rec, fu, x,rnd_ef)
-
   return(tab)
 }

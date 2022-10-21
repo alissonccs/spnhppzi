@@ -2,6 +2,7 @@
 
 export(Recur)
 export(Recur1)
+export(Recur2)
 export(func_sim)
 export(gencovfu)
 export(gencovfu1)

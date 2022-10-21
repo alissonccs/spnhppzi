@@ -250,7 +250,8 @@ spnhppzi2<-function(formula,
     else{
       if(q==0){
       print("ICAR model ZI")
-      mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+      # mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+      mod <- stanmodels$SPNHPP_ZI_FRAT_21_10_2022_teste
       }
       else{
       print("ICAR model ZI logistcov")

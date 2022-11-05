@@ -77,14 +77,14 @@ transformed parameters {
         }
 
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = lambda_plp2(time, N, alpha);
+  log_lambda0 = log_lambda_plp2(time, N, alpha);
   log_lambda0_ = event .*log_lambda0;
 
  if(q>0){
      eta2 = Z1*psi;
      }
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = lambda_plp2(time, N, alpha);
+  log_lambda0 = log_lambda_plp2(time, N, alpha);
   log_lambda0_ = event .*log_lambda0;
 
 

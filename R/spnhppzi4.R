@@ -19,9 +19,9 @@
 #@tpfrag: tipo de fragilidade (0-rho(t) = rho0(t)*exp(X*beta + w), 1 - rho(t) = rho0(t)*Z*exp(X*beta))
 #' @export
 ######################################################################################################
-spnhppzi2<-function(formula,
+spnhppzi4<-function(formula,
                        data,
-                       baseline = c("plp1", "plp2"),
+                       baseline = c("plp1", "plp2","plp3","bp"),
                        approach = c("mle", "bayes"),
                        n_iter=4000,
                        n_cores=1,
@@ -36,12 +36,17 @@ spnhppzi2<-function(formula,
                        shp_alpha1=0,scl_alpha1=0,shp_alpha2=0,scl_alpha2=0,
                        mu_beta=0,sigma_beta=10,
                        mu_psi=0,sigma_psi=10,
+                       rnd_logist=0,
+                       mu_xi=0,sigma_xi=1,
                        spatial=0,
                        sp_model = c("car","sparse","icar"),
                        nb_mat=NULL,
                        shp_tau=0,
                        scl_tau=0,
-                       W_n=0
+                       W_n=0,
+                       bp_degree=NULL,
+                       h1_gamma=0,
+                       h2_gamma=4
                        ){
   formula <- Formula::Formula(formula)
   approach <- tolower(approach)
@@ -105,6 +110,7 @@ spnhppzi2<-function(formula,
   max_stop <- as.vector(unlist(data1[,2]))
   IndRec2<- as.vector(unlist(data1[,4]))
   gr_SP_ID<- as.vector(unlist(data1[,5]))
+  zeta<-max(time)
 
   N <- length(time)
   SP_N<-nrow(nb_mat)
@@ -134,16 +140,27 @@ spnhppzi2<-function(formula,
   #print(head(Z))
   # print(head(Z1,n=20L))
   baseline <- switch(baseline,
-                     "plp" = 0,
-                     "plp1" = 1
+                     "plp" = 1,
+                     "plp1" = 2,
+                     "plp2" = 3,
+                     "bp" = 4
   )
 
-  if(baseline == 0){
+  if(baseline == 1 | baseline == 2|baseline == 3){
     m <- 2
   }
 
-  if(baseline == 1){
-    m <- 2
+  g<-NULL
+  G<-NULL
+  if(baseline == 4){
+    # zeta<-max(time)
+    # print(zeta)
+    bases <- bp(time, max_stop, bp_degree, zeta, N, n)
+    g <- bases$b
+    G <- bases$B
+    m <- bp_degree
+    # print(head(g))
+    # print(head(G))
   }
 
   approach <- switch(approach,
@@ -174,33 +191,30 @@ spnhppzi2<-function(formula,
                      sigma_omega=sigma_omega,
                      shp_alpha1=shp_alpha1, scl_alpha1=scl_alpha1, shp_alpha2=shp_alpha2, scl_alpha2=scl_alpha2,mu_beta=mu_beta,
                      sigma_beta=sigma_beta,mu_psi=mu_psi,
-                     sigma_psi=sigma_psi, tp_hf=baseline, tp_prior=tp_prior,
-                     SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat, shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n
+                     sigma_psi=sigma_psi, baseline=baseline, tp_prior=tp_prior,
+                     SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat, shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n,
+                     rnd_logist=rnd_logist,
+                     mu_xi=mu_xi, sigma_xii=sigma_xi,
+                     G=G, g=g, zeta=zeta
                      )
   if(spatial==0){
   if(FR==0){
+    if(baseline==4){
+      mod <-stanmodels$BPNHPP_COV_4
+
+    }
+    else{
     if(ZI==0){
-    #  mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_COV_4.stan")
-         # mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_COV_4.stan")
-     #mod <- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_COV_4.stan")
       mod <- stanmodels$NHPP_COV_4
     }
     else{
       if(q==0){
-    #  mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
-           #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
-      #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_1_08_03_2022.stan")
-       # mod<- stanmodels$NHPP_ZI_1_08_03_2022
-        #mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_03_07_2022.stan")
         mod<- stanmodels$NHPP_ZI_03_07_2022
       }
       else{
-     # mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
-         #
-        #mod<- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
-        #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_ZI_LOGISTCOV_09_03_2022.stan")
         mod<- stanmodels$NHPP_ZI_LOGISTCOV_23_07_2022
       }
+    }
     }
   }
   else {
@@ -250,11 +264,12 @@ spnhppzi2<-function(formula,
     else{
       if(q==0){
       print("ICAR model ZI")
-      mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+      # mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+        mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022
       }
       else{
       print("ICAR model ZI logistcov")
-      mod <- stanmodels$SPNHPP_ZI_LOGISTCOV_FRAT_23_09_2022
+      mod <- stanmodels$SPNHPP_ZI_LOGISTCOV_FRAT_EFECT_IN_LOG_12_10_2022
 
       }
     }

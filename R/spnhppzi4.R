@@ -140,12 +140,11 @@ spnhppzi4<-function(formula,
   #print(head(Z))
   # print(head(Z1,n=20L))
   baseline <- switch(baseline,
-                     "plp" = 1,
-                     "plp1" = 2,
-                     "plp2" = 3,
+                     "plp1" = 1,
+                     "plp2" = 2,
+                     "plp3" = 3,
                      "bp" = 4
   )
-
   if(baseline == 1 | baseline == 2|baseline == 3){
     m <- 2
   }

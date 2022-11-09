@@ -22,7 +22,8 @@ gencovfu2 <- function(N,
   # dist.z <- match.arg(dist.z)
   nr.cov <- length(beta.x)
 
-  ## gen_fu - Gera períodos de acompanhamento  ====
+  ##  Gera períodos de acompanhamento  ====
+  ### Funçõa - gen_fu ====
   gen_fu<-function(N,cens.prob,fu.min,fu.max){
     fu <- rbinom(N, 1, cens.prob) # 1 = censored
     nr.cens <- sum(fu)
@@ -37,13 +38,14 @@ gencovfu2 <- function(N,
     colnames(fu)<-c("ID","fu")
     return(fu)
   }
-
+ ### Executa função ====
   set.seed(123)
   fu<-gen_fu(N,cens.prob,fu.min,fu.max)
   set.seed(NULL)
 
 
-    ## gen_cov - Gera covariáveis  ====
+  # Gera covariáveis  ====
+  ### Função - gen_cov ====
   gen_cov<-function(N,
                     dist.x,
                     par.x,
@@ -69,7 +71,7 @@ gencovfu2 <- function(N,
     return(x)
   }
 
-
+### Executa Função ====
   set.seed(1)
   if(nr.cov!=0){
     x<-gen_cov(N,

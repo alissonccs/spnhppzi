@@ -46,7 +46,9 @@ spnhppzi4<-function(formula,
                        W_n=0,
                        bp_degree=NULL,
                        h1_gamma=0,
-                       h2_gamma=4
+                       h2_gamma=4,
+                       omega_data=0,
+                       omega=NULL
                        ){
   formula <- Formula::Formula(formula)
   approach <- tolower(approach)
@@ -194,7 +196,8 @@ spnhppzi4<-function(formula,
                      SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat, shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n,
                      rnd_logist=rnd_logist,
                      mu_xi=mu_xi, sigma_xii=sigma_xi,
-                     G=G, g=g, zeta=zeta
+                     G=G, g=g, zeta=zeta,
+                     omega=omega
                      )
   if(spatial==0){
   if(FR==0){
@@ -264,7 +267,12 @@ spnhppzi4<-function(formula,
       if(q==0){
       print("ICAR model ZI")
       # mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
+        if(omega_data==0){
         mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022
+        } else{
+          print("Omega data")
+        mod <- stanmodels$SPNHPP_ZI_RND_EF_DATA_09_11_2022
+        }
       }
       else{
       print("ICAR model ZI logistcov")

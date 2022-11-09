@@ -41,7 +41,9 @@ spnhppzi4(
   W_n = 0,
   bp_degree = NULL,
   h1_gamma = 0,
-  h2_gamma = 4
+  h2_gamma = 4,
+  omega_data = 0,
+  omega = NULL
 )
 }
 \arguments{

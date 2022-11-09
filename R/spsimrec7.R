@@ -5,50 +5,69 @@
 # @param cens.prob  Probabiidade de apresentar censura antes do período máximo de acompanhamento.
 # @param dist.x     Distribuição das Covariáveis. Binomial ou normal.
 # @param par.x      Parâmetros das distribuições das covariáveis.
-#' @param beta.x     Coeficiente de regressão das covariáveis.
-#' @param dist.z     Distribuição do efeito aleatório. Gamma ou lognormal.
-#' @param par.z      Parâmetros da distribuição do efeito aleatório.
-#' @param dist.rec   Forma da função de intensidade.  "Weibull" (Lei de potência)
-#' @param par.rec    Parâmetros da função de intensidade. Escala e forma
+#' @param N          Número de indivíduos
+#' @param spatial    Indicadora do uso de modelo espacial, (default =0 , não espacial)
+#' @param sp_model   Tipo de modelo espacial
+#' @param SP_N       Número de unidades de área
+#' @param nb_mat     Matriz de vizinhança
+#' @param sp_tau     Valor do parâmetro de precisão no modelo ICAR (\tau)
+#' @param sp_alpha   Valor do associação espacial no modelo CAR.
+#' @param x          Matriz de covariávies
+#' @param x1         Matriz ID e covariávies
+#' @param cov_rec    Lista de covariáveis relacionadas à função de intensidade
+#' @param cov_log    Lista de covariáveis relacionadas à regressão logística
+#' @param beta_x_rec Coeficientes das covariáveis relacionadas à função de intensidade
+#' @param beta_x_log Coeficientes das covariáveis relacionadas à regressão logística
+#' @param xi         Parâmetro que relaciona a função de intensidade e a logística
+#' @param fu_min     Tempo mínimo de acompanhamento
+#' @param fu_max     Tempo máximo de acompanhamento
+#' @param random_ef  Indicadora de uso de efeitos aleatórios na geração dos dados (random_ef==0, modelo sem efeitos).
+#' @param dist_z     Distribuição do efeito aleatório não espacial (Gamma ou lognormal).
+#' @param tp_rnd_ef  Indicadora de efeito aleatório multiplicativo
+#' @param par_z      Parâmetros de variância da distribuição do efeito aleatório.
+#' @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
+#' @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
+#' @param pi         Inflação de zeros (proporção de indivíduos sem recorrências)
+#' @param logist     Indicadora do uso de covariáveis na logística
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
-spsimrec6 <-  function(N,
-                      spatial,
+spsimrec7 <-  function(N,
+                      spatial = 0,
                       sp_model = c("car","sparse","icar"),
                       list_area=NULL,
-                      SP_N,
-                      nb_mat,
-                      sp_tau,
-                      sp_alpha,
-                      #beta.x = NULL,
-                      x,
+                      SP_N=NULL,
+                      nb_mat=NULL,
+                      sp_tau=NULL,
+                      sp_alpha=NULL,
+                      # beta.x = NULL,
+                      # x,
                       x1,
-                      cov.rec,
-                      cov.log = NULL,
-                      beta.x.rec = NULL,
-                      beta.x.log = NULL,
-                      xi=NULL,
+                      cov_rec = NULL,
+                      cov_log = NULL,
+                      beta_x_rec = NULL,
+                      beta_x_log = NULL,
+                      xi=1,
                       fu,
-                      fu.max,
-                      fu.min,
-                      dist.z = c("gamma","lognormal"),
-                      random.ef=0,
+                      fu_max,
+                      fu_min,
+                      random_ef=0,
+                      dist_z = c("gamma","lognormal"),
                       tp_rnd_ef=0,
-                      par.z=0,
-                      dist.rec,
-                      par.rec=0,
+                      par_z=0,
+                      dist_int_func,
+                      par_int_func=0,
                       pi = 0,
-                      dfree = 0,
+                      # dfree = 0,
                       logist = 0,
-                      mu.omega=0,
-                      sigma.omega=0){
+                      mu_omega=0,
+                      sigma_omega=0){
   ID <- c(1:N)
-  dist.z <- tolower(dist.z)
-  dist.z <- match.arg(dist.z)
-  nr.cov.rec <- length(beta.x.rec)
-  nr.cov.log <- length(beta.x.log)
-  cov.rec<-x1 %>% dplyr::select(all_of(cov.rec))
-  cov.log<-x1 %>% dplyr::select(all_of(cov.log))
+  dist_z <- tolower(dist_z)
+  dist_z <- match.arg(dist_z)
+  nr.cov_rec <- length(beta_x_rec)
+  nr.cov_log <- length(beta_x_log)
+  cov_rec<-x1 %>% dplyr::select(all_of(cov_rec))
+  cov_log<-x1 %>% dplyr::select(all_of(cov_log))
 
   ## Designa as unidades de areas para cada individuo a partir de uma lista de areas fornecida como entrada ====
   if(spatial==1){
@@ -65,34 +84,33 @@ spsimrec6 <-  function(N,
                    "sparse"=2,
                    "icar" = 3)
 
-  ## gen_rnd_ef - Gera efeitos aleatórios  ====
-
-  # Efeito não espacial
-  gen_rnd_ef<-function(N, ID, dist.z, tp_rnd_ef, par.z,mu.omega,sigma.omega){
+  # EFEITOS ALEATÓRIOS  ====
+  ### Funções ====
+  #### Efeito não espacial ====
+  gen_rnd_ef<-function(N, ID, dist_z, tp_rnd_ef, par_z,mu_omega,sigma_omega){
     if (tp_rnd_ef==0){ #Entra com parâmetros para Z. {Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
-      if(par.z==0){# se par.z=0 então a fragilidade=1 para todos
+      if(par_z==0){# se par_z=0 então a fragilidade=1 para todos
         z <- rep(1, N)}
       else{
-        dist.z <- match.arg(dist.z, choices = c("gamma", "lognormal"))
-        if (dist.z == "gamma") { # gamma-frailty
-          aGamma <- 1 / par.z
+        dist_z <- match.arg(dist_z, choices = c("gamma", "lognormal"))
+        if (dist_z == "gamma") { # gamma-frailty
+          aGamma <- 1 / par_z
           rnd_ef <- rgamma(N, shape = aGamma, scale = 1 / aGamma)}
         else { # lognormal  -- E(Z)=1
-          mu <- log(1 / sqrt(par.z + 1))
-          sigma <- sqrt(log(par.z + 1))
+          mu <- log(1 / sqrt(par_z + 1))
+          sigma <- sqrt(log(par_z + 1))
           rnd_ef <- exp(rnorm(N, mean = mu, sd = sigma))
         }
       }
     }
     else{ #Entra com parâmetros para \omega. {Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
-      rnd_ef <- rnorm(N, mean = mu.omega, sd = sigma.omega)
+      rnd_ef <- rnorm(N, mean = mu_omega, sd = sigma_omega)
     }
     return(rnd_ef)
   }
 
-  # Efeito espacial
-  #CAR
-
+  #### Efeito espacial ====
+  ##### CAR ====
   car_sp_rnd_ef<-function(SP_N, sp_tau, sp_alpha, nb_mat){
       print("CAR")
       D<-diag(rowSums(nb_mat))
@@ -103,7 +121,8 @@ spsimrec6 <-  function(N,
       print(paste("rnd_ef mean: ", mean(rnd_ef)))
     return(rnd_ef)
   }
-  #CAR CHOLESKY
+
+  ##### CAR CHOLESKY ====
   CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     print("CAR SPARSE")
     D<-diag(rowSums(nb_mat))
@@ -118,7 +137,7 @@ spsimrec6 <-  function(N,
     return(rnd_ef)
   }
 
-  #ICAR
+  ##### ICAR ====
    icar_sp_rnd_ef <- function(nb_mat,sig=1){
     print("ICAR")
     num <- rowSums(nb_mat)
@@ -137,19 +156,19 @@ spsimrec6 <-  function(N,
   }
 
 
-
-   if(random.ef==0){
+### Executa funções para gerar efeitos aleatórios ====
+   if(random_ef==0){  #sem efeitos
      rnd_ef<-rep(1,N)
      tp_rnd_ef<-0
      rnd_ef1<-as.data.frame(cbind(ID,rnd_ef))
      colnames(rnd_ef1)<-c("ID","rnd_ef")
-   }else if(spatial==0){
-     rnd_ef<- gen_rnd_ef(N, ID, dist.z, tp_rnd_ef, par.z,mu.omega,sigma.omega)
+   }else if(spatial==0){ #efeitos não espaciais
+     rnd_ef<- gen_rnd_ef(N, ID, dist_z, tp_rnd_ef, par_z,mu_omega,sigma_omega)
      rnd_ef1<-as.data.frame(cbind(ID,rnd_ef))
 
      if(tp_rnd_ef==0){colnames(rnd_ef1)<-c("ID","rnd_ef")}
      else{colnames(rnd_ef1)<-c("ID","rnd_ef")}
-   }else{  #Efeito espacial
+   }else{  #efeitos espaciais
      tp_rnd_ef<-1
      if (sp_model==1){ #CAR
        rnd_ef<-car_sp_rnd_ef(SP_N=SP_N, sp_tau=sp_tau,sp_alpha=sp_alpha, nb_mat=nb_mat)
@@ -157,7 +176,7 @@ spsimrec6 <-  function(N,
      if (sp_model==2){ #CAR CHOLESKY
        rnd_ef<-CAR.simWmat(sp_tau=sp_tau,sp_alpha = sp_alpha,nb_mat=nb_mat)
      }
-     if (sp_model==3){
+     if (sp_model==3){ #ICAR
        rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1/sp_tau)
      }
 
@@ -169,23 +188,24 @@ spsimrec6 <-  function(N,
      # rnd_ef<-rnd_ef$rnd_ef
    }
 
-
-
-   # Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
-
-   gen_zi<-function(ID,N,pi,logist,cov.log,beta.x.log,xi,rnd_ef){
+   # INFLAÇÃO DE ZEROS - Define indivíduos recorrentes  ====
+   ### Função ====
+   gen_zi<-function(ID,N,pi,logist,cov_log,beta_x_log,xi1=1,rnd_ef){
      if(logist==0){
        recurr <- rbinom(N, 1, pi)
        pi<-rep(pi,N)
-       return(list(recurr=recurr,pi=pi))
+       # return(list(recurr=recurr,pi=pi))
        #recurr<-rbind(recurr,pi)
        # pi<-rep(pi,N)
        # return(recurr)
      }
-
      else {
-       # pi<-1/(1+exp(-(1+as.matrix(cov.log) %*% beta.x.log)))
-       pi<-1/(1+exp(-(as.matrix(cov.log) %*% beta.x.log + xi*rnd_ef)))
+       pi<-1/(1+exp(-(1+as.matrix(cov_log) %*% beta_x_log)))
+       if(is.null(xi) == TRUE){
+         pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log +rnd_ef)))
+       }else{
+         pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log + xi1*rnd_ef)))
+       }
        recurr<-NULL
        for (i in 1:N){
          recurr[i] <- rbinom(1, 1,pi[i])
@@ -193,12 +213,12 @@ spsimrec6 <-  function(N,
        # recurr<-rbind(recurr,pi)
      }
      #print(recurr)
-     #return(list(N=N,x=x,x1=x1,fu=fu,nr.cov=nr.cov,beta.x=beta.x,fu.max=fu.max,fu.min=fu.min))
+     #return(list(N=N,x=x,x1=x1,fu=fu,nr.cov=nr.cov,beta.x=beta.x,fu_max=fu_max,fu_min=fu_min))
      return(list(recurr=recurr,pi=pi))
      #return(recurr)
    }
-
-   recurr<-gen_zi(ID,N,pi,logist,cov.log,beta.x.log,xi,rnd_ef1$rnd_ef)
+ ### Executa função ====
+   recurr<-gen_zi(ID,N,pi,logist,cov_log,beta_x_log,xi,rnd_ef1$rnd_ef)
    pi<-recurr$pi
    #print(pi)
    recurr<-recurr$recurr
@@ -207,53 +227,34 @@ spsimrec6 <-  function(N,
 
    colnames(recurr1)<-c("ID","recurr","pi")
 
-  ## Define indivíduos recorrentes (INFLAÇÃO DE ZEROS)  ====
-
-   gen_zi<-function(ID,N,pi){
-     recurr <- t(rbinom(N, 1, pi))
-   }
-   #set.seed(234)
-   # recurr<-gen_zi(ID,N,pi)
-   # pi<-0
-   recurr<-gen_zi(ID,N,pi)
-   # set.seed(NULL)
-
-   recurr1<-as.data.frame(t(rbind(ID,recurr)))
-   colnames(recurr1)<-c("ID","recurr")
-
-   # if(logist==1){
-   #  pi<-1/(1+exp(-(1+x %*% beta.x)))
-   # }
-
-
-   input_gen_data<-cov.rec %>%
+   input_gen_data<-cov_rec %>%
      left_join(rnd_ef1,by="ID") %>%
      left_join(recurr1,by="ID") %>%
      left_join(fu,by="ID")
 
 
-  ## gen_data - Gera tempos de ocorrência dos eventos  ====
+  ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
    gen_data<-function(ID,
                       N,
-                      dist.rec,
-                      par.rec,
+                      dist_int_func,
+                      par_int_func,
                       fu,
                       x,
                       rnd_ef,
                       recurr){
 
-    if (dist.rec == "weibull") { # weibull
-      alpha1 <- par.rec[1]
-      alpha2 <- par.rec[2]
+    if (dist_int_func == "weibull") { # weibull
+      alpha1 <- par_int_func[1]
+      alpha2 <- par_int_func[2]
     }
 
     ## Cálculo de alpha1_este e exp_eta ====
     # Considera a forma utilizada para introdução de efeitos aleatórios
-    if(nr.cov.rec==0){exp_eta=rep(1,N)}
+    if(nr.cov_rec==0){exp_eta=rep(1,N)}
     else if(tp_rnd_ef==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
-      exp_eta <- exp(x %*% beta.x.rec) * rnd_ef
+      exp_eta <- exp(x %*% beta_x_rec) * rnd_ef
     }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
-      exp_eta <- exp(x %*% beta.x.rec + rnd_ef)
+      exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
     }
     alpha1_eta <- alpha1*exp_eta
    # print(paste("alpha1_eta: ", dim(alpha1_eta)))
@@ -272,7 +273,7 @@ spsimrec6 <-  function(N,
       t<-NULL
       #print(t)
       U <- runif(1)
-      if (dist.rec == "weibull") {
+      if (dist_int_func == "weibull") {
         t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
         #ind<-0
         # print(i)
@@ -292,7 +293,7 @@ spsimrec6 <-  function(N,
         while (t < fu[i]) {
           U <- runif(1)
           t1 <- t
-          if (dist.rec == "weibull") { # weibull
+          if (dist_int_func == "weibull") { # weibull
             t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
           }
           #print(t)
@@ -305,7 +306,7 @@ spsimrec6 <-  function(N,
       # print(T)
     }
     colnames(T)<-c("ID","time")
-    print(paste("T: ", dim(T)))
+    # print(paste("T: ", dim(T)))
 
     ## Consolida tabela contendo os dados de saída ====
     tab <-T %>%
@@ -313,15 +314,15 @@ spsimrec6 <-  function(N,
       mutate(#individuo = group_indices(),
         ngroup=n(),
         rep=row_number(),
-        expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu.max)))~2,TRUE~1),
+        expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu_max)))~2,TRUE~1),
         expand1=expand)%>%
       expandRows("expand") %>%
       mutate(ngroup1=n(),
              IndRec=case_when(ngroup1>2~1, TRUE~0),
              rep1=row_number(),
              begin=case_when(rep1==1~0,TRUE~lag(time)),
-             end=case_when(ngroup1==rep1~fu.max, TRUE~time),
-             status=case_when(end==fu.max~0,TRUE~1)) %>%
+             end=case_when(ngroup1==rep1~fu_max, TRUE~time),
+             status=case_when(end==fu_max~0,TRUE~1)) %>%
       ungroup() %>%
       left_join(x1,by="ID") %>%
       left_join(rnd_ef1,by="ID") %>%
@@ -330,7 +331,7 @@ spsimrec6 <-  function(N,
     return(tab)
     #set.seed(NULL)
    }
-   tab <-gen_data(ID=input_gen_data$ID,N=N, dist.rec=dist.rec, par.rec=par.rec, fu=input_gen_data$fu, x=as.matrix(input_gen_data[,2:(1+nr.cov.rec)]),rnd_ef=input_gen_data$rnd_ef,input_gen_data$recurr)
-  #tab <-gen_data(ID, N, dist.rec, par.rec, fu, x,rnd_ef)
+   tab <-gen_data(ID=input_gen_data$ID,N=N, dist_int_func=dist_int_func, par_int_func=par_int_func, fu=input_gen_data$fu, x=as.matrix(input_gen_data[,2:(1+nr.cov_rec)]),rnd_ef=input_gen_data$rnd_ef,input_gen_data$recurr)
+  #tab <-gen_data(ID, N, dist_int_func, par_int_func, fu, x,rnd_ef)
   return(tab)
 }

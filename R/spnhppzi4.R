@@ -48,7 +48,8 @@ spnhppzi4<-function(formula,
                        h1_gamma=0,
                        h2_gamma=4,
                        omega_data=0,
-                       omega=NULL
+                       omega=NULL,
+                       tau=NULL
                        ){
   formula <- Formula::Formula(formula)
   approach <- tolower(approach)
@@ -197,7 +198,8 @@ spnhppzi4<-function(formula,
                      rnd_logist=rnd_logist,
                      mu_xi=mu_xi, sigma_xii=sigma_xi,
                      G=G, g=g, zeta=zeta,
-                     omega=omega
+                     omega=omega,
+                     tau=tau
                      )
   if(spatial==0){
   if(FR==0){

@@ -61,7 +61,7 @@ spsimrec8.1 <-  function(N,
                       logist = 0,
                       mu_omega=0,
                       sigma_omega=0){
-  # source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
+  source("/home/alisson/spnhppzi/R/Utils_spsimrec2.R")
   ID <- c(1:N)
   dist_z <- tolower(dist_z)
   dist_z <- match.arg(dist_z)
@@ -97,8 +97,7 @@ spsimrec8.1 <-  function(N,
    }else if(spatial==0){ #efeitos não espaciais
      rnd_ef<- gen_rnd_ef(N, ID, dist_z, tp_rnd_ef, par_z,mu_omega,sigma_omega)
      rnd_ef1<-as.data.frame(cbind(ID,rnd_ef))
-     if(tp_rnd_ef==0){colnames(rnd_ef1)<-c("ID","rnd_ef")}
-     else{colnames(rnd_ef1)<-c("ID","rnd_ef")}
+     colnames(rnd_ef1)<-c("ID","rnd_ef")
      rnd_ef_out<-list(rnd_ef=rnd_ef,rnd_ef1=rnd_ef1)
    }else{  #efeitos espaciais
      tp_rnd_ef<-1
@@ -168,7 +167,7 @@ print(head(cov_log))
                   tp_rnd_ef= tp_rnd_ef,
                   rnd_ef=input_gen_data$rnd_ef,
                   # rnd_ef1=rnd_ef1,
-                  input_gen_data$recurr,
+                  recurr=input_gen_data$recurr,
                   # recurr1 = recurr1,
                   nr.cov_rec=nr.cov_rec)
   #tab <-gen_data(ID, N, dist_int_func, par_int_func, fu, x,rnd_ef)

@@ -179,7 +179,7 @@ if(baseline==3){
 // model{
 //      target +=log_lik1;
 
-if(approach==1 && tp_prior==1 && baseline==2){
+if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2)){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);

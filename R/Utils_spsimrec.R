@@ -164,13 +164,13 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
                      fu,
                      fu_max,
                      x,
-                     x1,
+                     # x1,
                      beta_x_rec,
                      tp_rnd_ef,
                      rnd_ef,
-                     rnd_ef1,
+                     # rnd_ef1,
                      recurr,
-                     recurr1,
+                     # recurr1,
                      nr.cov_rec){
 
     if (dist_int_func == "weibull") { # weibull
@@ -254,9 +254,9 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
              end=case_when(ngroup1==rep1~fu_max, TRUE~time),
              status=case_when(end==fu_max~0,TRUE~1)) %>%
       ungroup() %>%
-      left_join(x1,by="ID") %>%
-      left_join(rnd_ef1,by="ID") %>%
-      left_join(recurr1,by="ID") %>%
+      # left_join(x1,by="ID") %>%
+      # left_join(rnd_ef1,by="ID") %>%
+      # left_join(recurr1,by="ID") %>%
       dplyr::select(-c(time,ngroup))
     return(tab)
     #set.seed(NULL)

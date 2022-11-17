@@ -31,7 +31,7 @@
 #' @param logist     Indicadora do uso de covariáveis na logística
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
-spsimrec7 <-  function(N,
+spsimrec8 <-  function(N,
                       spatial = 0,
                       sp_model = c("car","sparse","icar"),
                       list_area=NULL,
@@ -61,7 +61,7 @@ spsimrec7 <-  function(N,
                       logist = 0,
                       mu_omega=0,
                       sigma_omega=0){
-  source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
+  # source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
   ID <- c(1:N)
   dist_z <- tolower(dist_z)
   dist_z <- match.arg(dist_z)

@@ -1,6 +1,7 @@
   ### Funções ====
   # EFEITOS ALEATÓRIOS  ----
   #### Efeito não espacial ====
+  #' @title gen_rnd_ef_
   #' @aliases gen_rnd_ef
   #' @export
   #' @description Gera efeitos aleatórios não espacial.
@@ -37,6 +38,7 @@
 
   #### Efeito espacial ====
   ##### CAR ====
+  #' @title car_sp_rnd_ef
   #' @aliases car_sp_rnd_ef
   #' @export
   #' @description      Gera efeitos aleatórios espaciais considerando a estrutura do modelo CAR.
@@ -57,6 +59,7 @@ car_sp_rnd_ef<-function(SP_N, sp_tau, sp_alpha, nb_mat){
   }
 
   ##### CAR CHOLESKY ====
+  #' @title CAR.simWmat
   #' @aliases CAR.simWmat
   #' @export
   #' @description      Gera efeitos aleatórios espaciais utilizando a decomposição de Cholesky.
@@ -79,6 +82,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 }
 
   ##### ICAR ====
+  #' @title icar_sp_rnd_ef
   #' @aliases icar_sp_rnd_ef
   #' @export
   #' @description      Gera efeitos aleatórios espaciais utilizando a estrutura do modelo ICAR.
@@ -109,6 +113,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
 
   # INFLAÇÃO DE ZEROS - Define indivíduos recorrentes  ====
+  #' @title spsimrec
   #' @aliases spsimrec
   #' @export
   #' @description Recur:
@@ -140,6 +145,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   }
 
   ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
+  #' @title gen_data
   #' @aliases gen_data
   #' @export
   #' @description           Gera os tempos de recorrências dos eventos.

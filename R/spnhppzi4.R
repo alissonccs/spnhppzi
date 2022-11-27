@@ -72,7 +72,7 @@ spnhppzi4<-function(formula,
   id <- resp[,3]
   SP_ID<-resp[,4]
   IndRec<- resp[,5]
-
+  print("até aqui ok")
 
   data1<-as.data.frame(cbind(time,event,id,IndRec,SP_ID,X)) %>%
     group_by(id) %>%

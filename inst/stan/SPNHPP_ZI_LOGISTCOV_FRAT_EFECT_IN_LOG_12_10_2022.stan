@@ -6,7 +6,8 @@ data{
   int <lower=0>n;
   int <lower=0> p;
   int <lower=0> q;
-  int <lower=0> tp_hf;
+  // int <lower=0> tp_hf;
+  int <lower=0> baseline;
   int m;
   int id[N];
   int n_ind [n];

@@ -51,28 +51,37 @@ spnhppzi4<-function(formula,
                        omega=NULL,
                        tau=NULL
                        ){
+
   formula <- Formula::Formula(formula)
   approach <- tolower(approach)
   approach <- match.arg(approach)
   baseline <- tolower(baseline)
   baseline <- match.arg(baseline)
+
   ZI <- tolower(ZI)
   ZI <- match.arg(ZI)
   FR <- tolower(FR)
   FR <- match.arg(FR)
   sp_model<-tolower(sp_model)
   sp_model<-match.arg(sp_model)
+
+  # print(formula," formula")
+
   mf <- stats::model.frame(formula=formula, data=data)
+  # print(mf," mf")
   Terms <- stats::terms(mf)
+  # print(Terms," Terms")
   resp <- stats::model.response(mf)
+  # print(resp," resp")
   X <- stats::model.matrix(formula, data = mf, rhs = 1)[,-1, drop = FALSE]
   Z <- stats::model.matrix(formula, data = mf, rhs = 2)[,-1, drop = FALSE]
+
   time <- resp[,1]
   event <- resp[,2]
   id <- resp[,3]
   SP_ID<-resp[,4]
   IndRec<- resp[,5]
-  print("até aqui ok")
+
 
   data1<-as.data.frame(cbind(time,event,id,IndRec,SP_ID,X)) %>%
     group_by(id) %>%

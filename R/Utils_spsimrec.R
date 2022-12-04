@@ -131,7 +131,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
       }
     else { # Com covariáveis na regressão logística - cada indivíduo possui sua probabilidade de recorrência definida em função das covariáveis e efeitos aleatórios.
       pi<-1/(1+exp(-(1+as.matrix(cov_log) %*% beta_x_log)))
-      if(is.null(xi) == TRUE){
+      if(is.null(xi1) == TRUE){
         pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log +rnd_ef)))
       }else{
         pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log + xi1*rnd_ef)))

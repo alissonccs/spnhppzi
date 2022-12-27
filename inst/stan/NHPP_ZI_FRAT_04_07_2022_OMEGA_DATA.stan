@@ -63,8 +63,11 @@ if(p>0){
      eta[i] = X[i,]*beta+omega[id[i]];
      eta_event[i] = event[i]*eta[i];
   }
-     exp_etay = exp(Xy*beta+omega);
+  for (j in 1:n){
+     exp_etay[j] = exp(Xy[j,]*beta+omega[j]);
         }
+}
+
 
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
   log_lambda0 = log_lambda_plp2(time, N, alpha);

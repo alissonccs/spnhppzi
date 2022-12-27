@@ -84,27 +84,27 @@ if(p>0){
  if(p == 0){
     for (i in 1:n) {
 
-       if(IndRec2[i] == 0)
+       if(IndRec2[id[i]] == 0)
          target += log_sum_exp(bernoulli_lpmf(1| pii),
-                  Lambda0[i] +
+                  Lambda0[id[i]] +
                    bernoulli_lpmf(0 | pii));
        else
          target += bernoulli_lpmf(0 | pii)+
-                   Lambda0[i] +
-                   sum(log_lambda0_event[begin_ind[i]:end_ind[i]]);
+                   Lambda0[id[i]] +
+                   sum(log_lambda0_event[begin_ind[id[i]]:end_ind[id[i]]]);
                   }
           }
     else{
       for (i in 1:n) {
-       if(IndRec2[i] == 0)
+       if(IndRec2[id[i]] == 0)
          target += log_sum_exp(bernoulli_lpmf(1| pii),
-                   Lambda0[i]*exp_etay[i] +
+                   Lambda0[id[i]]*exp_etay[id[i]] +
                    bernoulli_lpmf(0 | pii));
        else
           target +=bernoulli_lpmf(0 | pii)+
-                  Lambda0[i]*exp_etay[i] +
-                  sum(log_lambda0_event[begin_ind[i]:end_ind[i]])+
-                  sum(eta_event[begin_ind[i]:end_ind[i]]);
+                  Lambda0[id[i]]*exp_etay[id[i]] +
+                  sum(log_lambda0_event[begin_ind[id[i]]:end_ind[id[i]]])+
+                  sum(eta_event[begin_ind[id[i]]:end_ind[id[i]]]);
                      }
         }
 

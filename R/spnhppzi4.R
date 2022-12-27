@@ -249,10 +249,10 @@ spnhppzi4<-function(formula,
        # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022_1.stan")
         if(omega_data==0){
           # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022_1.stan")
-          mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA
+          mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
         } else{
           print("Omega data")
-          mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
+          mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA
         }
       }
       else{

@@ -17,7 +17,9 @@ gen_rnd_ef(N, ID, dist_z, tp_rnd_ef, par_z, mu_omega, sigma_omega)
 
 \item{par_z}{Parâmetros de variância da distribuição do efeito aleatório.}
 
-\item{mu_omega}{Parâmetro desvio padrão da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}}
+\item{mu_omega}{Parâmetro média da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}}
+
+\item{sigma_omega}{Parâmetro desvio padrão da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}}
 
 \item{random_ef}{Indicadora de uso de efeitos aleatórios na geração dos dados (random_ef==0, modelo sem efeitos).}
 }

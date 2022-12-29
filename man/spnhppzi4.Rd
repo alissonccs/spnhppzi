@@ -18,6 +18,7 @@ spnhppzi4(
   initial,
   tp_prior = 0,
   frag = 0,
+  tp_rnd_ef = 0,
   mu_omega = 0,
   sigma_omega = 0,
   shp_sigma2_z = 0,

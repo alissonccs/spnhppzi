@@ -38,7 +38,11 @@ parameters{
   vector  <lower=0> [m] alpha;
   vector [p] beta;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
+<<<<<<< HEAD
   vector <lower=0> [n] omega;
+=======
+  vector [n] omega;
+>>>>>>> 08399d24f32aa3cf80e2e130929c6d9b99d2690c
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
           }

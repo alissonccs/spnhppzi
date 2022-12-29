@@ -12,7 +12,7 @@
   #' @param tp_rnd_ef  Indicadora de efeito aleatório multiplicativo.
   #' @param par_z      Parâmetros de variância da distribuição do efeito aleatório.
   #' @param mu_omega   Parâmetro média da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}
-  #' @param mu_omega   Parâmetro desvio padrão da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}
+  #' @param sigma_omega   Parâmetro desvio padrão da distribuição dos efeitos aleatórios para a forma {Y_i(t)*lambda_0(t)*exp(beta^t X_i+omega_i)}
 
   gen_rnd_ef<-function(N, ID, dist_z, tp_rnd_ef, par_z,mu_omega,sigma_omega){
     if (tp_rnd_ef==0){ #Entra com parâmetros para Z. {Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}

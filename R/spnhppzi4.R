@@ -29,7 +29,10 @@ spnhppzi4<-function(formula,
                        ZI = c("true","false"),
                        FR= c("true","false"),
                        initial,
-                       tp_prior=0,frag=0,mu_omega=0,
+                       tp_prior=0,
+                       frag=0,
+                       tp_rnd_ef=0,
+                       mu_omega=0,
                        sigma_omega=0,
                        #shp_sigma_omega=0, scl_sigma_omega=0,
                        shp_sigma2_z=0, scl_sigma2_z=0,
@@ -198,8 +201,8 @@ spnhppzi4<-function(formula,
   data_model <- list(id=id,evento=event,time=time, X=X, Z=Z, N=N, Xy=Xy, Z1=Z1,
                      max_stop=max_stop, n=n, p=p, q=q, IndR=IndRec, IndRec2=IndRec2, approach=approach, FR=FR, ZI=ZI,
                      begin_ind=begin_ind,end_ind=end_ind,
-                     n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega,shp_sigma2_z=shp_sigma2_z, scl_sigma2_z=scl_sigma2_z,
-                     sigma_omega=sigma_omega,
+                     n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega, tp_rnd_ef=tp_rnd_ef,
+                     shp_sigma2_z=shp_sigma2_z, scl_sigma2_z=scl_sigma2_z,sigma_omega=sigma_omega,
                      shp_alpha1=shp_alpha1, scl_alpha1=scl_alpha1, shp_alpha2=shp_alpha2, scl_alpha2=scl_alpha2,mu_beta=mu_beta,
                      sigma_beta=sigma_beta,mu_psi=mu_psi,
                      sigma_psi=sigma_psi, baseline=baseline, tp_prior=tp_prior,
@@ -250,7 +253,8 @@ spnhppzi4<-function(formula,
         if(omega_data==0){
           # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022.stan")
           # mod<- rstan::stan_model("inst/stan/NHPP_ZI_LOGISTCOV_FRAT_16_03_2022.stan")
-          mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
+          # mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
+          mod<- stanmodels$NHPP_ZI_FRAT_29_12_2022
         } else{
           print("Omega data")
           mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA

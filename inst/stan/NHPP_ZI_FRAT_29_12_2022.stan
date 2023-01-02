@@ -72,7 +72,7 @@ if(p>0 && tp_rnd_ef==1){
 
   if(p>0 && tp_rnd_ef==0){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+log(omega[id[i]]);
+     eta[i] = X[i,]*beta*omega[id[i]];
      eta_event[i] = event[i]*eta[i];
   }
   for (j in 1:n){

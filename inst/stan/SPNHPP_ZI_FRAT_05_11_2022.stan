@@ -208,5 +208,4 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2)){
             tau ~ gamma(shp_tau, scl_tau);
             sum(omega) ~ normal(0, 0.001 * SP_N);
                                }
-
   }

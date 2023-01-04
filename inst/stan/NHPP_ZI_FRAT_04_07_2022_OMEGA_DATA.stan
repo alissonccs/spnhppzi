@@ -31,6 +31,7 @@ data{
   // real scl_sigma2_z;
   real mu_beta;
   real <lower=0> sigma_beta;
+  int <lower=0> tp_rnd_ef;
   int <lower=0> tp_prior;
     }
 
@@ -58,7 +59,17 @@ parameters{
   int a = 0;
   int c = 0;
 
-if(p>0){
+if(p>0 && tp_rnd_ef==1){
+  for (i in 1:N){
+     eta[i] = X[i,]*beta+omega[id[i]];
+     eta_event[i] = event[i]*eta[i];
+  }
+  for (j in 1:n){
+     exp_etay[j] = exp(Xy[j,]*beta+omega[j]);
+        }
+}
+
+  if(p>0 && tp_rnd_ef==0){
   for (i in 1:N){
      eta[i] = X[i,]*beta+log(omega[id[i]]);
      eta_event[i] = event[i]*eta[i];
@@ -67,6 +78,7 @@ if(p>0){
      exp_etay[j] = exp(Xy[j,]*beta)*omega[j];
         }
 }
+
 
 
   Lambda0 = Lambda_plp2(max_stop, alpha,n);

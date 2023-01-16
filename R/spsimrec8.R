@@ -159,13 +159,13 @@ spsimrec8 <-  function(N,
                   fu=input_gen_data$fu,
                   fu_max =fu_max,
                   x=as.matrix(input_gen_data[,2:(1+nr.cov_rec)]),
-                  x1=x1,
+                  # x1=x1,
                   beta_x_rec=beta_x_rec,
                   tp_rnd_ef= tp_rnd_ef,
                   rnd_ef=input_gen_data$rnd_ef,
-                  rnd_ef1=rnd_ef1,
+                  # rnd_ef1=rnd_ef1,
                   input_gen_data$recurr,
-                  recurr1 = recurr1,
+                  # recurr1 = recurr1,
                   nr.cov_rec=nr.cov_rec)
   #tab <-gen_data(ID, N, dist_int_func, par_int_func, fu, x,rnd_ef)
   return(tab)

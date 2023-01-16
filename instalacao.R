@@ -9,7 +9,7 @@
 example(source) # defines the sourceDir() function
 try(roxygen2::roxygenize(load_code = sourceDir), silent = TRUE)
 roxygen2::roxygenize()
-  install.packages("../spnhppzi", repos = NULL, type = "source")
+install.packages("../spnhppzi", repos = NULL, type = "source")
 library("spnhppzi")
 ?spnhppzi::spsimrec
 ?spnhppzi::spnhppzi

@@ -63,7 +63,7 @@ vector log_lambda_plp3(vector time, int N, vector alpha, real zeta){
 
 vector Lambda_bp(matrix G, vector gamma,int n){
       vector [n] lprob;
-      lprob= G*gamma;
+      lprob= -G*gamma;
       return lprob;
     }
 vector log_lambda_bp(matrix g, vector gamma,int N,real zeta){

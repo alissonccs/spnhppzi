@@ -7,7 +7,8 @@ bp <- function(time, max_time_id, degree, zeta,N,n) {
   B <- matrix(nrow=n, ncol=degree)
   for(k in 1:degree)
   {
-    b[,k] <- stats::dbeta(y, k, degree - k + 1)/zeta
+    # b[,k] <- stats::dbeta(y, k, degree - k + 1)/zeta
+    b[,k] <- stats::dbeta(y, k, degree - k + 1)
     B[,k] <- stats::pbeta(y1, k, degree - k + 1)
   }
   return(list(b=b, B=B))

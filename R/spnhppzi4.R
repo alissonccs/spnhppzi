@@ -221,8 +221,9 @@ spnhppzi4<-function(formula,
       }
       else{
         if(q==0){
-          mod<- stanmodels$BPNHPP_ZI_03_07_2022
+          mod<- stanmodels$BPNHPP_ZI_18_01_2023
         }
+      }
     }
     else{
     if(ZI==0){

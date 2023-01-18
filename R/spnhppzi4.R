@@ -216,8 +216,13 @@ spnhppzi4<-function(formula,
   if(spatial==0){
   if(FR==0){
     if(baseline==4){
+      if(ZI==0){
       mod <-stanmodels$BPNHPP_COV_4
-
+      }
+      else{
+        if(q==0){
+          mod<- stanmodels$BPNHPP_ZI_03_07_2022
+        }
     }
     else{
     if(ZI==0){

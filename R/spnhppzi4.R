@@ -257,10 +257,15 @@ spnhppzi4<-function(formula,
         #mod<- rstan::stan_model("/home/alisson/R/x86_64-pc-linux-gnu-library/4.2/spnhppzi/stan/NHPP_ZI_FRAT_04_07_2022.stan")
        # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022_1.stan")
         if(omega_data==0){
+          if(baseline==4){
+            mod <-stanmodels$BPNHPP_ZI_FRAT_18_01_2023
+          }
+                        else{
           # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022.stan")
           # mod<- rstan::stan_model("inst/stan/NHPP_ZI_LOGISTCOV_FRAT_16_03_2022.stan")
           # mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
           mod<- stanmodels$NHPP_ZI_FRAT_29_12_2022
+          }
         } else{
           print("Omega data")
           mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA

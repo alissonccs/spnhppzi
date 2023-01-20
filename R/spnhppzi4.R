@@ -318,6 +318,9 @@ spnhppzi4<-function(formula,
     #Optimizing
     if(approach==0){
       result<- optimizing(stanmodels$mod, data = data_model, hessian =TRUE, init=initial, algorithm = "LBFGS")
+      if(baseline==4){
+      result<-list("result_stan"=result,"G"=G, "g"=g, "m"=m)
+      }
       return(result)
     }
 
@@ -325,6 +328,9 @@ spnhppzi4<-function(formula,
       #result_b<- sampling(mod, data = data_model, cores = 4, iter=4000)
       result_b<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter, chains=n_chains)
       # result_b<- sampling(mod, data = data_model, cores = 4, iter=4000,  control = list(max_treedepth = 50,adapt_delta = 0.999))
+      if(baseline==4){
+        result_b<-list("result_stan"=result_b,"G"=G, "g"=g, "m"=m)
+      }
       return(result_b)
     }
   }
@@ -332,6 +338,9 @@ spnhppzi4<-function(formula,
     #result_c<- sampling(mod, data = data_model, cores = 4, iter=4000)
    result_c<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter,chains=n_chains)
     #result_c<- sampling(mod, data = data_model, cores = 4, iter=4000, control = list(max_treedepth = 50,adapt_delta = 0.999))
+   if(baseline==4){
+     result_c<-list("result_stan"=result_c,"G"=G, "g"=g, "m"=m)
+   }
     return(result_c)
   }
 }

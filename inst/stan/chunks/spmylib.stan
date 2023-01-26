@@ -96,4 +96,17 @@ real sparse_iar_lpdf(vector omega, real tau,
       return 0.5 * ((SP_N-1) * log(tau)
                     - tau * (omegat_D * omega - (omegat_W * omega)));
   }
+
+
+vector Lambda_bp(matrix G, vector gamma,int n){
+      vector [n] lprob;
+      lprob= -G*gamma;
+      return lprob;
+    }
+vector log_lambda_bp(matrix g, vector gamma,int N,real zeta){
+      vector[N] lprob1;
+      lprob1 = log(g*gamma) - log(zeta);
+            return lprob1;
+    }
 }
+

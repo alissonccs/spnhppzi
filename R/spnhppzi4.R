@@ -301,7 +301,11 @@ spnhppzi4<-function(formula,
       print("ICAR model ZI")
       # mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
         if(omega_data==0){
-        mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022
+          if(baseline==4){
+            mod <- stanmodels$BP_SPNHPP_ZI_FRAT_05_11_2022
+          }
+          else{
+        mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022}
         } else{
           print("Omega data")
         mod <- stanmodels$SPNHPP_ZI_RND_EF_DATA_09_11_2022
@@ -344,4 +348,9 @@ spnhppzi4<-function(formula,
     return(result_c)
   }
 }
+
+
+
+
+
 

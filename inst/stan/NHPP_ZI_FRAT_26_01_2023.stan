@@ -38,15 +38,24 @@ parameters{
   vector  <lower=0> [m] alpha;
   vector [p] beta;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
+  // vector <lower=0> [n] omega [tp_rnd_ef==0];
+  // vector [n] omega [tp_rnd_ef==1];
 
-  vector <lower=0> [n] omega;
+  // vector <lower=0> [n] omega;
+  vector <lower=0> [baseline == 4 ? 0 : n]  omega_0;
+  vector [baseline != 4 ? 0 : n]  omega_1;
 
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
           }
-
-
-// transformed parameters {
+transformed parameters {
+  vector [n]  omega;
+  if(tp_rnd_ef==0){
+    omega=omega_0;
+  } else{
+    omega=omega_1;
+    }
+}
   // vector[n] log_lik1;
  model {
   vector [n] Lambda0 ;
@@ -139,12 +148,12 @@ if(approach==1 && tp_prior==1 && tp_rnd_ef==0 ){
             // sigma_omega ~ gamma(shp_sigma2_z,scl_sigma2_z);
             // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
             // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            omega~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
+            omega_0~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
 } else if (approach==1 && tp_prior==1 && tp_rnd_ef==1){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
             sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            omega ~ normal(mu_omega,sigma2_z);
+            omega_1 ~ normal(mu_omega,sigma2_z);
             }
                                            }

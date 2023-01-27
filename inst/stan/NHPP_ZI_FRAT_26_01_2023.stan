@@ -39,7 +39,9 @@ parameters{
   vector [p] beta;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
 
-  vector <lower=0> [n] omega;
+  // vector <lower=0> [n] omega;
+  vector <lower=0> [baseline == 4 ? 0 : n]  omega;
+  vector [baseline != 4 ? 0 : n]  omega1;
 
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;

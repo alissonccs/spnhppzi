@@ -44,7 +44,6 @@ parameters{
   // vector <lower=0> [n] omega;
   vector <lower=0> [baseline == 4 ? 0 : n]  omega_0;
   vector [baseline != 4 ? 0 : n]  omega_1;
-
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
           }

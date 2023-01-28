@@ -46,7 +46,11 @@ parameters{
   vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
 
-  vector <lower=0> [n] omega;
+
+  vector <lower=0> [tp_rnd_ef==0 ? n : 0]  omega_0;
+  vector [tp_rnd_ef==1 ? n : 0]  omega_1;
+
+  // vector <lower=0> [n] omega;
 
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
@@ -69,21 +73,21 @@ parameters{
 
 if(p>0 && tp_rnd_ef==1){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+omega[id[i]];
+     eta[i] = X[i,]*beta+omega_1[id[i]];
      eta_event[i] = event[i]*eta[i];
   }
   for (j in 1:n){
-     exp_etay[j] = exp(Xy[j,]*beta+omega[j]);
+     exp_etay[j] = exp(Xy[j,]*beta+omega_1[j]);
         }
 }
 
   if(p>0 && tp_rnd_ef==0){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+log(omega[id[i]]);
+     eta[i] = X[i,]*beta+log(omega_0[id[i]]);
      eta_event[i] = event[i]*eta[i];
   }
   for (j in 1:n){
-     exp_etay[j] = exp(Xy[j,]*beta)*omega[j];
+     exp_etay[j] = exp(Xy[j,]*beta)*omega_0[j];
         }
 }
 
@@ -169,10 +173,10 @@ if(approach==1 && tp_prior==1){
             // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
             // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
             if(tp_rnd_ef==0){
-            omega~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
+            omega_0~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             }
             else {
-            omega ~ normal(mu_omega,sigma2_z);
+            omega_1 ~ normal(mu_omega,sigma2_z);
             }
                                            }
   }

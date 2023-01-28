@@ -42,19 +42,24 @@ parameters{
   // vector [n] omega [tp_rnd_ef==1];
 
   // vector <lower=0> [n] omega;
-  vector <lower=0> [n]  omega_0;
-  vector [n]  omega_1;
+  // vector <lower=0> [n]  omega_0;
+  // vector [n]  omega_1;
+
+  vector <lower=0> [tp_rnd_ef==0 ? n : 0]  omega_0;
+  vector [tp_rnd_ef==1 ? n : 0]  omega_1;
+
+
   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
           }
-transformed parameters {
-  vector [n]  omega;
-  if(tp_rnd_ef==0){
-    omega=omega_0;
-  } else{
-    omega=omega_1;
-    }
-}
+// transformed parameters {
+//   vector [n]  omega;
+//   if(tp_rnd_ef==0){
+//     omega=omega_0;
+//   } else{
+//     omega=omega_1;
+//     }
+// }
   // vector[n] log_lik1;
  model {
   vector [n] Lambda0 ;
@@ -70,21 +75,21 @@ transformed parameters {
 
 if(p>0 && tp_rnd_ef==1){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+omega[id[i]];
+     eta[i] = X[i,]*beta+omega_1[id[i]];
      eta_event[i] = event[i]*eta[i];
   }
   for (j in 1:n){
-     exp_etay[j] = exp(Xy[j,]*beta+omega[j]);
+     exp_etay[j] = exp(Xy[j,]*beta+omega_1[j]);
         }
 }
 
   if(p>0 && tp_rnd_ef==0){
   for (i in 1:N){
-     eta[i] = X[i,]*beta+log(omega[id[i]]);
+     eta[i] = X[i,]*beta+log(omega_0[id[i]]);
      eta_event[i] = event[i]*eta[i];
   }
   for (j in 1:n){
-     exp_etay[j] = exp(Xy[j,]*beta)*omega[j];
+     exp_etay[j] = exp(Xy[j,]*beta)*omega_0[j];
         }
 }
 

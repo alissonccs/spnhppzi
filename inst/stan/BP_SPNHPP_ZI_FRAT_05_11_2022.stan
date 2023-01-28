@@ -44,6 +44,7 @@ data{
   real h1_gamma;
   real h2_gamma;
   real<lower=0> zeta;
+  real<lower=0> lower_tau;
     }
 
 transformed data{
@@ -83,7 +84,7 @@ parameters{
   vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
   vector [SP_N] omega;
-  real<lower = 0> tau;
+  real<lower = lower_tau> tau;
   // vector [n] omega;
   // real <lower=0> sigma_omega;
   // real <lower=0> sigma2_z;

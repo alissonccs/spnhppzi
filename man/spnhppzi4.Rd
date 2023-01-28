@@ -45,7 +45,8 @@ spnhppzi4(
   h2_gamma = 4,
   omega_data = 0,
   omega = NULL,
-  tau = NULL
+  tau = NULL,
+  lower_tau = 0
 )
 }
 \arguments{

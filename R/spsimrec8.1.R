@@ -60,7 +60,9 @@ spsimrec8.1 <-  function(N,
                       # dfree = 0,
                       logist = 0,
                       mu_omega=0,
-                      sigma_omega=0){
+                      sigma_omega=0,
+                      baseline = c("plp1", "plp2")
+                      ){
   # source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
   ID <- c(1:N)
   dist_z <- tolower(dist_z)
@@ -70,6 +72,14 @@ spsimrec8.1 <-  function(N,
   nr.cov_log <- length(beta_x_log)
   cov_rec<-x1 %>% dplyr::select(all_of(cov_rec))
   cov_log<-x1 %>% dplyr::select(all_of(cov_log))
+
+  baseline <- tolower(baseline)
+  baseline <- match.arg(baseline)
+
+  baseline <- switch(baseline,
+                     "plp1" = 1,
+                     "plp2" = 2
+  )
 
   ## Designa as unidades de areas para cada individuo a partir de uma lista de areas fornecida como entrada ====
   if(spatial==1){
@@ -139,8 +149,8 @@ spsimrec8.1 <-  function(N,
    recurr_out<-list(recurr=recurr, recurr1=recurr1)
 
 
-print(head(cov_rec))
-print(head(cov_log))
+# print(head(cov_rec))
+# print(head(cov_log))
    input_gen_data<-x1 %>%
      # left_join(cov_log,by="ID") %>%
      left_join(rnd_ef_out$rnd_ef1,by="ID") %>%
@@ -150,10 +160,10 @@ print(head(cov_log))
    #   left_join(x1,by="ID")
 
    # print(head(fu))
-  print(head(input_gen_data))
-   # print(fu.max)
-   print(head(input_gen_data$rnd_ef))
-   print(head(rnd_ef1))
+  # print(head(input_gen_data))
+  #  # print(fu.max)
+  #  print(head(input_gen_data$rnd_ef))
+  #  print(head(rnd_ef1))
   ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
    ### Executa função ====
    tab <-gen_data(ID=input_gen_data$ID,N=N,
@@ -169,9 +179,10 @@ print(head(cov_log))
                   # rnd_ef1=rnd_ef1,
                   recurr=input_gen_data$recurr,
                   # recurr1 = recurr1,
-                  nr.cov_rec=nr.cov_rec)
+                  nr.cov_rec=nr.cov_rec,
+                  baseline=baseline)
   #tab <-gen_data(ID, N, dist_int_func, par_int_func, fu, x,rnd_ef)
-   print(head(tab))
+   # print(head(tab))
   base<-tab %>%
     left_join(input_gen_data,by="ID")
 

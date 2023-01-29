@@ -104,7 +104,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
     rnd_ef <- rnorm(n-1,0,sqrt(sig*(1/D_aux[-1])))
     rnd_ef <- Q_aux%*%c(0,rnd_ef)
-    print((rnd_ef))
+    # print((rnd_ef))
     return(as.vector(rnd_ef))
   }
 
@@ -145,8 +145,128 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   }
 
   ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
-  #' @title gen_data
-  #' @aliases gen_data
+  # @title gen_data
+  # @aliases gen_data
+  # @export
+  # @description           Gera os tempos de recorrências dos eventos.
+  # @param ID              Identificador dos indivíduos.
+  # @param N               Número de indivíduos.
+  # @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
+  # @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
+  # @param rnd_ef          Vetor de efeitos aleatórios.
+  # @param x               Matriz de covariávies
+  # @param recurr          Indicador de recorrência.
+  #
+  # gen_data<-function(ID,
+  #                    N,
+  #                    dist_int_func,
+  #                    par_int_func,
+  #                    fu,
+  #                    fu_max,
+  #                    x,
+  #                    # x1,
+  #                    beta_x_rec,
+  #                    tp_rnd_ef,
+  #                    rnd_ef,
+  #                    # rnd_ef1,
+  #                    recurr,
+  #                    # recurr1,
+  #                    nr.cov_rec){
+  #
+  #   if (dist_int_func == "weibull") { # weibull
+  #     alpha1 <- par_int_func[1]
+  #     alpha2 <- par_int_func[2]
+  #   }
+  #
+  #   ## Cálculo de alpha1_este e exp_eta ====
+  #   # Considera a forma utilizada para introdução de efeitos aleatórios
+  #   if(nr.cov_rec==0){exp_eta=rep(1,N)}
+  #   else if(tp_rnd_ef==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
+  #     exp_eta <- exp(x %*% beta_x_rec) * rnd_ef
+  #   }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
+  #     exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
+  #   }
+  #   alpha1_eta <- alpha1*exp_eta
+  #   # print(paste("alpha1_eta: ", dim(alpha1_eta)))
+  #   # print(paste("exp_eta: ", dim(exp_eta)))
+  #   # print(paste("N: ", N))
+  #   #print(alpha2)
+  #
+  #   ## Definição dos tempos de ocorrência dos primeiros eventos ====
+  #
+  #   T<-NULL
+  #   T1<-NULL
+  #   # print(paste("T: ", dim(T)))
+  #   # print(paste("T1: ", dim(T1)))
+  #   # IND<-NULL
+  #   for (i in 1:N) {
+  #     t<-NULL
+  #     #print(t)
+  #     U <- runif(1)
+  #     if (dist_int_func == "weibull") {
+  #       t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
+  #       #ind<-0
+  #       # print(i)
+  #       # print(t)
+  #       # print(fu[i])
+  #       if (t>fu[i]){
+  #         t<-fu[i]
+  #         # ind<-1
+  #       }
+  #     }
+  #     T1 <- cbind(ID[i],t)
+  #
+  #     ## Definição dos tempos de ocorrência dos eventos subsequentes ====
+  #     if (recurr[i]==0 & t<fu[i]){
+  #       # print(ID[i])
+  #       # print(recurr[i])
+  #       while (t < fu[i]) {
+  #         U <- runif(1)
+  #         t1 <- t
+  #         if (dist_int_func == "weibull") { # weibull
+  #           t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
+  #         }
+  #         #print(t)
+  #         if (t >= fu[i]) break
+  #         T1 <- rbind(T1,c(ID[i],t))
+  #         # print(T1)
+  #       }
+  #     }
+  #     T<-as.data.frame(rbind(T,T1))
+  #     # print(T)
+  #   }
+  #   colnames(T)<-c("ID","time")
+  #   # print(paste("T: ", dim(T)))
+  #
+  #   ## Consolida tabela contendo os dados de saída ====
+  #   tab <-T %>%
+  #     group_by(ID)%>%
+  #     mutate(#individuo = group_indices(),
+  #       ngroup=n(),
+  #       rep=row_number(),
+  #       expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu_max)))~2,TRUE~1),
+  #       expand1=expand)%>%
+  #     expandRows("expand") %>%
+  #     mutate(ngroup1=n(),
+  #            IndRec=case_when(ngroup1>2~1, TRUE~0),
+  #            rep1=row_number(),
+  #            begin=case_when(rep1==1~0,TRUE~lag(time)),
+  #            end=case_when(ngroup1==rep1~fu_max, TRUE~time),
+  #            status=case_when(end==fu_max~0,TRUE~1)) %>%
+  #     ungroup() %>%
+  #     # left_join(x1,by="ID") %>%
+  #     # left_join(rnd_ef1,by="ID") %>%
+  #     # left_join(recurr1,by="ID") %>%
+  #     dplyr::select(-c(time,ngroup))
+  #   return(tab)
+  #   #set.seed(NULL)
+  # }
+
+
+
+  ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
+  #' @title gen_data_plp1
+  #' @aliases gen_data_plp1
   #' @export
   #' @description           Gera os tempos de recorrências dos eventos.
   #' @param ID              Identificador dos indivíduos.
@@ -171,7 +291,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
                      # rnd_ef1,
                      recurr,
                      # recurr1,
-                     nr.cov_rec){
+                     nr.cov_rec,
+                     baseline){
 
     if (dist_int_func == "weibull") { # weibull
       alpha1 <- par_int_func[1]
@@ -186,7 +307,9 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
       exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
     }
+    if (baseline==2){
     alpha1_eta <- alpha1*exp_eta
+    }
     # print(paste("alpha1_eta: ", dim(alpha1_eta)))
     # print(paste("exp_eta: ", dim(exp_eta)))
     # print(paste("N: ", N))
@@ -204,127 +327,12 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
       #print(t)
       U <- runif(1)
       if (dist_int_func == "weibull") {
-        t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
-        #ind<-0
-        # print(i)
-        # print(t)
-        # print(fu[i])
-        if (t>fu[i]){
-          t<-fu[i]
-          # ind<-1
-        }
-      }
-      T1 <- cbind(ID[i],t)
-
-      ## Definição dos tempos de ocorrência dos eventos subsequentes ====
-      if (recurr[i]==0 & t<fu[i]){
-        # print(ID[i])
-        # print(recurr[i])
-        while (t < fu[i]) {
-          U <- runif(1)
-          t1 <- t
-          if (dist_int_func == "weibull") { # weibull
-            t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
-          }
-          #print(t)
-          if (t >= fu[i]) break
-          T1 <- rbind(T1,c(ID[i],t))
-          # print(T1)
-        }
-      }
-      T<-as.data.frame(rbind(T,T1))
-      # print(T)
-    }
-    colnames(T)<-c("ID","time")
-    # print(paste("T: ", dim(T)))
-
-    ## Consolida tabela contendo os dados de saída ====
-    tab <-T %>%
-      group_by(ID)%>%
-      mutate(#individuo = group_indices(),
-        ngroup=n(),
-        rep=row_number(),
-        expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu_max)))~2,TRUE~1),
-        expand1=expand)%>%
-      expandRows("expand") %>%
-      mutate(ngroup1=n(),
-             IndRec=case_when(ngroup1>2~1, TRUE~0),
-             rep1=row_number(),
-             begin=case_when(rep1==1~0,TRUE~lag(time)),
-             end=case_when(ngroup1==rep1~fu_max, TRUE~time),
-             status=case_when(end==fu_max~0,TRUE~1)) %>%
-      ungroup() %>%
-      # left_join(x1,by="ID") %>%
-      # left_join(rnd_ef1,by="ID") %>%
-      # left_join(recurr1,by="ID") %>%
-      dplyr::select(-c(time,ngroup))
-    return(tab)
-    #set.seed(NULL)
-  }
-
-
-
-  ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
-  #' @title gen_data_plp1
-  #' @aliases gen_data_plp1
-  #' @export
-  #' @description           Gera os tempos de recorrências dos eventos.
-  #' @param ID              Identificador dos indivíduos.
-  #' @param N               Número de indivíduos.
-  #' @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
-  #' @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
-  #' @param rnd_ef          Vetor de efeitos aleatórios.
-  #' @param x               Matriz de covariávies
-  #' @param recurr          Indicador de recorrência.
-  #'
-  gen_data_plp1<-function(ID,
-                     N,
-                     dist_int_func,
-                     par_int_func,
-                     fu,
-                     fu_max,
-                     x,
-                     # x1,
-                     beta_x_rec,
-                     tp_rnd_ef,
-                     rnd_ef,
-                     # rnd_ef1,
-                     recurr,
-                     # recurr1,
-                     nr.cov_rec){
-
-    if (dist_int_func == "weibull") { # weibull
-      alpha1 <- par_int_func[1]
-      alpha2 <- par_int_func[2]
-    }
-
-    ## Cálculo de alpha1_este e exp_eta ====
-    # Considera a forma utilizada para introdução de efeitos aleatórios
-    if(nr.cov_rec==0){exp_eta=rep(1,N)}
-    else if(tp_rnd_ef==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
-      exp_eta <- exp(x %*% beta_x_rec) * rnd_ef
-    }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
-      exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
-    }
-    # alpha1_eta <- alpha1*exp_eta
-    # print(paste("alpha1_eta: ", dim(alpha1_eta)))
-    # print(paste("exp_eta: ", dim(exp_eta)))
-    # print(paste("N: ", N))
-    #print(alpha2)
-
-    ## Definição dos tempos de ocorrência dos primeiros eventos ====
-
-    T<-NULL
-    T1<-NULL
-    # print(paste("T: ", dim(T)))
-    # print(paste("T1: ", dim(T1)))
-    # IND<-NULL
-    for (i in 1:N) {
-      t<-NULL
-      #print(t)
-      U <- runif(1)
-      if (dist_int_func == "weibull") {
+        if(baseline==1){
         t <- alpha1*((-1)*log(U)*(exp_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
+        }
+        else {#baseline==2
+        t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2)
+        }
         #ind<-0
         # print(i)
         # print(t)
@@ -344,7 +352,12 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
           U <- runif(1)
           t1 <- t
           if (dist_int_func == "weibull") { # weibull
+            if(baseline==1){
             t <- ((-1)*log(U)*((exp_eta[i])^(-1))*alpha1^alpha2 + (t1)^(alpha2))^(1 / alpha2)
+            }
+            else{#baseline==2
+            t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
+            }
           }
           #print(t)
           if (t >= fu[i]) break

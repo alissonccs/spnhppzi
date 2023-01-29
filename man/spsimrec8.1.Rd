@@ -32,7 +32,8 @@ spsimrec8.1(
   pi = 0,
   logist = 0,
   mu_omega = 0,
-  sigma_omega = 0
+  sigma_omega = 0,
+  baseline = c("plp1", "plp2")
 )
 }
 \arguments{

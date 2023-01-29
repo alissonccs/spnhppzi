@@ -2,7 +2,8 @@
 % Please edit documentation in R/Utils_spsimrec.R
 \name{gen_data}
 \alias{gen_data}
-\title{gen_data}
+\alias{gen_data_plp1}
+\title{gen_data_plp1}
 \usage{
 gen_data(
   ID,
@@ -16,7 +17,8 @@ gen_data(
   tp_rnd_ef,
   rnd_ef,
   recurr,
-  nr.cov_rec
+  nr.cov_rec,
+  baseline
 )
 }
 \arguments{

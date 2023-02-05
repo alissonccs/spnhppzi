@@ -243,8 +243,7 @@ spnhppzi4<-function(formula,
   else {
     if(ZI==0){
       if(baseline==4){
-              mod <-stanmodels$BPNHPP_COV_FRAT_10.stan
-      }
+              mod <-stanmodels$BPNHPP_COV_FRAT_10
       else{
   # mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_COV_FRAT_10.stan")
       #

@@ -44,16 +44,18 @@ spnhppzi4<-function(formula,
                        spatial=0,
                        sp_model = c("car","sparse","icar"),
                        nb_mat=NULL,
+                       data_tau=0,
+                       tau=1, #usar somente para testar modelo onde tau é data
+                       tp_prior_tau=c("gamma","inv_gamma"),
                        shp_tau=0,
                        scl_tau=0,
+                       lower_tau=0,
                        W_n=0,
                        bp_degree=NULL,
                        h1_gamma=0,
                        h2_gamma=4,
                        omega_data=0,
-                       omega=NULL,
-                       tau=NULL,
-                       lower_tau=0
+                       omega=NULL
                        ){
 
   formula <- Formula::Formula(formula)
@@ -61,6 +63,12 @@ spnhppzi4<-function(formula,
   approach <- match.arg(approach)
   baseline <- tolower(baseline)
   baseline <- match.arg(baseline)
+  tp_prior_tau<-tolower(tp_prior_tau)
+  tp_prior_tau<-match.arg(tp_prior_tau)
+  tp_prior_tau <- switch(tp_prior_tau,
+                     "gamma" = 1,
+                     "inv_gamma" = 2
+  )
 
   ZI <- tolower(ZI)
   ZI <- match.arg(ZI)
@@ -212,7 +220,7 @@ spnhppzi4<-function(formula,
                      mu_xi=mu_xi, sigma_xii=sigma_xi,
                      G=G, g=g, zeta=zeta,
                      omega=omega,
-                     tau=tau, lower_tau=lower_tau
+                     tau=tau, lower_tau=lower_tau , tp_prior_tau=tp_prior_tau
                      )
   if(spatial==0){
   if(FR==0){
@@ -309,7 +317,12 @@ spnhppzi4<-function(formula,
       # mod <- stanmodels$SPNHPP_ZI_FRAT_15_09_2022
         if(omega_data==0){
           if(baseline==4){
+            if(data_tau==0){
             mod <- stanmodels$BP_SPNHPP_ZI_FRAT_05_11_2022
+            }
+            else{
+              print("Data tau")
+              mod <- stanmodels$BP_SPNHPP_ZI_FRAT_10_02_2022_tau_data}
           }
           else{
         mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022}

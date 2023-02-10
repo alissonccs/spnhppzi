@@ -44,8 +44,7 @@ data{
   real h1_gamma;
   real h2_gamma;
   real<lower=0> zeta;
-  real<lower=0> lower_tau;
-  int tp_prior_tau;
+  real<lower=0> tau;
     }
 
 transformed data{
@@ -85,7 +84,7 @@ parameters{
   vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
   vector [SP_N] omega;
-  real<lower = lower_tau> tau;
+  // real<lower = lower_tau> tau;
   // vector [n] omega;
   // real <lower=0> sigma_omega;
   // real <lower=0> sigma2_z;
@@ -200,13 +199,8 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             // omega ~ normal(mu_omega,sigma_omega);
             omega ~sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
-            sum(omega) ~ normal(0, 0.001 * SP_N);
-            if(tp_prior_tau==1){
             tau ~ gamma(shp_tau, scl_tau);
-            }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
+            sum(omega) ~ normal(0, 0.001 * SP_N);
                                }
 
   if(approach==1 && tp_prior==1 && baseline==3){
@@ -222,11 +216,5 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             omega ~sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             // tau ~ gamma(shp_tau, scl_tau);
             sum(omega) ~ normal(0, 0.001 * SP_N);
-            if(tp_prior_tau==1){
-            tau ~ gamma(shp_tau, scl_tau);
-            }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
                                }
   }

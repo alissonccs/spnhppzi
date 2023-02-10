@@ -37,16 +37,18 @@ spnhppzi4(
   spatial = 0,
   sp_model = c("car", "sparse", "icar"),
   nb_mat = NULL,
+  data_tau = 0,
+  tau = 1,
+  tp_prior_tau = c("gamma", "inv_gamma"),
   shp_tau = 0,
   scl_tau = 0,
+  lower_tau = 0,
   W_n = 0,
   bp_degree = NULL,
   h1_gamma = 0,
   h2_gamma = 4,
   omega_data = 0,
-  omega = NULL,
-  tau = NULL,
-  lower_tau = 0
+  omega = NULL
 )
 }
 \arguments{

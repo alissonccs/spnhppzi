@@ -50,6 +50,7 @@ spnhppzi4<-function(formula,
                        shp_tau=0,
                        scl_tau=0,
                        lower_tau=0,
+                       tp_icar=0,
                        W_n=0,
                        bp_degree=NULL,
                        h1_gamma=0,
@@ -220,7 +221,7 @@ spnhppzi4<-function(formula,
                      mu_xi=mu_xi, sigma_xii=sigma_xi,
                      G=G, g=g, zeta=zeta,
                      omega=omega,
-                     tau=tau, lower_tau=lower_tau , tp_prior_tau=tp_prior_tau
+                     tau=tau, lower_tau=lower_tau , tp_prior_tau=tp_prior_tau,tp_icar=tp_icar
                      )
   if(spatial==0){
   if(FR==0){

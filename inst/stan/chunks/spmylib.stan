@@ -97,6 +97,22 @@ real sparse_iar_lpdf(vector omega, real tau,
                     - tau * (omegat_D * omega - (omegat_W * omega)));
   }
 
+real sparse_iar1_lpdf(vector omega, real tau,
+    int[,] W_sparse, vector D_sparse, vector lambda, int SP_N, int W_n) {
+      row_vector[SP_N] omegat_D; // omega' * D
+      row_vector[SP_N] omegat_W; // omega' * W
+      vector[SP_N] ldet_terms;
+
+      omegat_D = (omega .* D_sparse)';
+      omegat_W = rep_row_vector(0, SP_N);
+      for (i in 1:W_n) {
+        omegat_W[W_sparse[i, 1]] = omegat_W[W_sparse[i, 1]] + omega[W_sparse[i, 2]];
+        omegat_W[W_sparse[i, 2]] = omegat_W[W_sparse[i, 2]] + omega[W_sparse[i, 1]];
+      }
+
+      return 0.5 * (-(SP_N-1) * log(tau)
+                    - (1/tau) * (omegat_D * omega - (omegat_W * omega)));
+  }
 
 vector Lambda_bp(matrix G, vector gamma,int n){
       vector [n] lprob;

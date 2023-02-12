@@ -43,6 +43,7 @@ spnhppzi4(
   shp_tau = 0,
   scl_tau = 0,
   lower_tau = 0,
+  tp_icar = 0,
   W_n = 0,
   bp_degree = NULL,
   h1_gamma = 0,

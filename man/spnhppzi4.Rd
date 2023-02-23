@@ -49,7 +49,8 @@ spnhppzi4(
   h1_gamma = 0,
   h2_gamma = 4,
   omega_data = 0,
-  omega = NULL
+  omega = NULL,
+  std_dev = 1
 )
 }
 \arguments{

@@ -319,7 +319,8 @@ spnhppzi4<-function(formula,
         if(omega_data==0){
           if(baseline==4){
             if(data_tau==0){
-            mod <- stanmodels$BP_SPNHPP_ZI_FRAT_05_11_2022
+            # mod <- stanmodels$BP_SPNHPP_ZI_FRAT_05_11_2022
+              mod <- stanmodels$BP_SPNHPP_ZI_FRAT_23_02_2023
             }
             else{
               print("Data tau")

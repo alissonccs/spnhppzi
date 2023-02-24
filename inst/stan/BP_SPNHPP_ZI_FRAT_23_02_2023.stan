@@ -87,7 +87,8 @@ parameters{
   vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
   vector [SP_N] omega;
-  real<lower = lower_tau> tau;
+  real<lower = 0> stddev;
+  // real<lower = lower_tau> tau;
   // vector [n] omega;
   // real <lower=0> sigma_omega;
   // real <lower=0> sigma2_z;
@@ -95,8 +96,8 @@ parameters{
 
 
 transformed parameters {
-real <lower=0> stddev;
-stddev=sqrt(1/tau);
+real <lower=0> tau;
+tau=1/stddev^2;
 }
  model {
   vector [n] Lambda0 ;
@@ -220,11 +221,11 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             sum(omega) ~ normal(0, 0.001 * SP_N);
             if(tp_prior_tau==1){
             // target += -0.5 * log(tau);  // correção Jacobiana
-            sqrt(1/tau) ~ uniform(0, std_dev);
+            stddev ~ uniform(0, std_dev);
             }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
+            // else{
+            //   tau ~ inv_gamma(shp_tau, scl_tau);
+            // }
                                }
 
   if(approach==1 && tp_prior==1 && baseline==3){
@@ -247,10 +248,10 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             sum(omega) ~ normal(0, 0.001 * SP_N);
             if(tp_prior_tau==1){
             // target += -0.5 * log(tau);  // correção Jacobiana
-            sqrt(1/tau) ~ uniform(0, std_dev);
+            stddev ~ uniform(0, std_dev);
             }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
+            // else{
+            //   tau ~ inv_gamma(shp_tau, scl_tau);
+            // }
                                }
   }

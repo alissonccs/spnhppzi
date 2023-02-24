@@ -211,7 +211,7 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             }
             sum(omega) ~ normal(0, 0.001 * SP_N);
             if(tp_prior_tau==1){
-            target += -0.5 * log(tau);  // correção Jacobiana
+            // target += -0.5 * log(tau);  // correção Jacobiana
             sqrt(1/tau) ~ uniform(0, std_dev);
             }
             else{
@@ -238,7 +238,7 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             // tau ~ gamma(shp_tau, scl_tau);
             sum(omega) ~ normal(0, 0.001 * SP_N);
             if(tp_prior_tau==1){
-            target += -0.5 * log(tau);  // correção Jacobiana
+            // target += -0.5 * log(tau);  // correção Jacobiana
             sqrt(1/tau) ~ uniform(0, std_dev);
             }
             else{

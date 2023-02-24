@@ -161,13 +161,13 @@ if(baseline==4){
          target += log_sum_exp(bernoulli_lpmf(1| pii),
                   Lambda0[i] +
                    bernoulli_lpmf(0 | pii));
-         target += -0.5 * log(tau);
+         // target += -0.5 * log(tau);
        }
        else{
          target += bernoulli_lpmf(0 | pii)+
                    Lambda0[i] +
                    sum(log_lambda0_event[begin_ind[i]:end_ind[i]]);
-         target += -0.5 * log(tau);
+         // target += -0.5 * log(tau);
        }
                   }
           }
@@ -177,7 +177,7 @@ if(baseline==4){
          target += log_sum_exp(bernoulli_lpmf(1| pii),
                    Lambda0[i]*exp_etay[i] +
                    bernoulli_lpmf(0 | pii));
-         target += -0.5 * log(tau);
+         // target += -0.5 * log(tau);
        }
        else{
          target +=bernoulli_lpmf(0 | pii)+
@@ -186,7 +186,7 @@ if(baseline==4){
                   sum(eta_event[begin_ind[i]:end_ind[i]]);
        }
                      }
-          target += -0.5 * log(tau);
+          // target += -0.5 * log(tau);
         }
 
  // if(approach==1 && tp_prior==1){

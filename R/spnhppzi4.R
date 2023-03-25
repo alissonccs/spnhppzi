@@ -240,19 +240,20 @@ spnhppzi4<-function(formula,
     }
     else{
     if(ZI==0){
-      if(tp_DIC==0){#USA GENERATE QUANTITIES
+      # if(tp_DIC==0){#USA GENERATE QUANTITIES
       mod <- stanmodels$NHPP_COV_4
-      }
-      else{
-        mod <- stanmodels$NHPP_COV_5
-      }
+      # }
+      # else{
+        # mod <- stanmodels$NHPP_COV_5
+      # }
     }
     else{
       if(q==0){
-        mod<- stanmodels$NHPP_ZI_03_07_2022
+        # mod<- stanmodels$NHPP_ZI_03_07_2022
+        mod<- stanmodels$NHPP_ZI_25_03_2023
       }
       else{
-        mod<- stanmodels$NHPP_ZI_LOGISTCOV_23_07_2022
+        mod<- stanmodels$NHPP_ZI_LOGISTCOV_25_03_2023
       }
     }
     }

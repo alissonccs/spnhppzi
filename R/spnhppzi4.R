@@ -57,7 +57,8 @@ spnhppzi4<-function(formula,
                        h2_gamma=4,
                        omega_data=0,
                        omega=NULL,
-                       std_dev=1
+                       std_dev=1,
+                       tp_DIC=0
                        ){
 
   formula <- Formula::Formula(formula)
@@ -239,7 +240,12 @@ spnhppzi4<-function(formula,
     }
     else{
     if(ZI==0){
+      if(tp_DIC==0){#USA GENERATE QUANTITIES
       mod <- stanmodels$NHPP_COV_4
+      }
+      else{
+        mod <- stanmodels$NHPP_COV_5
+      }
     }
     else{
       if(q==0){

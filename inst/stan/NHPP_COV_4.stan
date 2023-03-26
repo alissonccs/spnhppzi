@@ -62,7 +62,7 @@ model{vector [n] Lambda0 ;
   }
 
   generated quantities {
-  row_vector [n] log_lik1;
+  row_vector [n] log_lik;
   {
   vector [n] Lambda0 ;
   vector [N] log_lambda0;
@@ -118,13 +118,13 @@ model{vector [n] Lambda0 ;
 
  if(p == 0){
      for (i in 1:n) {
-       log_lik1[i]=   Lambda0[i] +
+       log_lik[i]=   Lambda0[i] +
                     sum_log_lambda0[i];
                    }
            }
      else{
        for (i in 1:n) {
-       log_lik1[i]= Lambda0[i]*exp_etay[i]+
+       log_lik[i]= Lambda0[i]*exp_etay[i]+
                   sum_log_lambda0[i]+sum_eta[i];
                       }
 

@@ -58,7 +58,7 @@ spnhppzi4<-function(formula,
                        omega_data=0,
                        omega=NULL,
                        std_dev=1,
-                       tp_DIC=0
+                       # tp_DIC=0
                        ){
 
   formula <- Formula::Formula(formula)
@@ -269,12 +269,12 @@ spnhppzi4<-function(formula,
       #mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/4.2/NHPPZISP/stan/NHPP_COV_FRAT_10.stan")
       #mod<- rstan::stan_model("/usr/local/lib/R/site-library/NHPPZISP/stan/NHPP_COV_FRAT_10.stan")
       # mod <- stanmodels$NHPP_COV_FRAT_10
-      if(tp_DIC==0){#USA GENERATE QUANTITIES
-      mod <- stanmodels$NHPP_COV_FRAT_10
-      }
-      else{
+      # if(tp_DIC==0){#USA GENERATE QUANTITIES
+      # mod <- stanmodels$NHPP_COV_FRAT_10
+      # }
+      # else{
       mod <- stanmodels$NHPP_COV_FRAT_26_03_2023
-      }
+      # }
   }
     }
     else{

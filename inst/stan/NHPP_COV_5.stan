@@ -73,19 +73,6 @@ transformed parameters{
      }
 
 
-  //
-  //
-  //
-  // for ( b in 1:n) {
-  //        sum_log_lambda0[b]=sum(log_lambda0_event[begin_int[b]:end_int[b]]);
-  //       }
-  //
-  //  if(p>0){
-  //  for ( c in 1:n) {
-  //    sum_eta[c]=sum(eta_event[begin_int[c]:end_int[c]]);
-  //               }
-  //         }
-
  if(p == 0){
      for (i in 1:n) {
        log_lik[i]=   Lambda0[i] +

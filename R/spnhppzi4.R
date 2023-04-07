@@ -290,12 +290,13 @@ spnhppzi4<-function(formula,
           if(baseline==4){
             mod <-stanmodels$BPNHPP_ZI_FRAT_18_01_2023
           }
-                        else{
+          else{
           # mod<- rstan::stan_model("/home/alisson/spnhppzi/inst/stan/NHPP_ZI_FRAT_04_07_2022.stan")
           # mod<- rstan::stan_model("inst/stan/NHPP_ZI_LOGISTCOV_FRAT_16_03_2022.stan")
           # mod<- stanmodels$NHPP_ZI_FRAT_04_07_2022
           # mod<- stanmodels$NHPP_ZI_FRAT_29_12_2022
-          mod<- stanmodels$NHPP_ZI_FRAT_26_01_2023
+          # mod<- stanmodels$NHPP_ZI_FRAT_26_01_2023
+          mod<- stanmodels$NHPP_ZI_FRAT_07_04_2023
           }
         } else{
           print("Omega data")

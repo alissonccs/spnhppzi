@@ -345,7 +345,8 @@ spnhppzi4<-function(formula,
               mod <- stanmodels$BP_SPNHPP_ZI_FRAT_10_02_2022_tau_data}
           }
           else{
-        mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022}
+          # mod <- stanmodels$SPNHPP_ZI_FRAT_05_11_2022}
+          mod <- stanmodels$SPNHPP_ZI_FRAT_09_04_2023}
         } else{
           print("Omega data")
         mod <- stanmodels$SPNHPP_ZI_RND_EF_DATA_09_11_2022

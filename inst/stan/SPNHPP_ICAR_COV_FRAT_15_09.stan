@@ -108,9 +108,24 @@ parameters{
       exp_etay[j] = exp(Xy[j,]*beta+omega[gr_SP_ID[j]]);
     }
 }
-    Lambda0 = Lambda_plp2(max_stop, alpha,n);
-    log_lambda0 = log_lambda_plp2(time, N, alpha);
-    log_lambda0_event= event .*log_lambda0;
+
+if(baseline==1){
+  Lambda0 = Lambda_plp1(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==2){
+  Lambda0 = Lambda_plp2(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==3){
+  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
+  log_lambda0 = log_lambda_plp3(time, N, alpha,tau);
+  log_lambda0_event = event .*log_lambda0;
+}
 
     // for ( b in 1:n) {
     //   sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
@@ -147,5 +162,72 @@ if(approach==1 && tp_prior==1){
     tau ~ gamma(shp_tau, scl_tau);
     sum(omega) ~ normal(0, 0.001 * SP_N);
     // omega ~ normal(mu_omega,sigma_omega);
+  }
+}
+
+
+generated quantities{
+  vector[n] log_lik;
+  {
+    vector [n] Lambda0 ;
+    vector [N] log_lambda0 ;
+    vector [N] log_lambda0_event;
+    vector[p == 0 ? 0 : N] eta;
+    vector [N] eta_event ;
+    vector[p == 0 ? 0 : n] exp_etay;
+    vector [n] sum_log_lambda0 = rep_vector(0, n);
+    vector [n] sum_eta = rep_vector(0, n);
+    int a = 0;
+    int c = 0;
+
+    if(p>0){
+      for (i in 1:N){
+        eta[i] = X[i,]*beta+omega[SP_ID[i]];
+        eta_event[i] = event[i]*eta[i];
+      }
+      for (j in 1:n){
+      exp_etay[j] = exp(Xy[j,]*beta+omega[gr_SP_ID[j]]);
+    }
+}
+
+if(baseline==1){
+  Lambda0 = Lambda_plp1(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==2){
+  Lambda0 = Lambda_plp2(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==3){
+  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
+  log_lambda0 = log_lambda_plp3(time, N, alpha,tau);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+    // for ( b in 1:n) {
+    //   sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
+    //   if(p>0){
+    //     sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
+    //   }
+    // }
+
+   if(p == 0){
+      for (i in 1:n) {
+        log_lik[i]=   Lambda0[i] +
+                    sum(log_lambda0_event[begin_ind[i]:end_ind[i]]);
+      }
+    }
+    else{
+      for (i in 1:n) {
+        log_lik[i]= Lambda0[i]*exp_etay[i]+
+                  sum(log_lambda0_event[begin_ind[i]:end_ind[i]])+
+                  sum(eta_event[begin_ind[i]:end_ind[i]]);
+
+      }
+    }
   }
 }

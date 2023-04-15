@@ -261,7 +261,8 @@ spnhppzi4<-function(formula,
   else {
     if(ZI==0){
       if(baseline==4){
-              mod <-stanmodels$BPNHPP_COV_FRAT_10
+              # mod <-stanmodels$BPNHPP_COV_FRAT_10
+              mod <-stanmodels$BPNHPP_COV_FRAT_10_15_04_2023
       }
       else{
   # mod <- rstan::stan_model("~/R/x86_64-pc-linux-gnu-library/3.6/spnhppzi/stan/NHPP_COV_FRAT_10.stan")
@@ -273,7 +274,8 @@ spnhppzi4<-function(formula,
       mod <- stanmodels$NHPP_COV_FRAT_10
       }
       else{
-      mod <- stanmodels$NHPP_COV_FRAT_26_03_2023
+      # mod <- stanmodels$NHPP_COV_FRAT_26_03_2023
+      mod <- stanmodels$NHPP_COV_FRAT_15_04_2023
       }
   }
     }

@@ -230,7 +230,8 @@ spnhppzi4<-function(formula,
   if(FR==0){
     if(baseline==4){
       if(ZI==0){
-      mod <-stanmodels$BPNHPP_COV_4
+      # mod <-stanmodels$BPNHPP_COV_4
+      mod <-stanmodels$BPNHPP_COV_4_16_ABR_2023
       }
       else{
         if(q==0){
@@ -242,6 +243,7 @@ spnhppzi4<-function(formula,
     if(ZI==0){
       # if(tp_DIC==0){#USA GENERATE QUANTITIES
       mod <- stanmodels$NHPP_COV_4
+
       # }
       # else{
         # mod <- stanmodels$NHPP_COV_5

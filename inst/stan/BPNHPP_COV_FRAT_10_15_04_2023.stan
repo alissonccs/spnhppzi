@@ -170,9 +170,9 @@ if(approach==1 && tp_prior==1 && tp_rnd_ef==0){
             // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
             // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
             // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
-            // omega ~ normal(mu_omega,sigma_omega);
+            omega_1 ~ normal(mu_omega,sigma2_z);
 
-            omega_0~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
+            // omega_0~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
   }
 }
 generated quantities{

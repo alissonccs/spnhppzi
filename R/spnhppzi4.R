@@ -235,7 +235,8 @@ spnhppzi4<-function(formula,
       }
       else{
         if(q==0){
-          mod<- stanmodels$BPNHPP_ZI_18_01_2023
+          # mod<- stanmodels$BPNHPP_ZI_18_01_2023
+          mod<- stanmodels$BPNHPP_ZI_20_04_2023
         }
       }
     }
@@ -277,7 +278,7 @@ spnhppzi4<-function(formula,
       }
       else{
       # mod <- stanmodels$NHPP_COV_FRAT_26_03_2023
-      mod <- stanmodels$NHPP_COV_FRAT_15_04_2023
+      mod <- stanmodels$NHPP_COV_FRAT_15_04_2023v
       }
   }
     }
@@ -379,6 +380,7 @@ spnhppzi4<-function(formula,
       # result_b<- sampling(mod, data = data_model, cores = 4, iter=4000,  control = list(max_treedepth = 50,adapt_delta = 0.999))
       if(baseline==4){
         result_b<-list("result_stan"=result_b,"G"=G, "g"=g, "m"=m)
+        # result_b[["result_stan"]]<-
       }
       return(result_b)
     }

@@ -1,7 +1,4 @@
 
-# remove.packages("spnhppzi")
-# devtools::install_github("alissonccs/spnhppzi@master", auth_token = "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")
-
 library(devtools)
 library(spnhppzi)
 library(rstan)
@@ -19,7 +16,7 @@ library(spam)
 library(tibble)
 library(loo)
 
-function_MOD04_BP<-function(N,
+function_MOD02_BP<-function(N,
                             alpha1_r,
                             alpha2_r,
                             beta1_r,
@@ -68,13 +65,13 @@ function_MOD04_BP<-function(N,
                          # sp_tau=sp_tau_r,
                          #sp_alpha=sp_alpha_r,
                          #beta.x = cov.fu$beta.x,
-                         mu_omega = 0,
-                         sigma_omega = 1,
-                         dist_z = "lognormal",
-                         random_ef=1,
-                         tp_rnd_ef=1,
+                         # mu_omega = 0,
+                         # sigma_omega = 1,
+                         # dist_z = "lognormal",
+                         random_ef=0,
+                         # tp_rnd_ef=1,
                          pi = pi_r,
-                         par_z=par_z_r,
+                         # par_z=par_z_r,
                          dist_int_func = "weibull",
                          par_int_func = c(alpha1_r,alpha2_r),
                          baseline="plp2"
@@ -96,7 +93,7 @@ function_MOD04_BP<-function(N,
     RESULT_BAYES_SCOV1<- spnhppzi::spnhppzi4(formula2,
                                              base_sp,
                                              baseline = "bp",
-                                             FR="TRUE",
+                                             FR="FALSE",
                                              ZI="FALSE",
                                              approach = "BAYES",
                                              # sp_model = "ICAR",
@@ -106,8 +103,8 @@ function_MOD04_BP<-function(N,
                                              # shp_alpha2=1,scl_alpha2=1,
                                              mu_beta=0,sigma_beta=1,
                                              # mu_psi=0,sigma_psi=1,
-                                             mu_omega=0,
-                                             shp_sigma2_z =1, scl_sigma2_z =1,
+                                             # mu_omega=0,
+                                             # shp_sigma2_z =1, scl_sigma2_z =1,
                                              spatial=0,
                                              # nb_mat=RMBH_mat,
                                              # shp_tau=1,
@@ -115,7 +112,8 @@ function_MOD04_BP<-function(N,
                                              n_iter = 2000,
                                              n_cores=2,
                                              n_chains=2,
-                                             W_n=284,omega_data = 0,
+                                             W_n=284,
+                                             # omega_data = 0,
                                              bp_degree=degree_bp,
                                              h1_gamma=0,
                                              h2_gamma=1,
@@ -125,24 +123,22 @@ function_MOD04_BP<-function(N,
                                              # std_dev = 1
                                              # omega=omega_data$omega,
                                              # tau=sp_tau_r,
-                                             tp_rnd_ef = 1
-                                             
-                                             
+                                             # tp_rnd_ef = 1
                                              
     )
     
     
     set.seed(NULL)
     # pars<- as.data.frame(RESULT_BAYES_SCOV1$result_stan, pars = c("alpha","beta","pii","tau"))
-    pars_desc<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("alpha","beta","sigma2_z"))
+    pars_desc<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("alpha","beta"))
     pars_desc<-pars_desc$summary
     loglik<-as.data.frame(RESULT_BAYES_SCOV1$result_stan, pars = c("log_lik"))
     
-    omega_desc<-summary(RESULT_BAYES_SCOV1, pars = c("omega"))
-    omega_desc<-omega_desc$summary
+    # omega_desc<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("omega"))
+    # omega_desc<-omega_desc$summary
     
-    tau_desc<-summary(RESULT_BAYES_SCOV1, pars = c("tau"))
-    tau_desc<-tau_desc$summary
+    # tau_desc<-summary(RESULT_BAYES_SCOV1, pars = c("tau"))
+    # tau_desc<-tau_desc$summary
     
     gamma_vec<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("gamma"))
     gamma_vec<-gamma_vec$summary
@@ -158,14 +154,14 @@ function_MOD04_BP<-function(N,
     
     
     
-    pars_loglik<-as.data.frame(summary(RESULT_BAYES_SCOV1, pars = c("log_lik")))
-    ess_bulk(RESULT_BAYES_SCOV1$result_stan)
-    Rhat(RESULT_BAYES_SCOV1$result_stan)
-    n_eff_loglik<-pars_loglik$summary.n_eff
-    r_n_eff<- n_eff_loglik/2000
+    # pars_loglik<-as.data.frame(summary(RESULT_BAYES_SCOV1, pars = c("log_lik")))
+    # ess_bulk(RESULT_BAYES_SCOV1$result_stan)
+    # Rhat(RESULT_BAYES_SCOV1$result_stan)
+    # n_eff_loglik<-pars_loglik$summary.n_eff
+    # r_n_eff<- n_eff_loglik/2000
     
     # loo_with_mat <- loo(as.matrix(loglik), r_eff = NULL)
-    loo_with_mat <- loo(as.matrix(loglik), r_eff =r_n_eff)
+    # loo_with_mat <- loo(as.matrix(loglik), r_eff =r_n_eff)
     # PSIS
     loo_PSIS<-loo(RESULT_BAYES_SCOV1$result_stan,
                   pars = "log_lik",
@@ -258,28 +254,28 @@ function_MOD04_BP<-function(N,
                 col.names =!file.exists(paste(folder,model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_",".txt",sep="")),
                 append = TRUE)
     
-    # time_graf=seq(0,fu.max,fu.max/n_points_graf)
-    # bases <- bp1(time=time_graf, max_time_id=rep(fu.max,length(time_graf)), degree=degree_bp, zeta=fu.max, N=length(time_graf), n=N)
-    # prod<-bases$B %*% (gamma_vec)
-    # 
-    # data_bp<-cbind(prod,time_graf) %>%
-    #   as.data.frame() %>%
-    #   mutate(type="PB",
-    #          step=step)
-    # colnames(data_bp)<-c("FMA_P","time","type","step")
-    # 
-    # 
-    # write.table(data_bp, file=paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep=""),
-    #             row.names =FALSE,
-    #             col.names =!file.exists(paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep="")),
-    #             append = TRUE)
+    time_graf=seq(0,fu.max,fu.max/n_points_graf)
+    bases <- bp1(time=time_graf, max_time_id=rep(fu.max,length(time_graf)), degree=degree_bp, zeta=fu.max, N=length(time_graf), n=N)
+    prod<-bases$B %*% (gamma_vec)
+    
+    data_bp<-cbind(prod,time_graf) %>%
+      as.data.frame() %>%
+      mutate(type="PB",
+             step=step)
+    colnames(data_bp)<-c("FMA_P","time","type","step")
+    
+    
+    write.table(data_bp, file=paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep=""),
+                row.names =FALSE,
+                col.names =!file.exists(paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep="")),
+                append = TRUE)
     return(pars_desc)
   }
   
   
   
   
-  cpus <- 18                       # UFMG
+  cpus <- 4                      # UFMG
   # cpus <- 1
   
   sfInit(parallel=TRUE, cpus=cpus,slaveOutfile=paste(folder,"log_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep=""))
@@ -302,75 +298,29 @@ function_MOD04_BP<-function(N,
 ########################################################################################
 
 
-# # Função bp para gerar dados para os gráficos ----
-# bp1 <- function(time, max_time_id, degree, zeta,N,n) {
-#   # n <- length(time)
-#   y <- time/zeta
-#   y1 <-max_time_id/zeta
-#   b <- matrix(nrow=N, ncol=degree)
-#   B <- matrix(nrow=N, ncol=degree)
-#   for(k in 1:degree)
-#   {
-#     # b[,k] <- stats::dbeta(y, k, degree - k + 1)/zeta
-#     b[,k] <- stats::dbeta(y, k, degree - k + 1)
-#     B[,k] <- stats::pbeta(y, k, degree - k + 1)
-#   }
-#   return(list(b=b, B=B))
-# }
+# Função bp para gerar dados para os gráficos ----
+bp1 <- function(time, max_time_id, degree, zeta,N,n) {
+  # n <- length(time)
+  y <- time/zeta
+  y1 <-max_time_id/zeta
+  b <- matrix(nrow=N, ncol=degree)
+  B <- matrix(nrow=N, ncol=degree)
+  for(k in 1:degree)
+  {
+    # b[,k] <- stats::dbeta(y, k, degree - k + 1)/zeta
+    b[,k] <- stats::dbeta(y, k, degree - k + 1)
+    B[,k] <- stats::pbeta(y, k, degree - k + 1)
+  }
+  return(list(b=b, B=B))
+}
 
 ## TRATA DADOS GEOGRÁFICOS ----
 ## Lista de códigos dos municípios da região metropolitana ====
-list_RMBH<-c(3165537,3141108,3126000,3140704,3137601,3136652,3132206,3130101,
-             3129806,3157807,3155306,3154804,3154606,3153905,3124104,3171204,
-             3168309,3162955,3156700,3133709,3134608,3136603,3140159,3144805,
-             3106705,3110004,3149309,3105004,3106200,3109006,3112505,3117876,
-             3118601, 3162922
-             # ,
-             # #COLAR METROPOLITANO
-             # 3157203, 3126406, 3142304, 3161908, 3108107, 3127206, 3106408, 3147105,
-             # 3131901, 3167202, 3153608, 3107703, 3133808, 3163102, 3105400, 3131000
-)
 
+folder="/home/leste/Alisson/Resultados/Modelo_02_BP/"
+model_name<-"MOD02_BP"
 
-## SHAPE REGIÃO METROPOLITANA DE BH ====
-MUN_MG<-st_read('/home/alisson/UFMG/TESE/SIM/MALHAS/MG_Municipios_2021/MG_Municipios_2021.shp')
-RMBH<-MUN_MG[MUN_MG$CD_MUN %in% list_RMBH,]
-dim(RMBH)
-# mapview(RMBH)
-
-
-### Exclui BH ====
-RMBH1<-RMBH %>%
-  filter(NM_MUN!="Belo Horizonte") %>%
-  dplyr::select(!c(SIGLA,AREA_KM2))
-nrow(RMBH1)
-
-#### Shape áreas de ponderação de BH ====
-APBH<-st_read('/home/alisson/UFMG/TESE/SIM/MALHAS/31_MG_Minas_Gerais/BELO HORIZONTE_area de ponderacao.shp')
-
-APBH<-APBH %>%
-  rename(CD_MUN=CD_APONDE) %>%
-  mutate(NM_MUN="Belo Horizonte") %>%
-  dplyr::select(!c(Qt_Setores))
-
-# %>%
-#   as.data.frame()
-
-### Adiciona áreas de ponderação de BH ao shape da Região Metropolitana ====
-RMBH2<-rbind(RMBH1,APBH)
-
-RMBH2_sorted <- RMBH2[ order(as.numeric(RMBH2$CD_MUN)), ]
-RMBH2_sorted$SP_ID<-seq(1:nrow(RMBH2_sorted))
-RMBH_mat <- nb2mat(poly2nb(RMBH2_sorted), style = "B")
-row.names(RMBH_mat)<-RMBH2_sorted$SP_ID
-sum(RMBH_mat)/2
-list_area_RMBH<-as.numeric(row.names(RMBH_mat))
-
-
-folder="/home/alisson/UFMG/TESE/SIM/SIMULACOES MAR 2023/PC_ALISSON/Modelo_09_SP_BP/"
-model_name<-"MOD09_SP_BP"
-
-model<-"Model 09 ICAR BP"
+model<-"Model 02 BP"
 geo_level<-"Municipio + AP BH"
 model_specif<-"Adj equal Gen"
 N<-1000
@@ -393,16 +343,16 @@ degree_bp<-min(ceiling(N^0.4),5)
 n_points_graf<-50
 lista<-c(1:300)
 
-function_MOD09_SP_BP(N,
-                     alpha1_r,
-                     alpha2_r,
-                     beta1_r,
-                     beta2_r,
-                     pi_r,
-                     fu.max,
-                     fu.min,
-                     list_area_RMBH,
-                     RMBH_mat,
-                     sp_tau_r,
-                     degree_bp,
-                     n_points_graf)
+function_MOD02_BP(N,
+                  alpha1_r,
+                  alpha2_r,
+                  beta1_r,
+                  beta2_r,
+                  pi_r,
+                  fu.max,
+                  fu.min,
+                  # list_area_RMBH,
+                  # RMBH_mat,
+                  # sp_tau_r,
+                  degree_bp,
+                  n_points_graf)

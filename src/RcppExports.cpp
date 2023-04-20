@@ -17,6 +17,7 @@ RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_4_16_ABR_2023_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod();
@@ -59,6 +60,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod, 0},
     {"_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod, 0},
     {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod, 0},
+    {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod, 0},
     {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod, 0},
     {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod, 0},
     {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod, 0},

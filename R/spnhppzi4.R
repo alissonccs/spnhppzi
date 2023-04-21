@@ -329,7 +329,12 @@ spnhppzi4<-function(formula,
     }
     if(sp_model==2){
      print("ICAR model")
+    if(baseline==4){
+      mod <- stanmodels$BP_SPNHPP_FRAT_ZETA_21_04_2023
+      }
+      else{
      mod <- stanmodels$SPNHPP_ICAR_COV_FRAT_15_09
+      }
     }
    # mod <- stanmodels$SPNHPP_COV_FRAT_10
     }

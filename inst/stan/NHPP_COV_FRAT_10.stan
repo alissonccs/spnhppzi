@@ -51,7 +51,7 @@ transformed parameters {
   vector [N] log_lambda0_event;
   vector[p == 0 ? 0 : N] eta;
   vector [N] eta_event ;
-  vector[p == 0 ? 0 : n] exp_etay;
+  vector [p == 0 ? 0 : n] exp_etay;
   vector [n] sum_log_lambda0 = rep_vector(0, n);
   vector [n] sum_eta = rep_vector(0, n);
   int a = 0;

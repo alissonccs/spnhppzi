@@ -363,10 +363,14 @@ spnhppzi4<-function(formula,
         }
       }
       else{
+        if(baseline==4){
+          mod <- stanmodels$BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023.stan
+        }
+        else{
       print("ICAR model ZI logistcov")
       # mod <- stanmodels$SPNHPP_ZI_LOGISTCOV_FRAT_EFECT_IN_LOG_12_10_2022
         mod <- stanmodels$SPNHPP_ZI_LOGISTCOV_FRAT_27_04_2023
-
+        }
       }
     }
   }

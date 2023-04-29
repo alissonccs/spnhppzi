@@ -45,6 +45,14 @@ data{
   real scl_tau;
   real mu_psi;
   real <lower=0> sigma_psi;
+  matrix[N,m] g;
+  matrix[n,m] G;
+  real h1_gamma;
+  real h2_gamma;
+  real<lower=0> zeta;
+  real<lower=0> lower_tau;
+  int tp_prior_tau;
+  int tp_icar;
   }
 
   transformed data{
@@ -79,7 +87,9 @@ data{
 
 
 parameters{
-  vector  <lower=0> [m] alpha;
+  // vector  <lower=0> [m] alpha;
+  vector <lower=0> [baseline == 4 ? 0 : m]  alpha;
+  vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
   vector [p==0 ? 0 :p] beta;
   vector [q==0 ? 0 :q] psi;
   vector [SP_N] omega;
@@ -122,16 +132,38 @@ model {
     }
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
+  // Lambda0 = Lambda_plp2(max_stop, alpha,n);
+  // log_lambda0 = log_lambda_plp2(time, N, alpha);
+  // log_lambda0_event = event .*log_lambda0;
 
  if(q>0){
      eta2 = Z1*psi;
      }
+
+if(baseline==1){
+  Lambda0 = Lambda_plp1(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+
+if(baseline==2){
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
   log_lambda0 = log_lambda_plp2(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==3){
+  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
+  log_lambda0 = log_lambda_plp3(time, N, alpha,zeta);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+if(baseline==4){
+  Lambda0=Lambda_bp(G, gamma,n);
+  log_lambda0=log_lambda_bp(g,gamma, N, zeta);
+  log_lambda0_event = event .*log_lambda0;
+}
 
 
  // CALCULA VEROSSIMILHANÇA ACUMULADA POR INDIVÍDUO
@@ -201,9 +233,10 @@ model {
 // model{
 //      target +=log_lik1;
 
- if(approach==1 && tp_prior==1){
-            alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
-            alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
+ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
+            gamma ~ lognormal(h1_gamma, h2_gamma);
+            // alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
+            // alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
             // sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
             // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
@@ -220,6 +253,7 @@ model {
   generated quantities{
   vector[n] log_lik;
   {
+
   vector [n] Lambda0 ;
   vector [N] log_lambda0 ;
   vector [N] log_lambda0_event ;
@@ -244,44 +278,38 @@ model {
     }
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
+  // Lambda0 = Lambda_plp2(max_stop, alpha,n);
+  // log_lambda0 = log_lambda_plp2(time, N, alpha);
+  // log_lambda0_event = event .*log_lambda0;
 
  if(q>0){
      eta2 = Z1*psi;
      }
+
+if(baseline==1){
+  Lambda0 = Lambda_plp1(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  log_lambda0_event = event .*log_lambda0;
+}
+
+
+if(baseline==2){
   Lambda0 = Lambda_plp2(max_stop, alpha,n);
   log_lambda0 = log_lambda_plp2(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
+}
 
+if(baseline==3){
+  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
+  log_lambda0 = log_lambda_plp3(time, N, alpha,zeta);
+  log_lambda0_event = event .*log_lambda0;
+}
 
- // CALCULA VEROSSIMILHANÇA ACUMULADA POR INDIVÍDUO
- // for (b in 1:n) {
- //    sum_log_lambda0[b] = 0;
- //    sum_eta[b] = 0;
- //  for (i in 1:n_ind[b]) {
- //    if (a == N) {
- //        break;
- //                }
- //    a = a + 1;
- //    sum_log_lambda0[b] += log_lambda0_event[a];
- //    if(p>0){
- //    sum_eta[b] += eta_event[a];
- //    }
- //                         }
- //    if (a == N) {
- //        break;
- //    }
- //  }
-
-//
-// for ( b in 1:n) {
-//         sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
-//         if(p>0){
-//        sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
-//                }
-//  }
+if(baseline==4){
+  Lambda0=Lambda_bp(G, gamma,n);
+  log_lambda0=log_lambda_bp(g,gamma, N, zeta);
+  log_lambda0_event = event .*log_lambda0;
+}
 
 
  if(p == 0){
@@ -311,7 +339,7 @@ model {
                    Lambda0[i]*exp_etay[i] +
                    bernoulli_lpmf(0 | nu[i]));
        else
-         log_lik[i]=bernoulli_lpmf(0 | nu[i])+
+         log_lik[i]= bernoulli_lpmf(0 | nu[i])+
                   Lambda0[i]*exp_etay[i] +
                   sum(log_lambda0_event[begin_ind[i]:end_ind[i]])+
                   sum(eta_event[begin_ind[i]:end_ind[i]])

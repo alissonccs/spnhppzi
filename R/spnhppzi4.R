@@ -364,7 +364,7 @@ spnhppzi4<-function(formula,
       }
       else{
         if(baseline==4){
-          mod <- stanmodels$BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023.stan
+          mod <- stanmodels$BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023
         }
         else{
       print("ICAR model ZI logistcov")

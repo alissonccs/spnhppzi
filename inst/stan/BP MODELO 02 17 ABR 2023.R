@@ -29,7 +29,7 @@ function_MOD02_BP<-function(N,
                             # sp_tau_r,
                             degree_bp,
                             n_points_graf){
-  
+
   # GERA COVARIÁVEIS ====
   set.seed(5832)
   cov.fu<-gencovfu2(N=N,
@@ -41,12 +41,12 @@ function_MOD02_BP<-function(N,
                     beta.x=c(beta1_r, beta2_r)
   )
   set.seed(NULL)
-  
+
   # GERA DADOS ====
-  
+
   run_montecarlo <- function(step){
     set.seed(258258*step)
-    
+
     base_sp<-spsimrec8.1(N=cov.fu$N,
                          cov_rec=c("ID","X1","X2"),
                          # cov_log=c("X3","X4"),
@@ -80,15 +80,15 @@ function_MOD02_BP<-function(N,
     #   filter(recurr==0) %>%
     #   group_by(ID) %>%
     #   summarise(ngroup1=max(ngroup1),rnd_ef=max(rnd_ef),X1=max(X1),X2=max(X2))
-    # 
-    # 
+    #
+    #
     # media_sp<-base_sp1  %>%
     #   summarise(
     #     media = mean(ngroup1),
     #     mediana = median(ngroup1)
     #   )
-    
-    
+
+
     formula2=Formula(spnhppzi::Recur1(end,status,ID,SP_ID=NULL,IndRec)~X1+X2|-1)
     RESULT_BAYES_SCOV1<- spnhppzi::spnhppzi4(formula2,
                                              base_sp,
@@ -124,42 +124,42 @@ function_MOD02_BP<-function(N,
                                              # omega=omega_data$omega,
                                              # tau=sp_tau_r,
                                              # tp_rnd_ef = 1
-                                             
+
     )
-    
-    
+
+
     set.seed(NULL)
     # pars<- as.data.frame(RESULT_BAYES_SCOV1$result_stan, pars = c("alpha","beta","pii","tau"))
     pars_desc<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("alpha","beta"))
     pars_desc<-pars_desc$summary
     loglik<-as.data.frame(RESULT_BAYES_SCOV1$result_stan, pars = c("log_lik"))
-    
+
     # omega_desc<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("omega"))
     # omega_desc<-omega_desc$summary
-    
+
     # tau_desc<-summary(RESULT_BAYES_SCOV1, pars = c("tau"))
     # tau_desc<-tau_desc$summary
-    
+
     gamma_vec<-summary(RESULT_BAYES_SCOV1$result_stan, pars = c("gamma"))
     gamma_vec<-gamma_vec$summary
     gamma_vec<-gamma_vec[,1]
-    
+
     ## CRITÉRIOS  ----
     # WAIC
     loo_WAIC<-loo::waic((as.matrix(loglik)))
-    
+
     loo_WAIC_estimates<-loo_WAIC$estimates %>%
       as.data.frame() %>%
       mutate(step=step)
-    
-    
-    
+
+
+
     # pars_loglik<-as.data.frame(summary(RESULT_BAYES_SCOV1, pars = c("log_lik")))
     # ess_bulk(RESULT_BAYES_SCOV1$result_stan)
     # Rhat(RESULT_BAYES_SCOV1$result_stan)
     # n_eff_loglik<-pars_loglik$summary.n_eff
     # r_n_eff<- n_eff_loglik/2000
-    
+
     # loo_with_mat <- loo(as.matrix(loglik), r_eff = NULL)
     # loo_with_mat <- loo(as.matrix(loglik), r_eff =r_n_eff)
     # PSIS
@@ -169,11 +169,11 @@ function_MOD02_BP<-function(N,
                   cores = getOption("mc.cores", 1),
                   moment_match = FALSE,
                   k_threshold = 0.7)
-    
+
     loo_PSIS_estimates<-loo_PSIS$estimates %>%
       as.data.frame() %>%
       mutate(step=step)
-    
+
     #DIC#
     Dev0 <- -2*colSums(t(loglik))
     DIC0_estimates <- as.data.frame(t(as.data.frame(list(DIC=mean(Dev0) + var(Dev0)/2, Dbar=mean(Dev0), pV=var(Dev0)/2))))
@@ -181,16 +181,16 @@ function_MOD02_BP<-function(N,
       mutate(step=step,
              SE=NA_real_) %>%
       rename(Estimate=V1,step=step,SE=SE)
-    
+
     ic_estimates<-rbind(loo_WAIC_estimates,
                         loo_PSIS_estimates,
                         DIC0_estimates
     )
-    
-    
+
+
     # table(data_graf_total$step)
-    
-    
+
+
     pars_desc <-pars_desc %>%
       as.data.frame %>%
       tibble::rownames_to_column("pars") %>%
@@ -206,7 +206,7 @@ function_MOD02_BP<-function(N,
                             # pars=="gamma[3]"~"gamma3",
                             # pars=="gamma[4]"~"gamma4",
                             # pars=="gamma[5]"~"gamma5"
-                            
+
                             # ,
                             # pars=="sp_tau_r"~sp_tau_r,
       ),
@@ -239,45 +239,45 @@ function_MOD02_BP<-function(N,
     # pars_desc$beta2_r<-beta2_r
     # pars_desc$sp_tau_r<-sp_tau_r
     saveRDS(loo_WAIC,paste(folder,"loo_waic_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),"_stp_",step,".RDS",sep=""))
-    
+
     saveRDS(loo_PSIS,paste(folder,"loo_PSIS_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),"_stp_",step,".RDS",sep=""))
-    
-    
+
+
     write.table(ic_estimates, file= paste(folder,"ic_estimates_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_",".txt",sep=""),
                 row.names =FALSE,
                 col.names =!file.exists(paste(folder,"ic_estimates_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_",".txt",sep="")),
                 append = TRUE)
-    
-    
+
+
     write.table(pars_desc, file=paste(folder,model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_",".txt",sep=""),
                 row.names =FALSE,
                 col.names =!file.exists(paste(folder,model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_",".txt",sep="")),
                 append = TRUE)
-    
+
     time_graf=seq(0,fu.max,fu.max/n_points_graf)
     bases <- bp1(time=time_graf, max_time_id=rep(fu.max,length(time_graf)), degree=degree_bp, zeta=fu.max, N=length(time_graf), n=N)
     prod<-bases$B %*% (gamma_vec)
-    
+
     data_bp<-cbind(prod,time_graf) %>%
       as.data.frame() %>%
       mutate(type="PB",
              step=step)
     colnames(data_bp)<-c("FMA_P","time","type","step")
-    
-    
+
+
     write.table(data_bp, file=paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep=""),
                 row.names =FALSE,
                 col.names =!file.exists(paste(folder,"DATA",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep="")),
                 append = TRUE)
     return(pars_desc)
   }
-  
-  
-  
-  
-  cpus <- 4                      # UFMG
+
+
+
+
+  cpus <- 16                      # UFMG
   # cpus <- 1
-  
+
   sfInit(parallel=TRUE, cpus=cpus,slaveOutfile=paste(folder,"log_",model_name,"_",formatC(alpha1_r, format="f",  digits=1),"_",alpha2_r,"_",N,"_", Sys.Date(),".txt",sep=""))
   sfExportAll()
   sfLibrary(spnhppzi)
@@ -324,6 +324,93 @@ model<-"Model 02 BP"
 geo_level<-"Municipio + AP BH"
 model_specif<-"Adj equal Gen"
 N<-1000
+alpha1_r<-2
+alpha2_r<-1.3
+# beta1_r<-0
+# beta2_r<-0
+beta1_r<-0.6
+beta2_r<-0.8
+sp_tau_r<-1
+#sp_alpha_r<-0.99
+psi1_r<-1.6
+psi2_r<-1.2
+par_z_r<-1
+pi_r<-0
+fu.min<-7
+fu.max<-7
+degree_bp<-min(ceiling(N^0.4),5)
+# degree_bp<-min(20)
+n_points_graf<-50
+lista<-c(1:300)
+
+function_MOD02_BP(N,
+                  alpha1_r,
+                  alpha2_r,
+                  beta1_r,
+                  beta2_r,
+                  pi_r,
+                  fu.max,
+                  fu.min,
+                  # list_area_RMBH,
+                  # RMBH_mat,
+                  # sp_tau_r,
+                  degree_bp,
+                  n_points_graf)
+
+
+
+
+
+folder="/home/leste/Alisson/Resultados/Modelo_02_BP/"
+model_name<-"MOD02_BP"
+
+model<-"Model 02 BP"
+geo_level<-"Municipio + AP BH"
+model_specif<-"Adj equal Gen"
+N<-500
+alpha1_r<-2
+alpha2_r<-1.3
+# beta1_r<-0
+# beta2_r<-0
+beta1_r<-0.6
+beta2_r<-0.8
+sp_tau_r<-1
+#sp_alpha_r<-0.99
+psi1_r<-1.6
+psi2_r<-1.2
+par_z_r<-1
+pi_r<-0
+fu.min<-7
+fu.max<-7
+degree_bp<-min(ceiling(N^0.4),5)
+# degree_bp<-min(20)
+n_points_graf<-50
+lista<-c(1:300)
+
+function_MOD02_BP(N,
+                  alpha1_r,
+                  alpha2_r,
+                  beta1_r,
+                  beta2_r,
+                  pi_r,
+                  fu.max,
+                  fu.min,
+                  # list_area_RMBH,
+                  # RMBH_mat,
+                  # sp_tau_r,
+                  degree_bp,
+                  n_points_graf)
+
+
+
+
+folder="/home/leste/Alisson/Resultados/Modelo_02_BP/"
+model_name<-"MOD02_BP"
+
+model<-"Model 02 BP"
+geo_level<-"Municipio + AP BH"
+model_specif<-"Adj equal Gen"
+N<-300
 alpha1_r<-2
 alpha2_r<-1.3
 # beta1_r<-0

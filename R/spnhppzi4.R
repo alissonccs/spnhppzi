@@ -314,7 +314,7 @@ spnhppzi4<-function(formula,
           mod<- stanmodels$BP_NHPP_ZI_LOGISTCOV_FRAT_24_05_2023
         }
         else{
-        mod<- stanmodels$NHPP_ZI_LOGISTCOV_FRAT_24_05_2023
+        mod<- stanmodels$NHPP_ZI_LOGISTCOV_FRAT_25_05_2023
         }
       }
     }

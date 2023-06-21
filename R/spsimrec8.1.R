@@ -27,7 +27,7 @@
 #' @param par_z      Parâmetros de variância da distribuição do efeito aleatório.
 #' @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
 #' @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
-#' @param pi         Inflação de zeros (proporção de indivíduos sem recorrências)
+#' @param pi_zi         Inflação de zeros (proporção de indivíduos sem recorrências)
 #' @param logist     Indicadora do uso de covariáveis na logística
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
@@ -56,7 +56,7 @@ spsimrec8.1 <-  function(N,
                       par_z=0,
                       dist_int_func,
                       par_int_func=0,
-                      pi = 0,
+                      pi_zi = 0,
                       # dfree = 0,
                       logist = 0,
                       mu_omega=0,
@@ -134,18 +134,18 @@ spsimrec8.1 <-  function(N,
  ### Executa função ====
    recurr<-gen_zi(ID,
                   N,
-                  pi,
+                  pi_zi,
                   logist,
                   cov_log,
                   beta_x_log,
                   xi,
                   rnd_ef1$rnd_ef)
-   pi<-recurr$pi
+   pi_zi<-recurr$pi_zi
    #print(pi)
    recurr<-recurr$recurr
    #print(recurr)
-   recurr1<-as.data.frame((cbind(ID,recurr,pi)))
-   colnames(recurr1)<-c("ID","recurr","pi")
+   recurr1<-as.data.frame((cbind(ID,recurr,pi_zi)))
+   colnames(recurr1)<-c("ID","recurr","pi_zi")
    recurr_out<-list(recurr=recurr, recurr1=recurr1)
 
 

@@ -122,26 +122,26 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   #' @param beta_x_log Coeficientes das covariáveis relacionadas à regressão logística.
   #' @param xi         Parâmetro que relaciona a função de intensidade e a logística.
   #' @param rnd        Vetor de efeitos aleatórios.
-  #' @param pi         Inflação de zeros (proporção de indivíduos sem recorrências).
+  #' @param pi_zi         Inflação de zeros (proporção de indivíduos sem recorrências).
 
-  gen_zi<-function(ID,N,pi,logist,cov_log,beta_x_log,xi1=1,rnd_ef){
+  gen_zi<-function(ID,N,pi_zi,logist,cov_log,beta_x_log,xi1=1,rnd_ef){
     if(logist==0){ #Sem covariáveis na regressão logística - propabilidade de recorrência comum a todos os indivíduos
-      recurr <- rbinom(N, 1, pi)
-      pi<-rep(pi,N)
+      recurr <- rbinom(N, 1, pi_zi)
+      pi_zi<-rep(pi_zi,N)
       }
     else { # Com covariáveis na regressão logística - cada indivíduo possui sua probabilidade de recorrência definida em função das covariáveis e efeitos aleatórios.
-      pi<-1/(1+exp(-(1+as.matrix(cov_log) %*% beta_x_log)))
+      pi_zi<-1/(1+exp(-(1+as.matrix(cov_log) %*% beta_x_log)))
       # if(is.null(xi1) == TRUE){
-      #   pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log +rnd_ef)))
+      #   pi_zi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log +rnd_ef)))
       # }else{
-      #   pi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log + xi1*rnd_ef)))
+      #   pi_zi<-1/(1+exp(-(as.matrix(cov_log) %*% beta_x_log + xi1*rnd_ef)))
       # }
       recurr<-NULL
       for (i in 1:N){
-        recurr[i] <- rbinom(1, 1,pi[i])
+        recurr[i] <- rbinom(1, 1,pi_zi[i])
       }
     }
-    return(list(recurr=recurr,pi=pi))
+    return(list(recurr=recurr,pi_zi=pi_zi))
   }
 
   ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
@@ -394,4 +394,138 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     return(tab)
     #set.seed(NULL)
   }
+
+
+  ## TEMPO DE OCORRÊNCIA DOS PRIMIEROS EVENTOS - FUNC INTENSIDADE POLINOMIAL ====
+  #' @title get_nhpp_realization_0
+  #' @aliases get_nhpp_realization_0
+  #' @export
+  #' @description           Gera os tempos de ocorrência dos primeiros eventos.
+  #' @param lambda          Funćão de intensidade polinomial.
+
+  get_nhpp_realization_0 <- function(lambda){
+    t_max <- 10
+    t <- 0
+    s <- 0
+    Lambda <- function(tupper) integrate(f = lambda,x=x,beta_x_rec=beta_x_rec, rnd_ef, lower = 0, upper = tupper)$value
+    Lambda_inv <- function(s){
+      v <- seq(0,t_max+3, length.out = 250)
+      min(v[Vectorize(Lambda)(v)>=s])
+    }
+
+    X <- numeric(0)
+    # while(t <= t_max){
+    u <- runif(1)
+    s <- s -log(u)
+    t <- Lambda_inv(s)
+    X <- c( X, t)
+    # }
+
+    return(X)
+  }
+
+
+
+  ## TEMPO DE OCORRÊNCIA DAS RECORRÊNCIAS - FUNC INTENSIDADE POLINOMIAL ====
+  #' @title get_nhpp_realization
+  #' @aliases get_nhpp_realization
+  #' @export
+  #' @description           Gera os tempos de ocorrência das reincidências.
+  #' @param lambda          Funćão de intensidade polinomial.
+
+
+  get_nhpp_realization <- function(lambda){
+    t_max <- 10
+    t <- 0
+    s <- 0
+    Lambda <- function(tupper) integrate(f = lambda,x=x,beta_x_rec=beta_x_rec, rnd_ef, lower = 0, upper = tupper)$value
+    Lambda_inv <- function(s){
+      v <- seq(0,t_max+3, length.out = 250)
+      min(v[Vectorize(Lambda)(v)>=s])
+    }
+
+    X <- numeric(0)
+    while(t <= t_max){
+      u <- runif(1)
+      s <- s -log(u)
+      t <- Lambda_inv(s)
+      X <- c( X, t)
+    }
+
+    return(X)
+  }
+
+
+
+  ## GERA TEMPO DE OCORRÊNCIA DOS EVENTOS ====
+  #' @title gen_data_plp1
+  #' @aliases gen_data_plp1
+  #' @export
+  #' @description           Gera os tempos de ocorrência e recorrência de todos os eventos.
+  #' @param ID              Identificador dos indivíduos.
+  #' @param N               Número de indivíduos.
+  #' @param fu_max          tempo máximo de acompanhamento.
+  #' @param x_cov           Matrix de covariáveis.
+  #' @param rnd_ef_tot      Vetor de efeitos aleatórios.
+  #' @param recurr          Indicador de recorrência.
+  #'
+
+  gen_data_pol_int<-function( ID,N, fu_max, x_cov,
+                              beta_x_rec,
+                              rnd_ef_tot,
+                              recurr
+  ){
+
+    # Declara funćão lambda ----
+    b <-10
+    lambda_cov <- function(t,x,beta_x_rec,rnd_ef) (1 + b*(1+sin(0.25*pi*t)))*exp(t(x)%*%beta_x_rec + rnd_ef)
+
+    # Gera tempos de ocorrências dos eventos ----
+
+    tab_0<-c()
+    for (i in 1:N){
+      print(i)
+      # x1<-X[i,2:3]
+      x<-x_cov[i,]
+      rnd_ef<-rnd_ef_tot[i]
+      # print(x)
+      if(recurr1$recurr[i]==0){
+        res_1 <-as.data.frame(get_nhpp_realization(lambda_cov))
+      }else{
+        res_1 <-as.data.frame(get_nhpp_realization_0(lambda_cov))
+      }
+      # print(head(res_1))
+      # dim(res_1)
+      colnames(res_1)<-c("end")
+      res_1$ID<-i
+      tab_0<-rbind(tab_0,res_1)
+    }
+
+    # cov<-cov.fu$x1
+
+    # Organiza dados para entrada no spnhppzi ----
+    tab<-tab_0%>%
+      group_by(ID) %>%
+      mutate(
+        # seq=1:n(),
+        # end=case_when(end>10~10,TRUE~end),
+        ngroup=n(),
+        rep=row_number(),
+        expand=case_when((ngroup==rep & !(rep==1&(end==0 | end==fu_max)))~2,TRUE~1),
+        expand1=expand)%>%
+      expandRows("expand") %>%
+      mutate(ngroup1=n(),
+             IndRec=case_when(ngroup1>2~1, TRUE~0),
+             rep1=row_number(),
+             begin=case_when(rep1==1~0,TRUE~lag(end)),
+             end=case_when(ngroup1==rep1~fu_max, TRUE~end),
+             status=case_when(end==fu_max~0,TRUE~1))
+    # %>%
+    #   ungroup() %>%
+    #   # left_join(cov, by="ID") %>%
+    #   left_join(input_gen_data,by="ID")
+
+    return(tab)
+  }
+
 

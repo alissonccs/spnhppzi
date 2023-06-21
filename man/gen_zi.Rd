@@ -5,12 +5,12 @@
 \alias{spsimrec}
 \title{spsimrec}
 \usage{
-gen_zi(ID, N, pi, logist, cov_log, beta_x_log, xi1 = 1, rnd_ef)
+gen_zi(ID, N, pi_zi, logist, cov_log, beta_x_log, xi1 = 1, rnd_ef)
 }
 \arguments{
 \item{N}{Número de indivíduos.}
 
-\item{pi}{Inflação de zeros (proporção de indivíduos sem recorrências).}
+\item{pi_zi}{Inflação de zeros (proporção de indivíduos sem recorrências).}
 
 \item{cov_log}{Lista de covariáveis relacionadas à regressão logística.}
 

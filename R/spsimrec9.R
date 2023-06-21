@@ -165,7 +165,7 @@ spsimrec9 <-  function(N,
                          fu_max=fu_max,
                          x_cov=as.matrix(input_gen_data[,2:(1+nr.cov_rec)]),
                          beta_x_rec=beta_x_rec,
-                         tp_rnd_ef= tp_rnd_ef,
+                         # tp_rnd_ef= tp_rnd_ef,
                          rnd_ef_tot=input_gen_data$rnd_ef,
                          recurr=input_gen_data$recurr
   )

@@ -403,8 +403,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   #' @description           Gera os tempos de ocorrência dos primeiros eventos.
   #' @param lambda          Funćão de intensidade polinomial.
 
-  get_nhpp_realization_0 <- function(lambda){
-    t_max <- 10
+  get_nhpp_realization_0 <- function(lambda,fu_max){
+    t_max <- fu_max
     t <- 0
     s <- 0
     Lambda <- function(tupper) integrate(f = lambda,x=x,beta_x_rec=beta_x_rec, rnd_ef, lower = 0, upper = tupper)$value
@@ -434,8 +434,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   #' @param lambda          Funćão de intensidade polinomial.
 
 
-  get_nhpp_realization <- function(lambda){
-    t_max <- 10
+  get_nhpp_realization <- function(lambda,fu_max){
+    t_max <- fu_max
     t <- 0
     s <- 0
     Lambda <- function(tupper) integrate(f = lambda,x=x,beta_x_rec=beta_x_rec, rnd_ef, lower = 0, upper = tupper)$value

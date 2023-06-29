@@ -4,7 +4,7 @@
 \alias{get_nhpp_realization}
 \title{get_nhpp_realization}
 \usage{
-get_nhpp_realization(lambda, fu_max)
+get_nhpp_realization(lambda, fu_max, x, beta_x_rec, rnd_ef)
 }
 \arguments{
 \item{lambda}{Funćão de intensidade polinomial.}

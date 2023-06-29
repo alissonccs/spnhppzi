@@ -490,9 +490,9 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
       rnd_ef<-rnd_ef_tot[i]
       # print(x)
       if(recurr[i]==0){
-        res_1 <-as.data.frame(get_nhpp_realization(lambda,fu_max, x, beta_x_rec,rnd_ef))
+        res_1 <-as.data.frame(get_nhpp_realization(lambda_cov,fu_max, x, beta_x_rec,rnd_ef))
       }else{
-        res_1 <-as.data.frame(get_nhpp_realization_0(lambda,fu_max, x, beta_x_rec,rnd_ef))
+        res_1 <-as.data.frame(get_nhpp_realization_0(lambda_cov,fu_max, x, beta_x_rec,rnd_ef))
       }
       # print(head(res_1))
       # dim(res_1)

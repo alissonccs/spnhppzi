@@ -449,6 +449,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
       u <- runif(1)
       s <- s -log(u)
       t <- Lambda_inv(s)
+      if (t>= t_max)
+        break
       X <- c( X, t)
     }
 

@@ -19,7 +19,7 @@
 #@tpfrag: tipo de fragilidade (0-rho(t) = rho0(t)*exp(X*beta + w), 1 - rho(t) = rho0(t)*Z*exp(X*beta))
 #' @export
 ######################################################################################################
-spnhppzi4<-function(formula,
+spnhppzi5<-function(formula,
                        data,
                        baseline = c("plp1", "plp2","plp3","bp"),
                        approach = c("mle", "bayes"),

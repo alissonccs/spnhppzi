@@ -239,7 +239,7 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             // omega ~ normal(mu_omega,sigma_omega);
             if(tp_icar==1){
-            omega ~sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
+            omega ~ sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             }
             else{
             omega ~sparse_iar1_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
@@ -323,10 +323,10 @@ if(baseline==4){
                    bernoulli_lpmf(0 | pii));
          // target += -0.5 * log(tau);
        }
-       else{
-         log_lik[i]= bernoulli_lpmf(0 | pii)+
+       else{ log_lik[i]= bernoulli_lpmf(0 | pii)+
                    Lambda0[i] +
-                   sum(log_lambda0_event[begin_ind[i]:end_ind[i]]);
+                   sum(log_lambda0_event[begin_ind[i]:end_ind[i]])
+                   ;
          // target += -0.5 * log(tau);
        }
                   }

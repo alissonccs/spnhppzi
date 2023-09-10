@@ -213,10 +213,10 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             // omega ~ normal(mu_omega,sigma_omega);
             if(tp_icar==1){
-            omega ~ sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
+            omega ~ sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             }
             else{
-            omega ~ sparse_iar1_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
+            omega ~ sparse_iar1(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             }
             sum(omega) ~ normal(0, 0.001 * SP_N);
             if(tp_prior_tau==1){
@@ -239,10 +239,10 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
             // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             // omega ~ normal(mu_omega,sigma_omega);
             if(tp_icar==1){
-            omega ~ sparse_iar_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
+            omega ~ sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             }
             else{
-            omega ~sparse_iar1_lpdf(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
+            omega ~sparse_iar1(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             }
             // tau ~ gamma(shp_tau, scl_tau);
             sum(omega) ~ normal(0, 0.001 * SP_N);

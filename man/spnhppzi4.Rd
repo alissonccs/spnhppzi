@@ -74,5 +74,5 @@ spnhppzi4(
 \item{frag:}{uso de fragilidade (0 - sem fragilidade, 1 - com fragilidade)}
 }
 \description{
-NHPPZI: Ajusta um modelo de processo de poisson não homegêneo
+NHPPZI:
 }

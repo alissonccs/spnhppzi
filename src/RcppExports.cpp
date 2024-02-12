@@ -12,104 +12,42 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_4_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_4_16_ABR_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_21_05_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_FRAT_ZETA_21_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_10_02_2022_tau_data_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_23_02_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_26_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_07_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_26_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_COV_4_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_COV_5_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_COV_FRAT_10_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_COV_FRAT_15_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_COV_FRAT_26_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_03_07_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_08_08_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_1_08_03_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_25_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_06_07_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_07_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_26_01_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_29_12_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_09_03_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_23_07_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_25_03_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_25_05_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_31_07_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_COV_FRAT_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ICAR_COV_FRAT_15_09_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_SPARSE_COV_FRAT_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_05_11_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_09_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_23_09_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_27_04_2023_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_EFECT_IN_LOG_12_10_2022_mod();
-RcppExport SEXP _rcpp_module_boot_stan_fit4SPNHPP_ZI_RND_EF_DATA_09_11_2022_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_RE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_RE_1_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4NHPP_SE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4SZI_NHPP_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4SZI_NHPP_RE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4SZI_NHPP_RE_COV_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4SZI_NHPP_SE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4SZI_NHPP_SE_COV_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4S_NHPP_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4S_NHPP_RE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4S_NHPP_SE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4ZI_NHPP_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4ZI_NHPP_RE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4ZI_NHPP_RE_COV_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4ZI_NHPP_SE_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4ZI_NHPP_SE_COV_mod();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcpp_module_boot_stan_fit4BPNHPP_COV_4_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_4_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_COV_4_16_ABR_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_4_16_ABR_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_COV_FRAT_10_15_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_18_01_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_20_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_18_01_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_21_05_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BPNHPP_ZI_FRAT_21_05_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_FRAT_ZETA_21_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_FRAT_ZETA_21_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_05_11_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_07_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_10_02_2022_tau_data_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_10_02_2022_tau_data_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_23_02_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_23_02_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_26_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_26_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_07_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_07_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_26_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_FRAT_ZETA_26_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4BP_SPNHPP_ZI_LOGISTCOV_FRAT_28_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_COV_4_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_COV_4_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_COV_5_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_COV_5_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_10_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_10_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_15_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_15_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_26_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_COV_FRAT_26_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_03_07_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_03_07_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_08_08_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_08_08_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_1_08_03_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_1_08_03_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_25_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_25_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_04_07_2022_OMEGA_DATA_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_06_07_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_06_07_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_07_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_07_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_26_01_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_26_01_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_29_12_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_FRAT_29_12_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_09_03_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_09_03_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_23_07_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_23_07_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_25_03_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_25_03_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_24_05_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_25_05_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_25_05_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_31_07_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_ZI_LOGISTCOV_FRAT_31_07_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_COV_FRAT_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_COV_FRAT_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ICAR_COV_FRAT_15_09_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ICAR_COV_FRAT_15_09_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_SPARSE_COV_FRAT_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_SPARSE_COV_FRAT_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_05_11_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_05_11_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_09_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_FRAT_09_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_23_09_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_23_09_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_27_04_2023_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_27_04_2023_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_EFECT_IN_LOG_12_10_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_LOGISTCOV_FRAT_EFECT_IN_LOG_12_10_2022_mod, 0},
-    {"_rcpp_module_boot_stan_fit4SPNHPP_ZI_RND_EF_DATA_09_11_2022_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SPNHPP_ZI_RND_EF_DATA_09_11_2022_mod, 0},
+    {"_rcpp_module_boot_stan_fit4NHPP_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_mod, 0},
+    {"_rcpp_module_boot_stan_fit4NHPP_RE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_RE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4NHPP_RE_1_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_RE_1_mod, 0},
+    {"_rcpp_module_boot_stan_fit4NHPP_SE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4NHPP_SE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4SZI_NHPP_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SZI_NHPP_mod, 0},
+    {"_rcpp_module_boot_stan_fit4SZI_NHPP_RE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SZI_NHPP_RE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4SZI_NHPP_RE_COV_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SZI_NHPP_RE_COV_mod, 0},
+    {"_rcpp_module_boot_stan_fit4SZI_NHPP_SE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SZI_NHPP_SE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4SZI_NHPP_SE_COV_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4SZI_NHPP_SE_COV_mod, 0},
+    {"_rcpp_module_boot_stan_fit4S_NHPP_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4S_NHPP_mod, 0},
+    {"_rcpp_module_boot_stan_fit4S_NHPP_RE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4S_NHPP_RE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4S_NHPP_SE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4S_NHPP_SE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4ZI_NHPP_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4ZI_NHPP_mod, 0},
+    {"_rcpp_module_boot_stan_fit4ZI_NHPP_RE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4ZI_NHPP_RE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4ZI_NHPP_RE_COV_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4ZI_NHPP_RE_COV_mod, 0},
+    {"_rcpp_module_boot_stan_fit4ZI_NHPP_SE_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4ZI_NHPP_SE_mod, 0},
+    {"_rcpp_module_boot_stan_fit4ZI_NHPP_SE_COV_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4ZI_NHPP_SE_COV_mod, 0},
     {NULL, NULL, 0}
 };
 

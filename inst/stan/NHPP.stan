@@ -8,8 +8,8 @@ data{
   int m;
   int n_ind [n];
   int id[N];
-  int begin_ind [n];
-  int end_ind[n];
+  // int begin_int [n];
+  // int end_int[n];
   vector [N] event;
   vector [n] max_stop;
   vector [N] time;
@@ -30,8 +30,36 @@ parameters{
   vector [p] beta;
   }
 
+model{vector [n] Lambda0 ;
+  vector [N] log_lambda0 ;
+  vector[p == 0 ? 0 : N] eta;
+  vector[p == 0 ? 0 : n] exp_etay;
 
-transformed parameters{
+ if(p>0){
+     eta = X*beta;
+     exp_etay = exp(Xy*beta);
+         }
+
+  Lambda0=Lambda_plp2(max_stop, alpha,n);
+  log_lambda0=log_lambda_plp2(time, N, alpha);
+
+  if(p==0){
+     target +=sum(Lambda0) +
+     sum(event .*log_lambda0);
+          }
+  else{
+     target += sum(Lambda0 .* exp_etay) +
+     sum(event .*(log_lambda0 + eta));
+       }
+
+ if(approach==1 && tp_prior==1){
+     alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
+     alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
+     beta ~ normal(mu_beta,sigma_beta);
+                               }
+  }
+
+  generated quantities {
   row_vector [n] log_lik;
   {
   vector [n] Lambda0 ;
@@ -72,7 +100,6 @@ transformed parameters{
                             }
      }
 
-
  if(p == 0){
      for (i in 1:n) {
        log_lik[i]=   Lambda0[i] +
@@ -88,13 +115,3 @@ transformed parameters{
      }
   }
 }
-
-model{
-     target +=log_lik;
-
-if(approach==1 && tp_prior==1){
-     alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
-     alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
-     beta ~ normal(mu_beta,sigma_beta);
-                               }
-  }

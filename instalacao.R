@@ -51,8 +51,6 @@ base1<-spnhppzi::spsimrec(
 
 base1$IndRec<-1-base1$recurr
 
-
-
 formula2=Formula(Recur(end,status,ID,IndRec)~1|-1)
 RESULT_BAYES_SCOV1<- spnhppzi::spnhppzi(formula2,
                                          base1,

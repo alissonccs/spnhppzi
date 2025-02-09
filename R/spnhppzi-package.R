@@ -2,7 +2,7 @@
 #'
 #' @description A DESCRIPTION OF THE PACKAGE
 #'
-#' @docType package
+#' _PACKAGE
 #' @name spnhppzi-package
 #' @aliases spnhppzi
 #' @useDynLib spnhppzi, .registration = TRUE

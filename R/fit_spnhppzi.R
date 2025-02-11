@@ -2,7 +2,7 @@
 #' @title spnhppzi: Hierarchical Models for Recurrent Event Data with Zero Inflation and Spatial Correlation
 #'
 #' @description
-#' The `spnhppzi` function estimates parameters for **recurrent event data with zero inflation and spatial correlation**,
+#' The `fit_spnhppzi` function estimates parameters for **recurrent event data with zero inflation and spatial correlation**,
 #' using either a frequentist or Bayesian approach.
 #'
 #' @param data A `data.frame` containing the dataset.
@@ -65,7 +65,7 @@
 #'
 #' formula2 <- Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1)
 #'
-#' RESULT_BAYES_SCOV1 <- spnhppzi::spnhppzi(formula2,
+#' RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
 #'                                          base,
 #'                                          baseline = "plp2",
 #'                                          FR = FALSE,
@@ -125,7 +125,7 @@
 #'
 #' formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
 #'
-#' RESULT <- spnhppzi::spnhppzi(
+#' RESULT <- spnhppzi::fit_spnhppzi(
 #'   formula2,
 #'   base_sp,
 #'   baseline = "bp",
@@ -157,7 +157,7 @@
 #'
 #' summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
 ##########################################################################################################################
-spnhppzi<-function(formula,
+fit_spnhppzi<-function(formula,
                        data,
                        baseline = c("plp1", "plp2","plp3","bp"),
                        approach = c("mle", "bayes"),

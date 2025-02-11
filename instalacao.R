@@ -13,7 +13,7 @@ roxygen2::roxygenize()
 install.packages("../spnhppzi", repos = NULL, type = "source")
 library("spnhppzi")
 ?spnhppzi::spsimrec
-?spnhppzi::spnhppzi
+?spnhppzi::fit_spnhppzi
 # remove.packages("spnhppzi")
 
 

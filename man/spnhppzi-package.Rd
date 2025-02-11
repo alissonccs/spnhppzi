@@ -3,11 +3,14 @@
 \name{spnhppzi-package}
 \alias{spnhppzi-package}
 \alias{spnhppzi}
-\title{The 'spnhppzi' package.}
+\title{spnhppzi: Hierarchical Models for Recurrent Event Data with Zero Inflation and Spatial Correlation}
 \description{
-A DESCRIPTION OF THE PACKAGE
+Provides statistical models for analyzing recurrent event data with zero inflation and spatial correlation.
+}
+\details{
+The 'spnhppzi' package.
 
-_PACKAGE
+The \code{spnhppzi} package provides tools for modeling recurrent event data, including spatially correlated zero-inflated models.
 }
 \references{
 Stan Development Team (2022). RStan: the R interface to Stan. R package version 2.21.5. https://mc-stan.org

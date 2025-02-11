@@ -156,13 +156,33 @@ summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 
 # Load adjacency matrix from package's extdata directory
 Adj_matrix <- readRDS(system.file("extdata", "Adj_matrix.RDS", package = "spnhppzi"))
-
+list_area_RMBH<-as.numeric(row.names(Adj_matrix))
 # Define parameters
+N <- 500
+alpha1_r <- 2
+alpha2_r <- 1.3
+beta1_r <- 0.6
+beta2_r <- 0.8
 sp_tau_r <- 1
 psi1_r <- 1.6
 psi2_r <- 1.2
+pi_r <- 0.75
+fu.min <- 7
+fu.max <- 7
 degree_bp <- min(ceiling(N^0.4), 5)
 
+# Simulating covariates for the dataset
+cov.fu <- gencovfu2(
+  N = N,
+  fu.min = fu.min,
+  fu.max = fu.max,
+  cens.prob = 0,
+  dist.x = c("binomial", "normal"),
+  par.x = list(0.7, c(0, 1)),
+  beta.x = c(beta1_r, beta2_r)
+)
+
+# Simulating recurrent event data for model estimation
 base_sp <- spsimrec(
   N = cov.fu$N,
   cov_rec = c("ID", "X1", "X2"),
@@ -187,6 +207,7 @@ base_sp <- spsimrec(
   baseline = "plp2"
 )
 
+# Fitting the SZINHPP model
 formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
 
 RESULT <- spnhppzi::fit_spnhppzi(

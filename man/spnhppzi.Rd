@@ -52,6 +52,55 @@ spnhppzi(
   std_dev = 1,
   tp_DIC = 0
 )
+
+spnhppzi(
+  formula,
+  data,
+  baseline = c("plp1", "plp2", "plp3", "bp"),
+  approach = c("mle", "bayes"),
+  n_iter = 4000,
+  n_cores = 1,
+  n_chains = 4,
+  ZI = c("true", "false"),
+  FR = c("true", "false"),
+  initial,
+  tp_prior = 0,
+  frag = 0,
+  tp_rnd_ef = 0,
+  mu_omega = 0,
+  sigma_omega = 0,
+  shp_sigma2_z = 0,
+  scl_sigma2_z = 0,
+  shp_alpha1 = 0,
+  scl_alpha1 = 0,
+  shp_alpha2 = 0,
+  scl_alpha2 = 0,
+  mu_beta = 0,
+  sigma_beta = 10,
+  mu_psi = 0,
+  sigma_psi = 10,
+  rnd_logist = 0,
+  mu_xi = 0,
+  sigma_xi = 1,
+  spatial = 0,
+  sp_model = c("car", "sparse", "icar"),
+  nb_mat = NULL,
+  data_tau = 0,
+  tau = 1,
+  tp_prior_tau = c("gamma", "inv_gamma"),
+  shp_tau = 0,
+  scl_tau = 0,
+  lower_tau = 0,
+  tp_icar = 0,
+  W_n = 0,
+  bp_degree = NULL,
+  h1_gamma = 0,
+  h2_gamma = 4,
+  omega_data = 0,
+  omega = NULL,
+  std_dev = 1,
+  tp_DIC = 0
+)
 }
 \arguments{
 \item{data}{A \code{data.frame} containing the dataset.}
@@ -82,8 +131,13 @@ spnhppzi(
 }
 \value{
 A list containing the estimated parameters and model fit statistics.
+
+A list containing the estimated parameters and model fit statistics.
 }
 \description{
+The \code{spnhppzi} function estimates parameters for \strong{recurrent event data with zero inflation and spatial correlation},
+using either a frequentist or Bayesian approach.
+
 The \code{spnhppzi} function estimates parameters for \strong{recurrent event data with zero inflation and spatial correlation},
 using either a frequentist or Bayesian approach.
 }
@@ -150,4 +204,136 @@ RESULT_BAYES_SCOV1 <- spnhppzi::spnhppzi(formula2,
                                          omega_data = 0)
 
 summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
+# EXAMPLE ----
+# This example illustrates the simplest case: the NHPP model for recurrent event data
+
+N <- 500
+alpha1_r <- 0.5
+alpha2_r <- 1.3
+beta1_r <- 0.6
+beta2_r <- 0.8
+pi_r <- 0
+fu.min <- 7
+fu.max <- 7
+
+set.seed(5832)
+cov.fu <- gencovfu2(N = N,
+                    fu.min = fu.min,
+                    fu.max = fu.max,
+                    cens.prob = 0,
+                    dist.x = c("binomial", "normal"),
+                    par.x = list(0.7, c(0, 1)),
+                    beta.x = c(beta1_r, beta2_r))
+set.seed(NULL)
+
+base <- spsimrec(N = cov.fu$N,
+                 cov_rec = c("ID", "X1", "X2"),
+                 beta_x_rec = c(beta1_r, beta2_r),
+                 logist = 0,
+                 x1 = cov.fu$x1,
+                 fu = cov.fu$fu,
+                 fu_max = cov.fu$fu.max,
+                 fu_min = cov.fu$fu.min,
+                 spatial = 0,
+                 random_ef = 0,
+                 tp_rnd_ef = 0,
+                 pi = pi_r,
+                 par_z = 0,
+                 dist_int_func = "weibull",
+                 par_int_func = c(alpha1_r, alpha2_r),
+                 baseline = "plp2")
+
+formula2 <- Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1)
+
+RESULT_BAYES_SCOV1 <- spnhppzi::spnhppzi(formula2,
+                                         base,
+                                         baseline = "plp2",
+                                         FR = FALSE,
+                                         ZI = FALSE,
+                                         approach = "BAYES",
+                                         sp_model = "ICAR",
+                                         initial = 1,
+                                         tp_prior = 1,
+                                         shp_alpha1 = 0.1, scl_alpha1 = 0.1,
+                                         shp_alpha2 = 0.1, scl_alpha2 = 0.1,
+                                         mu_beta = 0, sigma_beta = 4,
+                                         mu_psi = 0, sigma_psi = 4,
+                                         mu_omega = 0,
+                                         spatial = 0,
+                                         n_iter = 2000,
+                                         n_cores = 2,
+                                         n_chains = 2,
+                                         omega_data = 0)
+
+summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
+
+# ADDITIONAL EXAMPLE ----
+# This example illustrates the SZINHPP model (Spatial Zero-Inflated NHPP) with spatial correlation
+
+# Load adjacency matrix from package's extdata directory
+Adj_matrix <- readRDS(system.file("extdata", "Adj_matrix.RDS", package = "spnhppzi"))
+
+# Define parameters
+sp_tau_r <- 1
+psi1_r <- 1.6
+psi2_r <- 1.2
+degree_bp <- min(ceiling(N^0.4), 5)
+
+base_sp <- spsimrec(
+  N = cov.fu$N,
+  cov_rec = c("ID", "X1", "X2"),
+  beta_x_rec = c(beta1_r, beta2_r),
+  logist = 0,
+  x1 = cov.fu$x1,
+  fu = cov.fu$fu,
+  fu_max = cov.fu$fu.max,
+  fu_min = cov.fu$fu.min,
+  spatial = 1,
+  list_area = list_area_RMBH,
+  sp_model = "ICAR",
+  SP_N = 133,
+  nb_mat = Adj_matrix,
+  sp_tau = sp_tau_r,
+  random_ef = 1,
+  tp_rnd_ef = 0,
+  pi = pi_r,
+  par_z = 0,
+  dist_int_func = "weibull",
+  par_int_func = c(alpha1_r, alpha2_r),
+  baseline = "plp2"
+)
+
+formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
+
+RESULT <- spnhppzi::spnhppzi(
+  formula2,
+  base_sp,
+  baseline = "bp",
+  FR = TRUE,
+  ZI = TRUE,
+  approach = "BAYES",
+  sp_model = "ICAR",
+  initial = 1,
+  tp_prior = 1,
+  mu_beta = 0, sigma_beta = 4,
+  mu_psi = 0, sigma_psi = 4,
+  mu_omega = 0,
+  spatial = 1,
+  nb_mat = Adj_matrix,
+  shp_tau = 0.01,
+  scl_tau = 0.01,
+  n_iter = 2000,
+  n_cores = 1,
+  n_chains = 2,
+  W_n = 365, omega_data = 0,
+  bp_degree = degree_bp,
+  h1_gamma = 0,
+  h2_gamma = 4,
+  lower_tau = 0,
+  tp_prior_tau = "gamma",
+  tp_icar = 1,
+  std_dev = 1
+)
+
+summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
 }

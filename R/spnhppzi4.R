@@ -86,6 +86,76 @@
 #'                                          omega_data = 0)
 #'
 #' summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
+#'
+#' # ADDITIONAL EXAMPLE ----
+#' # This example illustrates the SZINHPP model (Spatial Zero-Inflated NHPP) with spatial correlation
+#'
+#' # Load adjacency matrix from package's extdata directory
+#' Adj_matrix <- readRDS(system.file("extdata", "Adj_matrix.RDS", package = "spnhppzi"))
+#'
+#' # Define parameters
+#' sp_tau_r <- 1
+#' psi1_r <- 1.6
+#' psi2_r <- 1.2
+#' degree_bp <- min(ceiling(N^0.4), 5)
+#'
+#' base_sp <- spsimrec(
+#'   N = cov.fu$N,
+#'   cov_rec = c("ID", "X1", "X2"),
+#'   beta_x_rec = c(beta1_r, beta2_r),
+#'   logist = 0,
+#'   x1 = cov.fu$x1,
+#'   fu = cov.fu$fu,
+#'   fu_max = cov.fu$fu.max,
+#'   fu_min = cov.fu$fu.min,
+#'   spatial = 1,
+#'   list_area = list_area_RMBH,
+#'   sp_model = "ICAR",
+#'   SP_N = 133,
+#'   nb_mat = Adj_matrix,
+#'   sp_tau = sp_tau_r,
+#'   random_ef = 1,
+#'   tp_rnd_ef = 0,
+#'   pi = pi_r,
+#'   par_z = 0,
+#'   dist_int_func = "weibull",
+#'   par_int_func = c(alpha1_r, alpha2_r),
+#'   baseline = "plp2"
+#' )
+#'
+#' formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
+#'
+#' RESULT <- spnhppzi::spnhppzi(
+#'   formula2,
+#'   base_sp,
+#'   baseline = "bp",
+#'   FR = TRUE,
+#'   ZI = TRUE,
+#'   approach = "BAYES",
+#'   sp_model = "ICAR",
+#'   initial = 1,
+#'   tp_prior = 1,
+#'   mu_beta = 0, sigma_beta = 4,
+#'   mu_psi = 0, sigma_psi = 4,
+#'   mu_omega = 0,
+#'   spatial = 1,
+#'   nb_mat = Adj_matrix,
+#'   shp_tau = 0.01,
+#'   scl_tau = 0.01,
+#'   n_iter = 2000,
+#'   n_cores = 1,
+#'   n_chains = 2,
+#'   W_n = 365, omega_data = 0,
+#'   bp_degree = degree_bp,
+#'   h1_gamma = 0,
+#'   h2_gamma = 4,
+#'   lower_tau = 0,
+#'   tp_prior_tau = "gamma",
+#'   tp_icar = 1,
+#'   std_dev = 1
+#' )
+#'
+#' summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
 ##########################################################################################################################
 spnhppzi<-function(formula,
                        data,

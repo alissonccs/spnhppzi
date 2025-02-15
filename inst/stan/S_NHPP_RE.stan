@@ -24,9 +24,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real shp_sigma_omega;
-  // real scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -84,15 +81,6 @@ if(baseline==2){
   log_lambda0_event = event .*log_lambda0;
 }
 
-
- // for ( b in 1:n) {
- //        sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
- //        if(p>0){
- //       sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
- //               }
- // }
-
-
 if(p == 0){
     for (i in 1:n) {
       target +=   Lambda0[i] +
@@ -108,38 +96,17 @@ if(p == 0){
                      }
         }
 
-
-  //   if(p==0){
-  //    log_lik=sum(Lambda0) +
-  //    sum(event .*log_lambda0);
-  //         }
-  // else{
-  //    log_lik= sum(Lambda0 .* exp_etay) +
-  //    sum(event .*(log_lambda0 + eta));
-  //      }
-//    }
-// }
-// model{
-//      target +=log_lik;
-
 if (approach==1){
   gamma ~ lognormal(h1_gamma, h2_gamma);
-            // alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
-            // alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
             sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             omega_1 ~ normal(mu_omega,sigma2_z);
-
-            // omega_0~ lognormal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
   }
 }
 generated quantities{
   vector[n] log_lik;
   {
-    vector [n] Lambda0 ;
+  vector [n] Lambda0 ;
   vector [N] log_lambda0 ;
   vector [N] log_lambda0_event;
   vector[p == 0 ? 0 : N] eta;

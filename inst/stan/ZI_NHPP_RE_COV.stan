@@ -27,9 +27,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real <lower=0> shp_sigma_omega;
-  // real <lower=0> scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -164,9 +161,6 @@ if (approach==1){
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
             sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             omega_1 ~ normal(mu_omega,sigma2_z);
             psi ~ normal(mu_psi,sigma_psi);
   }

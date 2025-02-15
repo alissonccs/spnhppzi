@@ -29,6 +29,51 @@
 #'   - `"true"`: Includes random effects (with frailty).
 #'   - `"false"`: No random effects (no frailty).
 #' @param initial A vector of initial parameter values for the optimization procedure.
+#' @param shp_alpha1 Shape parameter of the Gamma prior distribution for the scale parameter (`alpha_1`)
+#'   when using the Power-Law Process (PLP) model. Default is `0.1`.
+#' @param scl_alpha1 Scale parameter of the Gamma prior distribution for the scale parameter (`alpha_1`)
+#'   when using the PLP model. Default is `0.1`.
+#' @param shp_alpha2 Shape parameter of the Gamma prior distribution for the shape parameter (`alpha_2`)
+#'   when using the PLP model. Default is `0.1`.
+#' @param scl_alpha2 Scale parameter of the Gamma prior distribution for the shape parameter (`alpha_2`)
+#'   when using the PLP model. Default is `0.1`.
+#' @param mu_beta Mean (`μ`) of the Normal prior distribution for the regression coefficients of the covariates. Default is `0`.
+#' @param sigma_beta Standard deviation (`σ`) of the Normal prior distribution for the regression coefficients of the covariates. Default is `4`.
+#' @param mu_omega Mean (`μ_omega`) of the Normal distribution for individual-level random effects (`omega`)
+#'   in models without spatial random effects. Default is `0`.
+#' @param shp_sigma2_z Shape parameter of the Gamma prior distribution for the hyperparameter `sigma2_z`,
+#'   which controls the variance of the random effects. Default is `0.01`.
+#' @param scl_sigma2_z Scale parameter of the Gamma prior distribution for the hyperparameter `sigma2_z`.
+#'   Default is `0.01`.
+#' @param spatial A logical value indicating whether the model includes a spatial random effects structure:
+#'   - `0`: No spatial random effects.
+#'   - `1`: Includes spatial random effects.#'
+#'   If `spatial = TRUE`, then `rnd_efc` must necessarily be `FALSE`.
+#' @param sp_model A character string specifying the spatial model to be used (only applicable if `spatial = TRUE`):
+#'   - `"icar"`: Intrinsic Conditional Autoregressive (ICAR) model.
+#'   - `"car"`: Conditional Autoregressive (CAR) model (under development).
+#'   - `"sparse"`: Sparse spatial model (under development).
+#' @param nb_mat A neighborhood matrix defining the spatial structure of the area units.
+#'   It is an object of class `sf`, typically representing adjacency relationships between spatial units.
+#' @param shp_tau Shape parameter of the Gamma prior distribution for the precision (`tau`) of the spatial random effects.
+#'   Default is `0.01`.
+#' @param scl_tau Scale parameter of the Gamma prior distribution for the precision (`tau`) of the spatial random effects.
+#'   Default is `0.01`.
+#' @param W_n An integer specifying the number of edges (connections) in the sparse neighborhood matrix.
+#'   It represents the number of area pairs that share a spatial connection, as defined in `W_sparse`.
+#'   This value can be computed as:
+#'   - If `W` is a binary adjacency matrix: `W_n = sum(W) / 2`.
+#'   - If `nb` is a neighborhood list (e.g., from `spdep::poly2nb()`): `W_n = sum(sapply(nb, length)) / 2`.
+#'   - If `W_sparse` is a list of connected area pairs: `W_n = nrow(W_sparse)`.
+#' @param bp_degree An integer specifying the degree of the Bernstein polynomials used in the semiparametric
+#'   baseline intensity function. Default is `NULL`, meaning it is automatically selected.
+#'   This argument is only used when `baseline = "bp"`.
+#' @param h1_gamma A numeric value specifying the mean of the lognormal prior distribution
+#'   for the coefficients of the Bernstein polynomials. Default is `0`.
+#'   This argument is only used when `baseline = "bp"`.
+#' @param h2_gamma A numeric value specifying the variance of the lognormal prior distribution
+#'   for the coefficients of the Bernstein polynomials. Default is `4`.
+#'   This argument is only used when `baseline = "bp"`.
 #' @return A list containing the estimated parameters and model fit statistics.
 #'
 #' @export
@@ -90,8 +135,7 @@
 #'                                          spatial = 0,
 #'                                          n_iter = 2000,
 #'                                          n_cores = 2,
-#'                                          n_chains = 2,
-#'                                          omega_data = 0)
+#'                                          n_chains = 2)
 #'
 #' summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 #'
@@ -172,14 +216,10 @@
 #'   n_iter = 2000,
 #'   n_cores = 1,
 #'   n_chains = 2,
-#'   W_n = 365, omega_data = 0,
+#'   W_n = 365,
 #'   bp_degree = degree_bp,
 #'   h1_gamma = 0,
-#'   h2_gamma = 4,
-#'   lower_tau = 0,
-#'   tp_prior_tau = "gamma",
-#'   tp_icar = 1,
-#'   std_dev = 1
+#'   h2_gamma = 4
 #' )
 #'
 #' summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
@@ -194,32 +234,20 @@ fit_spnhppzi<-function(formula,
                        ZI = c("true","false"),
                        rnd_efc= c("true","false"),
                        initial,
+                       shp_alpha1=0.1,scl_alpha1=0.1,shp_alpha2=0.1,scl_alpha2=0.1,
+                       mu_beta=0,sigma_beta=4,
+                       mu_psi=0,sigma_psi=4,
                        mu_omega=0,
-                       sigma_omega=0,
-                       shp_sigma2_z=0, scl_sigma2_z=0,
-                       shp_alpha1=0,scl_alpha1=0,shp_alpha2=0,scl_alpha2=0,
-                       mu_beta=0,sigma_beta=10,
-                       mu_psi=0,sigma_psi=10,
-                       rnd_logist=0,
-                       mu_xi=0,sigma_xi=1,
+                       shp_sigma2_z=0.01, scl_sigma2_z=0.01,
                        spatial=0,
                        sp_model = c("car","sparse","icar"),
                        nb_mat=NULL,
-                       data_tau=0,
-                       tau=1, #usar somente para testar modelo onde tau é data
-                       tp_prior_tau=c("gamma","inv_gamma"),
-                       shp_tau=0,
-                       scl_tau=0,
-                       lower_tau=0,
-                       tp_icar=0,
+                       shp_tau=0.01,
+                       scl_tau=0.01,
                        W_n=0,
                        bp_degree=NULL,
                        h1_gamma=0,
-                       h2_gamma=4,
-                       omega_data=0,
-                       omega=NULL,
-                       std_dev=1,
-                       tp_DIC=0
+                       h2_gamma=4
                        ){
 
   formula <- Formula::Formula(formula)
@@ -227,11 +255,6 @@ fit_spnhppzi<-function(formula,
   approach <- match.arg(approach)
   baseline <- tolower(baseline)
   baseline <- match.arg(baseline)
-  tp_prior_tau<-tolower(tp_prior_tau)
-  tp_prior_tau<-match.arg(tp_prior_tau)
-  tp_prior_tau <- switch(tp_prior_tau,
-                         "gamma" = 1,
-                         "inv_gamma" = 2)
   ZI <- tolower(ZI)
   ZI <- match.arg(ZI)
   rnd_efc <- tolower(rnd_efc)
@@ -345,13 +368,10 @@ fit_spnhppzi<-function(formula,
                      max_stop=max_stop, n=n, p=p, q=q, IndR=IndRec, IndRec2=IndRec2,
                      approach=approach, rnd_efc=rnd_efc, ZI=ZI, begin_ind=begin_ind,end_ind=end_ind,
                      n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega, shp_sigma2_z=shp_sigma2_z,
-                     scl_sigma2_z=scl_sigma2_z,sigma_omega=sigma_omega,
-                     shp_alpha1=shp_alpha1, scl_alpha1=scl_alpha1, shp_alpha2=shp_alpha2,
-                     scl_alpha2=scl_alpha2,mu_beta=mu_beta, sigma_beta=sigma_beta,mu_psi=mu_psi,
-                     sigma_psi=sigma_psi, baseline=baseline, SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat,
-                     shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n, rnd_logist=rnd_logist, mu_xi=mu_xi,
-                     sigma_xii=sigma_xi, G=G, g=g, zeta=zeta, omega=omega, tau=tau, lower_tau=lower_tau ,
-                     tp_prior_tau=tp_prior_tau,tp_icar=tp_icar, std_dev=std_dev
+                     scl_sigma2_z=scl_sigma2_z, shp_alpha1=shp_alpha1, scl_alpha1=scl_alpha1,
+                     shp_alpha2=shp_alpha2, scl_alpha2=scl_alpha2,mu_beta=mu_beta, sigma_beta=sigma_beta,
+                     mu_psi=mu_psi, sigma_psi=sigma_psi, baseline=baseline, SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat,
+                     shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n, G=G, g=g, zeta=zeta
                      )
   # Modelos não espaciais ----
   if(spatial==0){
@@ -390,12 +410,12 @@ fit_spnhppzi<-function(formula,
       }
       #### Paramétrico ----
       else{
-      if(tp_DIC==0){#Usa Transformed Parameters
-      mod <- stanmodels$NHPP_RE
-      }
-      else{#Usa Generate Quantities
+      # if(tp_DIC==0){#Usa Transformed Parameters
+      # mod <- stanmodels$NHPP_RE
+      # }
+      # else{#Usa Generate Quantities
       mod <- stanmodels$NHPP_RE_1
-      }
+      # }
      }
     }
     #### Com inflaćão de zeros ----

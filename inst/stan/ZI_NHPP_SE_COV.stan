@@ -6,7 +6,6 @@ data{
   int <lower=0>n;
   int <lower=0> p;
   int <lower=0> q;
-  // int <lower=0> tp_hf;
   int <lower=0> baseline;
   int m;
   int id[N];
@@ -29,9 +28,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real <lower=0> shp_sigma_omega;
-  // real <lower=0> scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -83,9 +79,6 @@ parameters{
   vector [q==0 ? 0 :q] psi;
   vector [SP_N] omega;
   real<lower = 0> tau;
-  // real <lower=0> sigma_omega;
-  //real <lower=0,upper=1> prob [q == 0 ? 1 : 0];
- // real <lower=0> sigma2_z;
           }
 
 //Estima valor de prob para o modelo que contém somente o intercepto
@@ -208,10 +201,6 @@ if(q>0){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
-            // sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            // omega ~ normal(mu_omega,sigma_omega);
-            // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
             psi ~ normal(mu_psi,sigma_psi);
             omega ~sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
             tau ~ gamma(shp_tau, scl_tau);

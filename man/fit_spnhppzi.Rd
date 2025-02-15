@@ -15,40 +15,26 @@ fit_spnhppzi(
   ZI = c("true", "false"),
   rnd_efc = c("true", "false"),
   initial,
-  tp_rnd_ef = 0,
-  mu_omega = 0,
-  sigma_omega = 0,
-  shp_sigma2_z = 0,
-  scl_sigma2_z = 0,
-  shp_alpha1 = 0,
-  scl_alpha1 = 0,
-  shp_alpha2 = 0,
-  scl_alpha2 = 0,
+  shp_alpha1 = 0.1,
+  scl_alpha1 = 0.1,
+  shp_alpha2 = 0.1,
+  scl_alpha2 = 0.1,
   mu_beta = 0,
-  sigma_beta = 10,
+  sigma_beta = 4,
   mu_psi = 0,
-  sigma_psi = 10,
-  rnd_logist = 0,
-  mu_xi = 0,
-  sigma_xi = 1,
+  sigma_psi = 4,
+  mu_omega = 0,
+  shp_sigma2_z = 0.01,
+  scl_sigma2_z = 0.01,
   spatial = 0,
   sp_model = c("car", "sparse", "icar"),
   nb_mat = NULL,
-  data_tau = 0,
-  tau = 1,
-  tp_prior_tau = c("gamma", "inv_gamma"),
-  shp_tau = 0,
-  scl_tau = 0,
-  lower_tau = 0,
-  tp_icar = 0,
+  shp_tau = 0.01,
+  scl_tau = 0.01,
   W_n = 0,
   bp_degree = NULL,
   h1_gamma = 0,
-  h2_gamma = 4,
-  omega_data = 0,
-  omega = NULL,
-  std_dev = 1,
-  tp_DIC = 0
+  h2_gamma = 4
 )
 }
 \arguments{
@@ -95,6 +81,75 @@ Defines the symbolic representation of the model to be fitted.}
 }}
 
 \item{initial}{A vector of initial parameter values for the optimization procedure.}
+
+\item{shp_alpha1}{Shape parameter of the Gamma prior distribution for the scale parameter (\code{alpha_1})
+when using the Power-Law Process (PLP) model. Default is \code{0.1}.}
+
+\item{scl_alpha1}{Scale parameter of the Gamma prior distribution for the scale parameter (\code{alpha_1})
+when using the PLP model. Default is \code{0.1}.}
+
+\item{shp_alpha2}{Shape parameter of the Gamma prior distribution for the shape parameter (\code{alpha_2})
+when using the PLP model. Default is \code{0.1}.}
+
+\item{scl_alpha2}{Scale parameter of the Gamma prior distribution for the shape parameter (\code{alpha_2})
+when using the PLP model. Default is \code{0.1}.}
+
+\item{mu_beta}{Mean (\code{μ}) of the Normal prior distribution for the regression coefficients of the covariates. Default is \code{0}.}
+
+\item{sigma_beta}{Standard deviation (\code{σ}) of the Normal prior distribution for the regression coefficients of the covariates. Default is \code{4}.}
+
+\item{mu_omega}{Mean (\code{μ_omega}) of the Normal distribution for individual-level random effects (\code{omega})
+in models without spatial random effects. Default is \code{0}.}
+
+\item{shp_sigma2_z}{Shape parameter of the Gamma prior distribution for the hyperparameter \code{sigma2_z},
+which controls the variance of the random effects. Default is \code{0.01}.}
+
+\item{scl_sigma2_z}{Scale parameter of the Gamma prior distribution for the hyperparameter \code{sigma2_z}.
+Default is \code{0.01}.}
+
+\item{spatial}{A logical value indicating whether the model includes a spatial random effects structure:
+\itemize{
+\item \code{0}: No spatial random effects.
+\item \code{1}: Includes spatial random effects.#'
+If \code{spatial = TRUE}, then \code{rnd_efc} must necessarily be \code{FALSE}.
+}}
+
+\item{sp_model}{A character string specifying the spatial model to be used (only applicable if \code{spatial = TRUE}):
+\itemize{
+\item \code{"icar"}: Intrinsic Conditional Autoregressive (ICAR) model.
+\item \code{"car"}: Conditional Autoregressive (CAR) model (under development).
+\item \code{"sparse"}: Sparse spatial model (under development).
+}}
+
+\item{nb_mat}{A neighborhood matrix defining the spatial structure of the area units.
+It is an object of class \code{sf}, typically representing adjacency relationships between spatial units.}
+
+\item{shp_tau}{Shape parameter of the Gamma prior distribution for the precision (\code{tau}) of the spatial random effects.
+Default is \code{0.01}.}
+
+\item{scl_tau}{Scale parameter of the Gamma prior distribution for the precision (\code{tau}) of the spatial random effects.
+Default is \code{0.01}.}
+
+\item{W_n}{An integer specifying the number of edges (connections) in the sparse neighborhood matrix.
+It represents the number of area pairs that share a spatial connection, as defined in \code{W_sparse}.
+This value can be computed as:
+\itemize{
+\item If \code{W} is a binary adjacency matrix: \code{W_n = sum(W) / 2}.
+\item If \code{nb} is a neighborhood list (e.g., from \code{spdep::poly2nb()}): \code{W_n = sum(sapply(nb, length)) / 2}.
+\item If \code{W_sparse} is a list of connected area pairs: \code{W_n = nrow(W_sparse)}.
+}}
+
+\item{bp_degree}{An integer specifying the degree of the Bernstein polynomials used in the semiparametric
+baseline intensity function. Default is \code{NULL}, meaning it is automatically selected.
+This argument is only used when \code{baseline = "bp"}.}
+
+\item{h1_gamma}{A numeric value specifying the mean of the lognormal prior distribution
+for the coefficients of the Bernstein polynomials. Default is \code{0}.
+This argument is only used when \code{baseline = "bp"}.}
+
+\item{h2_gamma}{A numeric value specifying the variance of the lognormal prior distribution
+for the coefficients of the Bernstein polynomials. Default is \code{4}.
+This argument is only used when \code{baseline = "bp"}.}
 }
 \value{
 A list containing the estimated parameters and model fit statistics.
@@ -136,7 +191,6 @@ base <- spsimrec(N = cov.fu$N,
                  fu_min = cov.fu$fu.min,
                  spatial = 0,
                  random_ef = 0,
-                 tp_rnd_ef = 0,
                  pi = pi_r,
                  par_z = 0,
                  dist_int_func = "weibull",
@@ -161,8 +215,7 @@ RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
                                          spatial = 0,
                                          n_iter = 2000,
                                          n_cores = 2,
-                                         n_chains = 2,
-                                         omega_data = 0)
+                                         n_chains = 2)
 
 summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 
@@ -214,7 +267,6 @@ base_sp <- spsimrec(
   nb_mat = Adj_matrix,
   sp_tau = sp_tau_r,
   random_ef = 1,
-  tp_rnd_ef = 0,
   pi = pi_r,
   par_z = 0,
   dist_int_func = "weibull",
@@ -244,14 +296,10 @@ RESULT <- spnhppzi::fit_spnhppzi(
   n_iter = 2000,
   n_cores = 1,
   n_chains = 2,
-  W_n = 365, omega_data = 0,
+  W_n = 365,
   bp_degree = degree_bp,
   h1_gamma = 0,
-  h2_gamma = 4,
-  lower_tau = 0,
-  tp_prior_tau = "gamma",
-  tp_icar = 1,
-  std_dev = 1
+  h2_gamma = 4
 )
 
 summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))

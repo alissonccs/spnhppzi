@@ -25,9 +25,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real shp_sigma_omega;
-  // real scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -43,9 +40,6 @@ data{
   real h1_gamma;
   real h2_gamma;
   real<lower=0> zeta;
-  real<lower=0> lower_tau;
-  int tp_prior_tau;
-  int tp_icar;
     }
 
 transformed data{
@@ -79,16 +73,12 @@ transformed data{
 }
 
 parameters{
-  // vector  <lower=0> [m] alpha;
   vector [p] beta;
   vector <lower=0> [baseline == 2 ? 0 : m]  alpha;
   vector <lower=0> [baseline != 2 ? 0 : m]  gamma;
-  // real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
-  vector [SP_N] omega;
-  real<lower = lower_tau> tau;
-  // vector [n] omega;
-  // real <lower=0> sigma_omega;
-  // real <lower=0> sigma2_z;
+    vector [SP_N] omega;
+  real<lower = 0> tau;
+
           }
 
 
@@ -154,26 +144,10 @@ if(baseline==2){
 if(approach==1 && baseline==2){
             gamma ~ lognormal(h1_gamma, h2_gamma);
             beta ~ normal(mu_beta,sigma_beta);
-            // sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // sigma_omega ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
-            // omega ~ normal(mu_omega,sigma_omega);
-            if(tp_icar==1){
             omega ~ sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
-            }
-            else{
-            omega ~ sparse_iar1(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
-            }
             sum(omega) ~ normal(0, 0.001 * SP_N);
-            if(tp_prior_tau==1){
             tau ~ gamma(shp_tau, scl_tau);
-            }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
-                               }
+           }
 
   }
 

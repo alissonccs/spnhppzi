@@ -23,9 +23,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real shp_sigma_omega;
-  // real scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -115,19 +112,13 @@ if(baseline==2){
 
 
 if(approach==1){
-            // alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
-            // alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             gamma ~ lognormal(h1_gamma, h2_gamma);
             beta ~ normal(mu_beta,sigma_beta);
             sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // sigma_omega ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
             omega_1 ~ normal(mu_omega,sigma2_z);
 
                                            }
   }
-
 
 
    generated quantities{

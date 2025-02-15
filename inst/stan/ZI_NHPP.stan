@@ -55,33 +55,7 @@ model{
 
 
  // // CALCULA VEROSSIMILHANÇA ACUMULADA POR INDIVÍDUO
- //  for (b in 1:n) {
- //     sum_log_lambda0[b] = 0;
- //     sum_eta[b] = 0;
- //   for (i in 1:n_ind[b]) {
- //     if (a <= N) {
- //     a = a + 1;
- //     sum_log_lambda0[b] += log_lambda0_[a];
- //     if(p>0){
- //     sum_eta[b] += eta_[a];
- //            }
- //                  }
- //                         }
- //                  }
-
-
-// for ( b in 1:n) {
-//       vector [n_ind[b]] sub_lambda = log_lambda0_[sum(n_ind[:b-1])+1:sum(n_ind[:b])];
-//       vector [n_ind[b]] sub_eta = eta_[sum(n_ind[:b-1])+1:sum(n_ind[:b])];
-//       sum_log_lambda0[b] = 0;
-//       sum_eta[b] = 0;
-//       sum_log_lambda0[b]=sum(sub_lambda);
-//       if(p>0){
-//       sum_eta[b]=sum(sub_eta);
-//               }
-//                 }
-
- for ( b in 1:n) {
+  for ( b in 1:n) {
         sum_log_lambda0[b]=sum(log_lambda0_[begin_ind[b]:end_ind[b]]);
         if(p>0){
        sum_eta[b]=sum(eta_[begin_ind[b]:end_ind[b]]);
@@ -146,31 +120,6 @@ model{
 
 
  // // CALCULA VEROSSIMILHANÇA ACUMULADA POR INDIVÍDUO
- //  for (b in 1:n) {
- //     sum_log_lambda0[b] = 0;
- //     sum_eta[b] = 0;
- //   for (i in 1:n_ind[b]) {
- //     if (a <= N) {
- //     a = a + 1;
- //     sum_log_lambda0[b] += log_lambda0_[a];
- //     if(p>0){
- //     sum_eta[b] += eta_[a];
- //            }
- //                  }
- //                         }
- //                  }
-
-
-// for ( b in 1:n) {
-//       vector [n_ind[b]] sub_lambda = log_lambda0_[sum(n_ind[:b-1])+1:sum(n_ind[:b])];
-//       vector [n_ind[b]] sub_eta = eta_[sum(n_ind[:b-1])+1:sum(n_ind[:b])];
-//       sum_log_lambda0[b] = 0;
-//       sum_eta[b] = 0;
-//       sum_log_lambda0[b]=sum(sub_lambda);
-//       if(p>0){
-//       sum_eta[b]=sum(sub_eta);
-//               }
-//                 }
 
  for ( b in 1:n) {
         sum_log_lambda0[b]=sum(log_lambda0_[begin_ind[b]:end_ind[b]]);

@@ -24,9 +24,6 @@ data{
   real shp_alpha2;
   real scl_alpha2;
   real mu_omega;
-  // real <lower=0> sigma_omega;
-  // real shp_sigma_omega;
-  // real scl_sigma_omega;
   real shp_sigma2_z;
   real scl_sigma2_z;
   real mu_beta;
@@ -36,9 +33,7 @@ data{
 parameters{
   vector  <lower=0> [m] alpha;
   vector [p] beta;
-   // real <lower=0> sigma_omega;
   real <lower=0> sigma2_z;
-  // vector [n] omega;
   vector[n] omega_1;
             }
 
@@ -55,15 +50,6 @@ model{
   vector [n] sum_eta = rep_vector(0, n);
   int a = 0;
   int c = 0;
-
-// if(p>0){
-//   for (i in 1:N){
-//      eta[i] = X[i,]*beta+omega[id[i]];
-//      eta_event[i] = event[i]*eta[i];
-//   }
-//      exp_etay = exp(Xy*beta+omega);
-//         }
-
 
 if(p>0){
   for (i in 1:N){
@@ -135,53 +121,12 @@ if(p>0 ){
         }
 }
 
-
-// if(p>0){
-//   for (i in 1:N){
-//      eta[i] = X[i,]*beta+omega[id[i]];
-//      eta_event[i] = event[i]*eta[i];
-//   }
-//      exp_etay = exp(Xy*beta+omega);
-//         }
-
-
-
 if(baseline==1){
    Lambda0 = Lambda_plp(max_stop, alpha,n);
     log_lambda0 = log_lambda_plp(time, N, alpha);
     log_lambda0_event = event .*log_lambda0;
 }
 
-//
-//
-//
-//
-//
-//   Lambda0 = Lambda_plp2(max_stop, alpha,n);
-//   log_lambda0 = log_lambda_plp2(time, N, alpha);
-//   log_lambda0_event= event .*log_lambda0;
-
- // for ( b in 1:n) {
- //        sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
- //        if(p>0){
- //       sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
- //               }
- // }
-
-
-// if(p == 0){
-//     for (i in 1:n) {
-//       target +=   Lambda0[i] +
-//                    sum_log_lambda0[i];
-//                   }
-//           }
-//     else{
-//       for (i in 1:n) {
-//       target += Lambda0[i]*exp_etay[i]+
-//                  sum_log_lambda0[i]+sum_eta[i];
-//
-//                      }
-//         }
 
    if(p == 0){
     for (i in 1:n) {

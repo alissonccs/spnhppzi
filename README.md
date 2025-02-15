@@ -30,6 +30,9 @@ Additional methodological details can be found in the dissertation:
 
 ### **Example 1: NHPP Model for Recurrent Event Data**
 ```r
+# EXAMPLE ----
+# This example illustrates the simplest case: the NHPP model for recurrent event data
+
 N <- 500
 alpha1_r <- 0.5
 alpha2_r <- 1.3
@@ -90,38 +93,66 @@ summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 
 ### **Example 2: SZINHPP Model with Spatial Correlation**
 ```r
+# ADDITIONAL EXAMPLE ----
+# This example illustrates the SZINHPP model (Spatial Zero-Inflated NHPP) with spatial correlation
+
+# Load adjacency matrix from package's extdata directory
 Adj_matrix <- readRDS(system.file("extdata", "Adj_matrix.RDS", package = "spnhppzi"))
 list_area_RMBH <- as.numeric(row.names(Adj_matrix))
 
-RESULT <- spnhppzi::fit_spnhppzi(
-  formula2,
-  base_sp,
-  baseline = "bp",
-  rnd_efc = TRUE,
-  ZI = TRUE,
-  approach = "BAYES",
-  sp_model = "ICAR",
-  initial = 1,
-  mu_beta = 0, sigma_beta = 4,
-  mu_psi = 0, sigma_psi = 4,
-  mu_omega = 0,
-  spatial = 1,
-  nb_mat = Adj_matrix,
-  shp_tau = 0.01,
-  scl_tau = 0.01,
-  n_iter = 2000,
-  n_cores = 1,
-  n_chains = 2,
-  W_n = 365,
-  bp_degree = degree_bp,
-  h1_gamma = 0,
-  h2_gamma = 4
+# Define parameters
+N <- 500
+alpha1_r <- 2
+alpha2_r <- 1.3
+beta1_r <- 0.6
+beta2_r <- 0.8
+sp_tau_r <- 1
+psi1_r <- 1.6
+psi2_r <- 1.2
+pi_r <- 0.75
+fu.min <- 7
+fu.max <- 7
+degree_bp <- min(ceiling(N^0.4), 5)
+
+# Simulating covariates for the dataset
+cov.fu <- gencovfu2(
+  N = N,
+  fu.min = fu.min,
+  fu.max = fu.max,
+  cens.prob = 0,
+  dist.x = c("binomial", "normal"),
+  par.x = list(0.7, c(0, 1)),
+  beta.x = c(beta1_r, beta2_r)
 )
 
-summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
+# Simulating recurrent event data for model estimation
+base_sp <- spsimrec(
+  N = cov.fu$N,
+  cov_rec = c("ID", "X1", "X2"),
+  beta_x_rec = c(beta1_r, beta2_r),
+  logist = 0,
+  x1 = cov.fu$x1,
+  fu = cov.fu$fu,
+  fu_max = cov.fu$fu.max,
+  fu_min = cov.fu$fu.min,
+  spatial = 1,
+  list_area = list_area_RMBH,
+  sp_model = "ICAR",
+  SP_N = 133,
+  nb_mat = Adj_matrix,
+  sp_tau = sp_tau_r,
+  random_ef = 1,
+  pi = pi_r,
+  par_z = 0,
+  dist_int_func = "weibull",
+  par_int_func = c(alpha1_r, alpha2_r),
+  baseline = "plp"
+)
 ```
 
 ## **Contributions and Contact**
 
 Thank you for your interest in **spnhppzi**! If you encounter any issues or have suggestions, feel free to **open an issue** or contact the author via **alisson.ccs2@gmail.com**.
+
+
 

@@ -1,31 +1,31 @@
-# **spnhppzi: Modelagem Bayesiana de Eventos Recorrentes com Inflação de Zeros e Correlação Espacial**  
+# **spnhppzi: Bayesian Modeling of Recurrent Event Data with Zero Inflation and Spatial Correlation**  
 
-O **spnhppzi** é um pacote desenvolvido para a **modelagem de dados de eventos recorrentes** que apresentam **inflação de zeros e correlação espacial**. Ele adota uma **abordagem bayesiana**, implementando **modelos hierárquicos** para capturar **estruturas complexas** associadas à repetição de eventos e suas dependências espaciais.  
+The **spnhppzi** package is designed for **modeling recurrent event data** that exhibit **zero inflation and spatial correlation**. It follows a **Bayesian approach**, implementing **hierarchical models** to capture **complex structures** associated with event repetition and spatial dependencies.  
 
-A modelagem espacial é baseada no **modelo Condicional Intrinsecamente Autorregressivo (ICAR)**, que permite incorporar a correlação espacial de maneira eficiente. Além disso, o pacote oferece **modelos paramétricos e semiparamétricos**, nos quais **polinômios de Bernstein** são empregados para a **modelagem da função de intensidade de linha de base**. Essa abordagem aumenta a flexibilidade do modelo, tornando-o aplicável a cenários onde **modelos estritamente paramétricos podem falhar na representação da complexidade dos dados**.  
+Spatial modeling is based on the **Intrinsic Conditional Autoregressive (ICAR) model**, which efficiently incorporates spatial correlation. Additionally, the package provides **both parametric and semiparametric models**, where **Bernstein polynomials** are used for **modeling the baseline intensity function**. This approach enhances the model's flexibility, making it applicable in scenarios where **purely parametric models may struggle to adequately capture data complexity**.  
 
-## **Simulação de Dados**  
+## **Data Simulation**  
 
-O **spnhppzi** também inclui **funções para simulação de dados de eventos recorrentes**, utilizando uma adaptação do pacote **SIMREC** ([Farrington et al., 2014](https://doi.org/10.18637/jss.v058.i02)). Isso permite a geração de **dados espacialmente correlacionados**, possibilitando a **avaliação do desempenho dos modelos** e experimentação com diferentes cenários de recorrência e dependência espacial.  
+The **spnhppzi** package also includes **functions for simulating recurrent event data**, using an adaptation of the **SIMREC** package ([Farrington et al., 2014](https://doi.org/10.18637/jss.v058.i02)). This enables the generation of **spatially correlated recurrent event data**, allowing for **model performance evaluation** and experimentation with different recurrence and spatial dependence scenarios.  
 
-## **Referências e Aplicação**  
+## **References and Application**  
 
-Este repositório contém as funções utilizadas para gerar os resultados apresentados no artigo:  
+This repository contains the functions used to generate the results presented in the following article:  
 
-📄 **"The Analysis of Criminal Recidivism: A Hierarchical Model-Based Approach for the Analysis of Zero-Inflated, Spatially Correlated Recurrent Events Data"**, disponível em [arXiv:2405.02666](https://arxiv.org/abs/2405.02666).  
+📄 **"The Analysis of Criminal Recidivism: A Hierarchical Model-Based Approach for the Analysis of Zero-Inflated, Spatially Correlated Recurrent Events Data"**, available at [arXiv:2405.02666](https://arxiv.org/abs/2405.02666).  
 
-Detalhes adicionais sobre a metodologia podem ser encontrados na tese:  
+Additional methodological details can be found in the dissertation:  
 
-📖 **"Modelos Hierárquicos para a Análise de Dados de Eventos Recorrentes com Inflação de Zeros e Correlação Espacial"**, disponível mediante solicitação ao autor pelo e-mail **alisson.ccs2@gmail.com**.  
+📖 **"Hierarchical Models for the Analysis of Recurrent Event Data with Zero Inflation and Spatial Correlation"**, available upon request from the author via **alisson.ccs2@gmail.com**.  
 
-## **Funcionalidades**  
+## **Features**  
 
-- **Modelagem hierárquica bayesiana** para dados de eventos recorrentes;  
-- **Modelagem da correlação espacial** entre eventos por meio do **modelo ICAR**;  
-- **Versões paramétricas e semiparamétricas**, com **polinômios de Bernstein** para maior flexibilidade na modelagem da função de intensidade de linha de base;  
-- **Simulação de dados** de eventos recorrentes espacialmente correlacionados (adaptação do **SIMREC**);  
-- **Ferramentas para pré-processamento de dados e estimação de modelos**.  
+- **Bayesian hierarchical modeling** for recurrent event data;  
+- **Spatial correlation modeling** using the **ICAR model**;  
+- **Parametric and semiparametric models**, incorporating **Bernstein polynomials** for greater flexibility in modeling the baseline intensity function;  
+- **Data simulation** for spatially correlated recurrent events (adaptation of **SIMREC**);  
+- **Tools for data preprocessing and model estimation**.  
 
-## **Contribuição e Contato**  
+## **Contributions and Contact**  
 
-Agradecemos seu interesse no **spnhppzi**! Caso encontre algum problema ou tenha sugestões, fique à vontade para **abrir uma issue** ou entrar em contato pelo e-mail **alisson.ccs2@gmail.com**.  
+Thank you for your interest in **spnhppzi**! If you encounter any issues or have suggestions, feel free to **open an issue** or contact the author via **alisson.ccs2@gmail.com**. 

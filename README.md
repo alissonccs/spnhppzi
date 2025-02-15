@@ -148,6 +148,34 @@ base_sp <- spsimrec(
   par_int_func = c(alpha1_r, alpha2_r),
   baseline = "plp"
 )
+# Fitting the SZINHPP model
+formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
+RESULT <- spnhppzi::fit_spnhppzi(
+  formula2,
+  base_sp,
+  baseline = "bp",
+  rnd_efc = TRUE,
+  ZI = TRUE,
+  approach = "BAYES",
+  sp_model = "ICAR",
+  initial = 1,
+  mu_beta = 0, sigma_beta = 4,
+  mu_psi = 0, sigma_psi = 4,
+  mu_omega = 0,
+  spatial = 1,
+  nb_mat = Adj_matrix,
+  shp_tau = 0.01,
+  scl_tau = 0.01,
+  n_iter = 2000,
+  n_cores = 1,
+  n_chains = 2,
+  W_n = 365,
+  bp_degree = degree_bp,
+  h1_gamma = 0,
+  h2_gamma = 4
+)
+
+summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
 ```
 
 ## **Contributions and Contact**

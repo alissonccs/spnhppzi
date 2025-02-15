@@ -307,7 +307,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
       exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
     }
-    if (baseline==2){
+    if (baseline==1){
     alpha1_eta <- alpha1*exp_eta
     }
     # print(paste("alpha1_eta: ", dim(alpha1_eta)))
@@ -328,9 +328,6 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
       U <- runif(1)
       if (dist_int_func == "weibull") {
         if(baseline==1){
-        t <- alpha1*((-1)*log(U)*(exp_eta[i])^(-1))^(1 / alpha2) # (veja artigo Generating survival times to simulate pag 1717 tabela II)
-        }
-        else {#baseline==2
         t <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2)
         }
         #ind<-0
@@ -353,9 +350,6 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
           t1 <- t
           if (dist_int_func == "weibull") { # weibull
             if(baseline==1){
-            t <- ((-1)*log(U)*((exp_eta[i])^(-1))*alpha1^alpha2 + (t1)^(alpha2))^(1 / alpha2)
-            }
-            else{#baseline==2
             t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
             }
           }

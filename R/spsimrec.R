@@ -61,7 +61,7 @@ spsimrec<-  function(N,
                          logist = 0,
                          mu_omega=0,
                          sigma_omega=0,
-                         baseline = c("plp1", "plp2", "polynom")
+                         baseline = c("plp","polynom")
 ){
   # source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
   ID <- c(1:N)
@@ -77,9 +77,8 @@ spsimrec<-  function(N,
   baseline <- match.arg(baseline)
 
   baseline <- switch(baseline,
-                     "plp1" = 1,
-                     "plp2" = 2,
-                     "polynom"=3
+                     "plp" = 1,
+                     "polynom"=2
   )
 
   ## Designa as unidades de areas para cada individuo a partir de uma lista de areas fornecida como entrada ====
@@ -158,7 +157,7 @@ spsimrec<-  function(N,
     left_join(recurr_out$recurr1,by="ID") %>%
     left_join(fu,by="ID")
 
-  if (baseline==3){
+  if (baseline==2){
 
   tab<- gen_data_pol_int(ID=input_gen_data$ID,
                          N=N,

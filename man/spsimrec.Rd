@@ -32,7 +32,7 @@ spsimrec(
   logist = 0,
   mu_omega = 0,
   sigma_omega = 0,
-  baseline = c("plp1", "plp2", "polynom")
+  baseline = c("plp", "polynom")
 )
 }
 \arguments{

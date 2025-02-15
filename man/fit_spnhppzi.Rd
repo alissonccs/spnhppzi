@@ -7,16 +7,14 @@
 fit_spnhppzi(
   formula,
   data,
-  baseline = c("plp1", "plp2", "plp3", "bp"),
+  baseline = c("plp", "bp"),
   approach = c("mle", "bayes"),
   n_iter = 4000,
   n_cores = 1,
   n_chains = 4,
   ZI = c("true", "false"),
-  FR = c("true", "false"),
+  rnd_efc = c("true", "false"),
   initial,
-  tp_prior = 0,
-  frag = 0,
   tp_rnd_ef = 0,
   mu_omega = 0,
   sigma_omega = 0,
@@ -54,31 +52,49 @@ fit_spnhppzi(
 )
 }
 \arguments{
-\item{data}{A \code{data.frame} containing the dataset.}
+\item{formula}{An object of class \code{"formula"} (or coercible to one).
+Defines the symbolic representation of the model to be fitted.}
+
+\item{data}{A data frame containing all model variables, with the following elements:
+\itemize{
+\item \code{id}: A vector identifying individuals.
+\item \code{status}: A vector indicating whether the event occurred (\code{1}) or was censored (\code{0}).
+\item \code{stop}: A numeric vector representing the time until the event occurs.
+\item \code{IndRec}: A binary indicator (\code{0/1}) for whether the individual has at least one recurrence.
+\item \code{covar}: A vector or matrix of covariates.
+}}
+
+\item{baseline}{Character. Specifies the baseline intensity function:
+\itemize{
+\item \code{"plp"}: Parametric Power-Law Process (PLP).
+\item \code{"bp"}: Semiparametric approach using Bernstein polynomials.
+}}
 
 \item{approach}{An integer specifying the estimation approach:
 \itemize{
-\item \code{0}: Frequentist approach
-\item \code{1}: Bayesian approach
+\item \code{mle}: Frequentist approach (available only for models \strong{without} random effects).
+\item \code{bayes}: Bayesian approach.
+}}
+
+\item{n_iter}{An integer specifying the number of iterations for the MCMC algorithm. Default is \code{4000}.}
+
+\item{n_cores}{An integer indicating the number of CPU cores to use for parallel computation. Default is \code{1} (no parallelization).}
+
+\item{n_chains}{An integer defining the number of Markov chains to run in parallel. Default is \code{4}.}
+
+\item{ZI}{A character string indicating whether the model accounts for zero-inflated data:
+\itemize{
+\item \code{"true"}: The model includes a structure for zero inflation.
+\item \code{"false"}: The model does not consider zero inflation.
+}}
+
+\item{rnd_efc}{A character string indicating whether the model includes a random effects structure (frailty term):
+\itemize{
+\item \code{"true"}: Includes random effects (with frailty).
+\item \code{"false"}: No random effects (no frailty).
 }}
 
 \item{initial}{A vector of initial parameter values for the optimization procedure.}
-
-\item{frag}{An integer indicating whether a frailty term is included in the model:
-\itemize{
-\item \code{0}: No frailty
-\item \code{1}: With frailty
-}}
-
-\item{id}{A vector identifying individuals.}
-
-\item{status}{A vector indicating whether the event occurred (1) or was censored (0).}
-
-\item{stop}{A numeric vector representing the time until the event occurs.}
-
-\item{IndRec}{A binary indicator (0/1) for whether the individual has at least one recurrence.}
-
-\item{covar}{A vector or matrix of covariates.}
 }
 \value{
 A list containing the estimated parameters and model fit statistics.
@@ -125,19 +141,18 @@ base <- spsimrec(N = cov.fu$N,
                  par_z = 0,
                  dist_int_func = "weibull",
                  par_int_func = c(alpha1_r, alpha2_r),
-                 baseline = "plp2")
+                 baseline = "plp")
 
 formula2 <- Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1)
 
 RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
                                          base,
-                                         baseline = "plp2",
-                                         FR = FALSE,
+                                         baseline = "plp",
+                                         rnd_efc = FALSE,
                                          ZI = FALSE,
                                          approach = "BAYES",
                                          sp_model = "ICAR",
                                          initial = 1,
-                                         tp_prior = 1,
                                          shp_alpha1 = 0.1, scl_alpha1 = 0.1,
                                          shp_alpha2 = 0.1, scl_alpha2 = 0.1,
                                          mu_beta = 0, sigma_beta = 4,
@@ -204,7 +219,7 @@ base_sp <- spsimrec(
   par_z = 0,
   dist_int_func = "weibull",
   par_int_func = c(alpha1_r, alpha2_r),
-  baseline = "plp2"
+  baseline = "plp"
 )
 
 # Fitting the SZINHPP model
@@ -214,12 +229,11 @@ RESULT <- spnhppzi::fit_spnhppzi(
   formula2,
   base_sp,
   baseline = "bp",
-  FR = TRUE,
+  rnd_efc = TRUE,
   ZI = TRUE,
   approach = "BAYES",
   sp_model = "ICAR",
   initial = 1,
-  tp_prior = 1,
   mu_beta = 0, sigma_beta = 4,
   mu_psi = 0, sigma_psi = 4,
   mu_omega = 0,

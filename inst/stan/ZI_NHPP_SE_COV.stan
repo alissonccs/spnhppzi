@@ -36,7 +36,6 @@ data{
   real scl_sigma2_z;
   real mu_beta;
   real <lower=0> sigma_beta;
-  int <lower=0> tp_prior;
   int SP_ID[N];
   int gr_SP_ID[n];
   matrix<lower = 0, upper = 1>[SP_N,SP_N] nb_mat; // adjacency matrix
@@ -122,8 +121,8 @@ model {
     }
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 
 if(q>0){
@@ -133,8 +132,8 @@ if(q>0){
  // if(q==2){
  //     eta2 = Z1*psi;
  //     }
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 
 
@@ -205,7 +204,7 @@ if(q>0){
 // model{
 //      target +=log_lik1;
 
- if(approach==1 && tp_prior==1){
+ if(approach==1){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
@@ -248,15 +247,15 @@ if(q>0){
     }
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 
  if(q>0){
      eta2 = Z1*psi;
      }
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 
 

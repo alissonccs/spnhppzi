@@ -5,20 +5,30 @@
 #' The `fit_spnhppzi` function estimates parameters for **recurrent event data with zero inflation and spatial correlation**,
 #' using either a frequentist or Bayesian approach.
 #'
-#' @param data A `data.frame` containing the dataset.
-#' @param id A vector identifying individuals.
-#' @param status A vector indicating whether the event occurred (1) or was censored (0).
-#' @param stop A numeric vector representing the time until the event occurs.
-#' @param IndRec A binary indicator (0/1) for whether the individual has at least one recurrence.
-#' @param covar A vector or matrix of covariates.
-#' @param initial A vector of initial parameter values for the optimization procedure.
+#' @param formula An object of class `"formula"` (or coercible to one).
+#'   Defines the symbolic representation of the model to be fitted.
+#' @param data A data frame containing all model variables, with the following elements:
+#'   - `id`: A vector identifying individuals.
+#'   - `status`: A vector indicating whether the event occurred (`1`) or was censored (`0`).
+#'   - `stop`: A numeric vector representing the time until the event occurs.
+#'   - `IndRec`: A binary indicator (`0/1`) for whether the individual has at least one recurrence.
+#'   - `covar`: A vector or matrix of covariates.
+#' @param baseline Character. Specifies the baseline intensity function:
+#'   - `"plp"`: Parametric Power-Law Process (PLP).
+#'   - `"bp"`: Semiparametric approach using Bernstein polynomials.
 #' @param approach An integer specifying the estimation approach:
-#'   - `0`: Frequentist approach
-#'   - `1`: Bayesian approach
-#' @param frag An integer indicating whether a frailty term is included in the model:
-#'   - `0`: No frailty
-#'   - `1`: With frailty
-#'
+#'   - `mle`: Frequentist approach (available only for models **without** random effects).
+#'   - `bayes`: Bayesian approach.
+#' @param n_iter An integer specifying the number of iterations for the MCMC algorithm. Default is `4000`.
+#' @param n_cores An integer indicating the number of CPU cores to use for parallel computation. Default is `1` (no parallelization).
+#' @param n_chains An integer defining the number of Markov chains to run in parallel. Default is `4`.
+#' @param ZI A character string indicating whether the model accounts for zero-inflated data:
+#'   - `"true"`: The model includes a structure for zero inflation.
+#'   - `"false"`: The model does not consider zero inflation.
+#' @param rnd_efc  A character string indicating whether the model includes a random effects structure (frailty term):
+#'   - `"true"`: Includes random effects (with frailty).
+#'   - `"false"`: No random effects (no frailty).
+#' @param initial A vector of initial parameter values for the optimization procedure.
 #' @return A list containing the estimated parameters and model fit statistics.
 #'
 #' @export
@@ -56,24 +66,22 @@
 #'                  fu_min = cov.fu$fu.min,
 #'                  spatial = 0,
 #'                  random_ef = 0,
-#'                  tp_rnd_ef = 0,
 #'                  pi = pi_r,
 #'                  par_z = 0,
 #'                  dist_int_func = "weibull",
 #'                  par_int_func = c(alpha1_r, alpha2_r),
-#'                  baseline = "plp2")
+#'                  baseline = "plp")
 #'
 #' formula2 <- Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1)
 #'
 #' RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
 #'                                          base,
-#'                                          baseline = "plp2",
-#'                                          FR = FALSE,
+#'                                          baseline = "plp",
+#'                                          rnd_efc = FALSE,
 #'                                          ZI = FALSE,
 #'                                          approach = "BAYES",
 #'                                          sp_model = "ICAR",
 #'                                          initial = 1,
-#'                                          tp_prior = 1,
 #'                                          shp_alpha1 = 0.1, scl_alpha1 = 0.1,
 #'                                          shp_alpha2 = 0.1, scl_alpha2 = 0.1,
 #'                                          mu_beta = 0, sigma_beta = 4,
@@ -135,12 +143,11 @@
 #'   nb_mat = Adj_matrix,
 #'   sp_tau = sp_tau_r,
 #'   random_ef = 1,
-#'   tp_rnd_ef = 0,
 #'   pi = pi_r,
 #'   par_z = 0,
 #'   dist_int_func = "weibull",
 #'   par_int_func = c(alpha1_r, alpha2_r),
-#'   baseline = "plp2"
+#'   baseline = "plp"
 #' )
 #'
 #' # Fitting the SZINHPP model
@@ -150,12 +157,11 @@
 #'   formula2,
 #'   base_sp,
 #'   baseline = "bp",
-#'   FR = TRUE,
+#'   rnd_efc = TRUE,
 #'   ZI = TRUE,
 #'   approach = "BAYES",
 #'   sp_model = "ICAR",
 #'   initial = 1,
-#'   tp_prior = 1,
 #'   mu_beta = 0, sigma_beta = 4,
 #'   mu_psi = 0, sigma_psi = 4,
 #'   mu_omega = 0,
@@ -180,17 +186,14 @@
 ##########################################################################################################################
 fit_spnhppzi<-function(formula,
                        data,
-                       baseline = c("plp1", "plp2","plp3","bp"),
+                       baseline = c("plp","bp"),
                        approach = c("mle", "bayes"),
                        n_iter=4000,
                        n_cores=1,
                        n_chains=4,
                        ZI = c("true","false"),
-                       FR= c("true","false"),
+                       rnd_efc= c("true","false"),
                        initial,
-                       tp_prior=0,
-                       frag=0,
-                       tp_rnd_ef=0,
                        mu_omega=0,
                        sigma_omega=0,
                        shp_sigma2_z=0, scl_sigma2_z=0,
@@ -231,8 +234,8 @@ fit_spnhppzi<-function(formula,
                          "inv_gamma" = 2)
   ZI <- tolower(ZI)
   ZI <- match.arg(ZI)
-  FR <- tolower(FR)
-  FR <- match.arg(FR)
+  rnd_efc <- tolower(rnd_efc)
+  rnd_efc <- match.arg(rnd_efc)
   sp_model<-tolower(sp_model)
   sp_model<-match.arg(sp_model)
 
@@ -300,18 +303,16 @@ fit_spnhppzi<-function(formula,
   }
 
   baseline <- switch(baseline,
-                     "plp1" = 1,
-                     "plp2" = 2,
-                     "plp3" = 3,
-                     "bp" = 4
+                     "plp" = 1,
+                     "bp" = 2
   )
-  if(baseline == 1 | baseline == 2|baseline == 3){
+  if(baseline == 1){
     m <- 2
   }
 
   g<-NULL
   G<-NULL
-  if(baseline == 4){
+  if(baseline == 2){
     bases <- bp(time, max_stop, bp_degree, zeta, N, n)
     g <- bases$b
     G <- bases$B
@@ -323,7 +324,7 @@ fit_spnhppzi<-function(formula,
                      "bayes" = 1
   )
 
-  FR <- switch(FR,
+  rnd_efc <- switch(rnd_efc,
                "true" = 1,
                "false" = 0
   )
@@ -342,23 +343,22 @@ fit_spnhppzi<-function(formula,
 # Lista de argumentos para o rStan
   data_model <- list(id=id,evento=event,time=time, X=X, Z=Z, N=N, Xy=Xy, Z1=Z1,
                      max_stop=max_stop, n=n, p=p, q=q, IndR=IndRec, IndRec2=IndRec2,
-                     approach=approach, FR=FR, ZI=ZI, begin_ind=begin_ind,end_ind=end_ind,
-                     n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega, tp_rnd_ef=tp_rnd_ef,
-                     shp_sigma2_z=shp_sigma2_z, scl_sigma2_z=scl_sigma2_z,sigma_omega=sigma_omega,
+                     approach=approach, rnd_efc=rnd_efc, ZI=ZI, begin_ind=begin_ind,end_ind=end_ind,
+                     n_ind=n_ind,n_ind1=n_ind1, m=m, mu_omega=mu_omega, shp_sigma2_z=shp_sigma2_z,
+                     scl_sigma2_z=scl_sigma2_z,sigma_omega=sigma_omega,
                      shp_alpha1=shp_alpha1, scl_alpha1=scl_alpha1, shp_alpha2=shp_alpha2,
                      scl_alpha2=scl_alpha2,mu_beta=mu_beta, sigma_beta=sigma_beta,mu_psi=mu_psi,
-                     sigma_psi=sigma_psi, baseline=baseline, tp_prior=tp_prior,
-                     SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat, shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n,
-                     rnd_logist=rnd_logist, mu_xi=mu_xi, sigma_xii=sigma_xi, G=G, g=g, zeta=zeta,
-                     omega=omega, tau=tau, lower_tau=lower_tau , tp_prior_tau=tp_prior_tau,tp_icar=tp_icar,
-                     std_dev=std_dev
+                     sigma_psi=sigma_psi, baseline=baseline, SP_ID,gr_SP_ID, SP_N, nb_mat=nb_mat,
+                     shp_tau=shp_tau, scl_tau=scl_tau, W_n=W_n, rnd_logist=rnd_logist, mu_xi=mu_xi,
+                     sigma_xii=sigma_xi, G=G, g=g, zeta=zeta, omega=omega, tau=tau, lower_tau=lower_tau ,
+                     tp_prior_tau=tp_prior_tau,tp_icar=tp_icar, std_dev=std_dev
                      )
   # Modelos não espaciais ----
   if(spatial==0){
   ## Sem efeito aleatório para o indivíduo ----
-  if(FR==0){
+  if(rnd_efc==0){
     ### Semiparamétrico ----
-    if(baseline==4){
+    if(baseline==2){
       ##### Sem inflação de zeros ----
       if(ZI==0){
       mod <-stanmodels$S_NHPP
@@ -385,7 +385,7 @@ fit_spnhppzi<-function(formula,
     #### Sem inflaćão de zeros ----
     if(ZI==0){
       #### Semiparamétrico ----
-      if(baseline==4){
+      if(baseline==2){
        mod <-stanmodels$S_NHPP_RE
       }
       #### Paramétrico ----
@@ -403,7 +403,7 @@ fit_spnhppzi<-function(formula,
       # Sem covariável na reg logística ---
       if(q==0){
           # Semiparamétrico
-          if(baseline==4){
+          if(baseline==2){
             mod <-stanmodels$SZI_NHPP_RE
           }
           # Paramétrico
@@ -414,7 +414,7 @@ fit_spnhppzi<-function(formula,
       # Com covariável na reg logística ----
       else{
         # Semiparamétrico ----
-        if(baseline==4){
+        if(baseline==2){
           mod<- stanmodels$SZI_NHPP_RE_COV
         }
         # Paramétrico ----
@@ -432,7 +432,7 @@ fit_spnhppzi<-function(formula,
     if(sp_model==2){
      print("ICAR model")
     # Semiparamétrico ----
-    if(baseline==4){
+    if(baseline==2){
      mod <- stanmodels$S_NHPP_SE
     }
       # Paramétrico ----
@@ -447,7 +447,7 @@ fit_spnhppzi<-function(formula,
       if(q==0){
        print("ICAR model ZI")
           # Semiparamétrico ----
-          if(baseline==4){
+          if(baseline==2){
            mod <- stanmodels$SZI_NHPP_SE
           }
           # Paramétrico ----
@@ -458,7 +458,7 @@ fit_spnhppzi<-function(formula,
       # Com covariável na reg logística
       else{
         # Semiparamétrico ----
-        if(baseline==4){
+        if(baseline==2){
           mod <- stanmodels$SZI_NHPP_SE_COV
         }
         # Paramétrico ----
@@ -469,18 +469,18 @@ fit_spnhppzi<-function(formula,
       }
     }
   }
-  if(FR==0){
+  if(rnd_efc==0){
     #Optimizing
     if(approach==0){
       result<- optimizing(stanmodels$mod, data = data_model, hessian =TRUE, init=initial, algorithm = "LBFGS")
-      if(baseline==4){
+      if(baseline==2){
        result<-list("result_stan"=result,"G"=G, "g"=g, "m"=m)
       }
       return(result)
     }
     if(approach==1){
      result_b<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter, chains=n_chains)
-      if(baseline==4){
+      if(baseline==2){
        result_b<-list("result_stan"=result_b,"G"=G, "g"=g, "m"=m)
       }
       return(result_b)
@@ -488,7 +488,7 @@ fit_spnhppzi<-function(formula,
   }
   else{
    result_c<- sampling(mod, data = data_model, cores = n_cores, iter=n_iter,chains=n_chains)
-   if(baseline==4){
+   if(baseline==2){
     result_c<-list("result_stan"=result_c,"G"=G, "g"=g, "m"=m)
    }
     return(result_c)

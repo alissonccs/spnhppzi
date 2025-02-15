@@ -32,7 +32,6 @@ data{
   real scl_sigma2_z;
   real mu_beta;
   real <lower=0> sigma_beta;
-  int <lower=0> tp_prior;
   int SP_ID[N];
   int gr_SP_ID[n];
   matrix<lower = 0, upper = 1>[SP_N,SP_N] nb_mat; // adjacency matrix
@@ -110,29 +109,10 @@ parameters{
 }
 
 if(baseline==1){
-  Lambda0 = Lambda_plp1(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 }
-
-if(baseline==2){
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==3){
-  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
-  log_lambda0 = log_lambda_plp3(time, N, alpha,tau);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-    // for ( b in 1:n) {
-    //   sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
-    //   if(p>0){
-    //     sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
-    //   }
-    // }
 
    if(p == 0){
       for (i in 1:n) {
@@ -149,7 +129,7 @@ if(baseline==3){
       }
     }
 
-if(approach==1 && tp_prior==1){
+if(approach==1){
     alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
     alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
     beta ~ normal(mu_beta,sigma_beta);
@@ -191,29 +171,10 @@ generated quantities{
 }
 
 if(baseline==1){
-  Lambda0 = Lambda_plp1(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 }
-
-if(baseline==2){
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==3){
-  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
-  log_lambda0 = log_lambda_plp3(time, N, alpha,tau);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-    // for ( b in 1:n) {
-    //   sum_log_lambda0[b]=sum(log_lambda0_event[begin_ind[b]:end_ind[b]]);
-    //   if(p>0){
-    //     sum_eta[b]=sum(eta_event[begin_ind[b]:end_ind[b]]);
-    //   }
-    // }
 
    if(p == 0){
       for (i in 1:n) {

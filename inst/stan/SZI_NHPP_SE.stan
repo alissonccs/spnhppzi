@@ -32,7 +32,6 @@ data{
   real scl_sigma2_z;
   real mu_beta;
   real <lower=0> sigma_beta;
-  int <lower=0> tp_prior;
   int SP_ID[N];
   int gr_SP_ID[n];
   matrix<lower = 0, upper = 1>[SP_N,SP_N] nb_mat; // adjacency matrix
@@ -82,8 +81,8 @@ transformed data{
 parameters{
   // vector  <lower=0> [m] alpha;
   vector [p] beta;
-  vector <lower=0> [baseline == 4 ? 0 : m]  alpha;
-  vector <lower=0> [baseline != 4 ? 0 : m]  gamma;
+  vector <lower=0> [baseline == 2 ? 0 : m]  alpha;
+  vector <lower=0> [baseline != 2 ? 0 : m]  gamma;
   real <lower=0,upper=1> pii [ZI == 0 ? 0 : 1];
   vector [SP_N] omega;
   real<lower = lower_tau> tau;
@@ -119,24 +118,12 @@ if(p>0){
 
 
 if(baseline==1){
-  Lambda0 = Lambda_plp1(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 }
 
 if(baseline==2){
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==3){
-  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
-  log_lambda0 = log_lambda_plp3(time, N, alpha,zeta);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==4){
   Lambda0=Lambda_bp(G, gamma,n);
   log_lambda0=log_lambda_bp(g,gamma, N, zeta);
   log_lambda0_event = event .*log_lambda0;
@@ -177,19 +164,8 @@ if(baseline==4){
                      }
         }
 
- // if(approach==1 && tp_prior==1){
- //            alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
- //            alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
- //            beta ~ normal(mu_beta,sigma_beta);
- //            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
- //            omega[id] ~ normal(mu_omega,sigma_omega);
- //                               }
-//   }
-// }
-// model{
-//      target +=log_lik1;
 
-if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
+if(approach==1 && baseline==2){
             gamma ~ lognormal(h1_gamma, h2_gamma);
             // alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             // alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
@@ -214,33 +190,8 @@ if(approach==1 && tp_prior==1 && (baseline==1 || baseline==2 || baseline==4)){
               tau ~ inv_gamma(shp_tau, scl_tau);
             }
                                }
-
-  if(approach==1 && tp_prior==1 && baseline==3){
-            alpha[1] ~ lognormal(shp_alpha1,scl_alpha1);
-            alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
-            beta ~ normal(mu_beta,sigma_beta);
-            // sigma2_z ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // sigma_omega ~ gamma(shp_sigma2_z,scl_sigma2_z);
-            // omega~ normal(-(sigma_omega)^2/2,sigma_omega);
-            // sigma_omega ~ gamma(shp_sigma_omega,scl_sigma_omega);
-            // omega~ normal(log(1 / sqrt(sigma2_z + 1)),sqrt(log(sigma2_z + 1)));
-            // omega ~ normal(mu_omega,sigma_omega);
-            if(tp_icar==1){
-            omega ~sparse_iar(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
-            }
-            else{
-            omega ~sparse_iar1(tau, W_sparse, D_sparse, lambda, SP_N, W_n);
-            }
-            // tau ~ gamma(shp_tau, scl_tau);
-            sum(omega) ~ normal(0, 0.001 * SP_N);
-            if(tp_prior_tau==1){
-            tau ~ gamma(shp_tau, scl_tau);
-            }
-            else{
-              tau ~ inv_gamma(shp_tau, scl_tau);
-            }
                                }
-  }
+
 
   generated quantities{
   vector[n] log_lik;
@@ -268,24 +219,13 @@ if(p>0){
 
 
 if(baseline==1){
-  Lambda0 = Lambda_plp1(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp1(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event = event .*log_lambda0;
 }
+
 
 if(baseline==2){
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==3){
-  Lambda0 = Lambda_plp3(max_stop, alpha,n,tau);
-  log_lambda0 = log_lambda_plp3(time, N, alpha,zeta);
-  log_lambda0_event = event .*log_lambda0;
-}
-
-if(baseline==4){
   Lambda0=Lambda_bp(G, gamma,n);
   log_lambda0=log_lambda_bp(g,gamma, N, zeta);
   log_lambda0_event = event .*log_lambda0;

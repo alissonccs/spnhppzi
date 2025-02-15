@@ -24,7 +24,6 @@ data{
   real scl_alpha2;
   real mu_beta;
   real <lower=0> sigma_beta;
-  int <lower=0> tp_prior;
     }
 
 parameters{
@@ -50,8 +49,8 @@ model{
      exp_etay = exp(Xy*beta);
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_ = event .*log_lambda0;
 
 
@@ -115,7 +114,7 @@ model{
                      }
         }
 
- if(approach==1 && tp_prior==1){
+ if(approach==1){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);
@@ -141,8 +140,8 @@ model{
      exp_etay = exp(Xy*beta);
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_ = event .*log_lambda0;
 
 

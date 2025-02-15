@@ -31,7 +31,6 @@ data{
   real scl_sigma2_z;
   real mu_beta;
   real <lower=0> sigma_beta;
-  int <lower=0> tp_prior;
     }
 
 parameters{
@@ -65,8 +64,8 @@ if(p>0){
      exp_etay = exp(Xy*beta+omega);
         }
 
-  Lambda0 = Lambda_plp2(max_stop, alpha,n);
-  log_lambda0 = log_lambda_plp2(time, N, alpha);
+  Lambda0 = Lambda_plp(max_stop, alpha,n);
+  log_lambda0 = log_lambda_plp(time, N, alpha);
   log_lambda0_event= event .*log_lambda0;
 
  for ( b in 1:n) {
@@ -105,7 +104,7 @@ if(p == 0){
 model{
      target +=log_lik;
 
-if(approach==1 && tp_prior==1){
+if(approach==1){
             alpha[1] ~ gamma(shp_alpha1,scl_alpha1);
             alpha[2] ~ gamma(shp_alpha2,scl_alpha2);
             beta ~ normal(mu_beta,sigma_beta);

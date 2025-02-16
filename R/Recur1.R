@@ -2,11 +2,15 @@
 #' @title Recur
 #' @aliases Recur
 #' @export
-#' @description Recur: Preparação dos dados
-#' @param time: tempo até ocorrência
-#' @param event: identificador de ocorrência de evento ou censura
-#' @param id: identificador do indivíduo
-#' @param IndRec: Indicador se o indivíduo apresenta uma ou mais recorrência
+#' @description
+#' Prepares recurrent event data for analysis by structuring key variables,
+#' including event times, censoring indicators, and recurrence status.
+#'
+#' @param time Numeric. Time until the occurrence of an event.
+#' @param event Integer (0 or 1). Indicator of event occurrence (`1`) or censoring (`0`).
+#' @param id Integer or Character. Unique identifier for each individual.
+#' @param IndRec Integer (0 or 1). Indicator of whether the individual has at least one recurrence (`1`) or not (`0`).
+#'
 #' @export
 ######################################################################################################
 Recur1 <- function(time, event = NULL, id = NULL,SP_ID, IndRec=NULL){

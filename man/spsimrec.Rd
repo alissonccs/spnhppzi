@@ -36,54 +36,72 @@ spsimrec(
 )
 }
 \arguments{
-\item{N}{Número de indivíduos}
+\item{N}{Integer. Number of individuals in the dataset.}
 
-\item{spatial}{Indicadora do uso de modelo espacial, (default =0 , não espacial)}
+\item{spatial}{Logical (0 or 1). Indicator for spatial modeling (default = 0, non-spatial).}
 
-\item{sp_model}{Tipo de modelo espacial}
+\item{sp_model}{Character. Type of spatial model used (\code{"ICAR"} or \code{"CAR"}).}
 
-\item{SP_N}{Número de unidades de área}
+\item{SP_N}{Integer. Number of area units when using a spatial model.}
 
-\item{nb_mat}{Matriz de vizinhança}
+\item{nb_mat}{Matrix. Neighborhood matrix defining spatial relationships.}
 
-\item{sp_tau}{Valor do parâmetro de precisão no modelo ICAR (\tau)}
+\item{sp_tau}{Numeric. Precision parameter (\code{τ}) for the ICAR model.}
 
-\item{sp_alpha}{Valor do associação espacial no modelo CAR.}
+\item{sp_alpha}{Numeric. Spatial association parameter for the CAR model.
+\subsection{Covariates}{
+}}
 
-\item{x1}{Matriz ID e covariávies}
+\item{x1}{Matrix. Matrix containing \code{ID} and covariates.}
 
-\item{cov_rec}{Lista de covariáveis relacionadas à função de intensidade}
+\item{cov_rec}{Character vector. List of covariates associated with the intensity function.}
 
-\item{cov_log}{Lista de covariáveis relacionadas à regressão logística}
+\item{cov_log}{Character vector. List of covariates associated with the logistic regression.}
 
-\item{beta_x_rec}{Coeficientes das covariáveis relacionadas à função de intensidade}
+\item{beta_x_rec}{Numeric vector. Coefficients of covariates in the intensity function.}
 
-\item{beta_x_log}{Coeficientes das covariáveis relacionadas à regressão logística}
+\item{beta_x_log}{Numeric vector. Coefficients of covariates in the logistic regression.
+\subsection{Follow-up and Zero Inflation}{
+}}
 
-\item{xi}{Parâmetro que relaciona a função de intensidade e a logística}
+\item{xi}{Numeric. Parameter linking the intensity function and logistic regression.
+\subsection{Logistic Regression Model}{
+}}
 
-\item{fu_max}{Tempo máximo de acompanhamento}
+\item{fu_max}{Numeric. Maximum follow-up time.}
 
-\item{fu_min}{Tempo mínimo de acompanhamento}
+\item{fu_min}{Numeric. Minimum follow-up time.}
 
-\item{random_ef}{Indicadora de uso de efeitos aleatórios na geração dos dados (random_ef==0, modelo sem efeitos).}
+\item{random_ef}{Logical (0 or 1). Indicator for using random effects (default = 0, no random effects).}
 
-\item{dist_z}{Distribuição do efeito aleatório não espacial (Gamma ou lognormal).}
+\item{dist_z}{Character. Distribution of the non-spatial random effect (\code{"Gamma"} or \code{"lognormal"}).}
 
-\item{tp_rnd_ef}{Indicadora de efeito aleatório multiplicativo}
+\item{tp_rnd_ef}{Logical (0 or 1). Indicator for using multiplicative random effects.}
 
-\item{par_z}{Parâmetros de variância da distribuição do efeito aleatório.}
+\item{par_z}{Numeric vector. Variance parameters for the random effect distribution.
+\subsection{Intensity Function}{
+}}
 
-\item{dist_int_func}{Forma da função de intensidade.  "Weibull" (Lei de potência)}
+\item{dist_int_func}{Character. Type of intensity function (\code{"Weibull"} for power-law process).}
 
-\item{par_int_func}{Parâmetros da função de intensidade. Escala e forma (Lei de potência)}
+\item{par_int_func}{Numeric vector. Scale and shape parameters of the intensity function.}
 
-\item{pi_zi}{Inflação de zeros (proporção de indivíduos sem recorrências)}
+\item{pi_zi}{Numeric. Proportion of individuals with zero recurrences (zero inflation).}
 
-\item{logist}{Indicadora do uso de covariáveis na logística}
+\item{logist}{Logical (0 or 1). Indicator for using covariates in the logistic regression model.}
 
-\item{x}{Matriz de covariávies}
+\item{x}{Matrix. Matrix of covariates.}
+
+\item{cens.prob}{Numeric. Probability of censoring before the maximum follow-up period.
+\subsection{Random Effects}{
+}}
+
+\item{dist.x}{Character. Distribution of covariates (\code{"binomial"} or \code{"normal"}).}
+
+\item{par.x}{List. Parameters of the covariate distributions.}
 }
 \description{
-Recur:
+Simulates recurrent event data with options for spatial correlation, zero inflation,
+random effects, and different intensity functions. The function allows customization
+of the follow-up period, covariates, and model parameters.
 }

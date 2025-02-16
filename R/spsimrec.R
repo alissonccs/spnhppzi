@@ -1,34 +1,48 @@
-#'@title spsimrec
+#' @title spsimrec
 #' @aliases spsimrec
 #' @export
-#' @description Recur:
-# @param cens.prob  Probabiidade de apresentar censura antes do período máximo de acompanhamento.
-# @param dist.x     Distribuição das Covariáveis. Binomial ou normal.
-# @param par.x      Parâmetros das distribuições das covariáveis.
-#' @param N          Número de indivíduos
-#' @param spatial    Indicadora do uso de modelo espacial, (default =0 , não espacial)
-#' @param sp_model   Tipo de modelo espacial
-#' @param SP_N       Número de unidades de área
-#' @param nb_mat     Matriz de vizinhança
-#' @param sp_tau     Valor do parâmetro de precisão no modelo ICAR (\tau)
-#' @param sp_alpha   Valor do associação espacial no modelo CAR.
-#' @param x          Matriz de covariávies
-#' @param x1         Matriz ID e covariávies
-#' @param cov_rec    Lista de covariáveis relacionadas à função de intensidade
-#' @param cov_log    Lista de covariáveis relacionadas à regressão logística
-#' @param beta_x_rec Coeficientes das covariáveis relacionadas à função de intensidade
-#' @param beta_x_log Coeficientes das covariáveis relacionadas à regressão logística
-#' @param xi         Parâmetro que relaciona a função de intensidade e a logística
-#' @param fu_min     Tempo mínimo de acompanhamento
-#' @param fu_max     Tempo máximo de acompanhamento
-#' @param random_ef  Indicadora de uso de efeitos aleatórios na geração dos dados (random_ef==0, modelo sem efeitos).
-#' @param dist_z     Distribuição do efeito aleatório não espacial (Gamma ou lognormal).
-#' @param tp_rnd_ef  Indicadora de efeito aleatório multiplicativo
-#' @param par_z      Parâmetros de variância da distribuição do efeito aleatório.
-#' @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
-#' @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
-#' @param pi_zi         Inflação de zeros (proporção de indivíduos sem recorrências)
-#' @param logist     Indicadora do uso de covariáveis na logística
+#' @description
+#' Simulates recurrent event data with options for spatial correlation, zero inflation,
+#' random effects, and different intensity functions. The function allows customization
+#' of the follow-up period, covariates, and model parameters.
+#'
+#' @param N Integer. Number of individuals in the dataset.
+#' @param spatial Logical (0 or 1). Indicator for spatial modeling (default = 0, non-spatial).
+#' @param sp_model Character. Type of spatial model used (`"ICAR"` or `"CAR"`).
+#' @param SP_N Integer. Number of area units when using a spatial model.
+#' @param nb_mat Matrix. Neighborhood matrix defining spatial relationships.
+#' @param sp_tau Numeric. Precision parameter (`τ`) for the ICAR model.
+#' @param sp_alpha Numeric. Spatial association parameter for the CAR model.
+#'
+#' ## Covariates
+#' @param x Matrix. Matrix of covariates.
+#' @param x1 Matrix. Matrix containing `ID` and covariates.
+#' @param cov_rec Character vector. List of covariates associated with the intensity function.
+#' @param cov_log Character vector. List of covariates associated with the logistic regression.
+#' @param beta_x_rec Numeric vector. Coefficients of covariates in the intensity function.
+#' @param beta_x_log Numeric vector. Coefficients of covariates in the logistic regression.
+#'
+#' ## Follow-up and Zero Inflation
+#' @param fu_min Numeric. Minimum follow-up time.
+#' @param fu_max Numeric. Maximum follow-up time.
+#' @param pi_zi Numeric. Proportion of individuals with zero recurrences (zero inflation).
+#' @param cens.prob Numeric. Probability of censoring before the maximum follow-up period.
+#'
+#' ## Random Effects
+#' @param random_ef Logical (0 or 1). Indicator for using random effects (default = 0, no random effects).
+#' @param tp_rnd_ef Logical (0 or 1). Indicator for using multiplicative random effects.
+#' @param dist_z Character. Distribution of the non-spatial random effect (`"Gamma"` or `"lognormal"`).
+#' @param par_z Numeric vector. Variance parameters for the random effect distribution.
+#'
+#' ## Intensity Function
+#' @param dist_int_func Character. Type of intensity function (`"Weibull"` for power-law process).
+#' @param par_int_func Numeric vector. Scale and shape parameters of the intensity function.
+#' @param xi Numeric. Parameter linking the intensity function and logistic regression.
+#'
+#' ## Logistic Regression Model
+#' @param logist Logical (0 or 1). Indicator for using covariates in the logistic regression model.
+#' @param dist.x Character. Distribution of covariates (`"binomial"` or `"normal"`).
+#' @param par.x List. Parameters of the covariate distributions.
 
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
 spsimrec<-  function(N,

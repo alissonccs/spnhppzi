@@ -8,14 +8,15 @@
 Recur1(time, event = NULL, id = NULL, SP_ID, IndRec = NULL)
 }
 \arguments{
-\item{time:}{tempo até ocorrência}
+\item{time}{Numeric. Time until the occurrence of an event.}
 
-\item{event:}{identificador de ocorrência de evento ou censura}
+\item{event}{Integer (0 or 1). Indicator of event occurrence (\code{1}) or censoring (\code{0}).}
 
-\item{id:}{identificador do indivíduo}
+\item{id}{Integer or Character. Unique identifier for each individual.}
 
-\item{IndRec:}{Indicador se o indivíduo apresenta uma ou mais recorrência}
+\item{IndRec}{Integer (0 or 1). Indicator of whether the individual has at least one recurrence (\code{1}) or not (\code{0}).}
 }
 \description{
-Recur: Preparação dos dados
+Prepares recurrent event data for analysis by structuring key variables,
+including event times, censoring indicators, and recurrence status.
 }

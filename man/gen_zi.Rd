@@ -2,8 +2,8 @@
 % Please edit documentation in R/Utils_spsimrec.R
 \name{gen_zi}
 \alias{gen_zi}
-\alias{spsimrec}
-\title{spsimrec}
+\alias{Utils_spsimrec}
+\title{Utils_spsimrec}
 \usage{
 gen_zi(ID, N, pi_zi, logist, cov_log, beta_x_log, xi1 = 1, rnd_ef)
 }

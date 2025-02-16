@@ -113,8 +113,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
 
   # INFLAÇÃO DE ZEROS - Define indivíduos recorrentes  ====
-  #' @title spsimrec
-  #' @aliases spsimrec
+  #' @title Utils_spsimrec
+  #' @aliases Utils_spsimrec
   #' @export
   #' @description Recur:
   #' @param N          Número de indivíduos.

@@ -9,7 +9,7 @@ You can install The spnhppzi package from GitHub using devtools:
 install.packages("devtools")
 
 ## Install spnhppzi from GitHub
-devtools::install_github("your-username/spnhppzi")
+devtools::install_github("alissonccs/spnhppzi@master")
 ```
 After installation, load the package using:
 

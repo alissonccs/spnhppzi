@@ -85,7 +85,7 @@ base <- spsimrec(N = cov.fu$N,
                   par_int_func = c(alpha1_r, alpha2_r),
                   baseline = "plp")
 
-formula2 <- as.list(Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1))
+formula2 <- as.list(Formula(spnhppzi::Recur(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1))
 
 RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
                                           base,
@@ -166,7 +166,7 @@ base_sp <- spsimrec(
   baseline = "plp"
 )
 # Fitting the SZINHPP model
-formula2 <- Formula(spnhppzi::Recur1(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
+formula2 <- Formula(spnhppzi::Recur(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1)
 RESULT <- spnhppzi::fit_spnhppzi(
   formula2,
   base_sp,

@@ -1,8 +1,26 @@
 # **spnhppzi: Bayesian Modeling of Recurrent Event Data with Zero Inflation and Spatial Correlation**
 
-The **spnhppzi** package is designed for **modeling recurrent event data** that exhibit **zero inflation and spatial correlation**. It follows a **Bayesian approach**, implementing **hierarchical models** to capture **complex structures** associated with event repetition and spatial dependencies.
+Installation
 
-Spatial modeling is based on the **Intrinsic Conditional Autoregressive (ICAR) model**, which efficiently incorporates spatial correlation. Additionally, the package provides **both parametric and semiparametric models**, where **Bernstein polynomials** are used for **modeling the baseline intensity function**. This approach enhances the model's flexibility, making it applicable in scenarios where **purely parametric models may struggle to adequately capture data complexity**.
+The spnhppzi package is not yet available on CRAN. You can install it from GitHub using devtools:
+
+# Install devtools if not already installed
+install.packages("devtools")
+
+# Install spnhppzi from GitHub
+devtools::install_github("your-username/spnhppzi")
+
+If you have a local version of the package, install it with:
+
+install.packages("path/to/spnhppzi.tar.gz", repos = NULL, type = "source")
+
+After installation, load the package using:
+
+library(spnhppzi)
+
+The spnhppzi package is designed for modeling recurrent event data that exhibit zero inflation and spatial correlation. It follows a Bayesian approach, implementing hierarchical models to capture complex structures associated with event repetition and spatial dependencies.
+
+Spatial modeling is based on the Intrinsic Conditional Autoregressive (ICAR) model, which efficiently incorporates spatial correlation. Additionally, the package provides both parametric and semiparametric models, where Bernstein polynomials are used for modeling the baseline intensity function. This approach enhances the model's flexibility, making it applicable in scenarios where purely parametric models may struggle to adequately capture data complexity.
 
 ## **Data Simulation**
 
@@ -43,7 +61,7 @@ fu.min <- 7
 fu.max <- 7
 
 set.seed(5832)
-cov.fu <- gencovfu2(N = N,
+cov.fu <- gencovfu(N = N,
                      fu.min = fu.min,
                      fu.max = fu.max,
                      cens.prob = 0,
@@ -68,7 +86,7 @@ base <- spsimrec(N = cov.fu$N,
                   par_int_func = c(alpha1_r, alpha2_r),
                   baseline = "plp")
 
-formula2 <- Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1)
+formula2 <- as.list(Formula(spnhppzi::Recur1(time = end, event = status, id = ID, SP_ID = NULL, IndRec = IndRec) ~ X1 + X2 | -1))
 
 RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
                                           base,
@@ -115,7 +133,7 @@ fu.max <- 7
 degree_bp <- min(ceiling(N^0.4), 5)
 
 # Simulating covariates for the dataset
-cov.fu <- gencovfu2(
+cov.fu <- gencovfu(
   N = N,
   fu.min = fu.min,
   fu.max = fu.max,

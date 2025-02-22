@@ -1,4 +1,3 @@
-######################################################################################################
 #' @title Recur
 #' @aliases Recur
 #' @export
@@ -12,8 +11,8 @@
 #' @param IndRec Integer (0 or 1). Indicator of whether the individual has at least one recurrence (`1`) or not (`0`).
 #'
 #' @export
-######################################################################################################
-Recur1 <- function(time, event = NULL, id = NULL,SP_ID, IndRec=NULL){
+#'
+Recur <- function(time, event = NULL, id = NULL,SP_ID=NULL, IndRec=NULL){
   n <- length(time)
   if(is.null(event)){
     event <- rep(1, n)

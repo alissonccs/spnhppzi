@@ -1,14 +1,37 @@
-#'@title gencovfu
+#' @title gencovfu
 #' @aliases gencovfu
 #' @export
-#' @description Recur:
-#' @param cens.prob  Probabiidade de apresentar censura antes do período máximo de acompanhamento.
-#' @param dist.x     Distribuição das Covariáveis. Binomial ou normal.
-#' @param par.x      Parâmetros das distribuições das covariáveis.
-#' @param beta.x     Coeficiente de regressão das covariáveis.
+#' @description
+#' Generates covariate values and follow-up periods for recurrent event data simulations.
+#' Allows for censoring, different covariate distributions, and regression coefficients.
+#'
+#' @param N Integer. Number of individuals in the dataset.
+#' @param fu.min Numeric. Minimum follow-up time for individuals.
+#' @param fu.max Numeric. Maximum follow-up time for individuals.
+#' @param cens.prob Numeric. Probability of censoring before the maximum follow-up period.
+#' @param dist.x Character. Distribution of covariates (`"binomial"` or `"normal"`).
+#' @param par.x List. Parameters for the covariate distributions.
+#' @param beta.x Numeric vector. Regression coefficients for the covariates.
+#'
+#' @return A data frame containing generated covariate values and follow-up times.
+#'
+#' @examples
+#' # Example: Generate covariates with a normal distribution and a binomial variable
+#' cov_data <- gencovfu(
+#'   N = 500,
+#'   fu.min = 7,
+#'   fu.max = 7,
+#'   cens.prob = 0,
+#'   dist.x = c("binomial", "normal"),
+#'   par.x = list(0.7, c(0, 1)),
+#'   beta.x = c(0.5, 1.3)
+#' )
+#' head(cov_data)
+#'
+#' @export
 
 # gencovfu - Gera valores das covariáveis e período de acompanhamento ====
-gencovfu2 <- function(N,
+gencovfu <- function(N,
                       fu.min,
                       fu.max,
                       cens.prob = 0,

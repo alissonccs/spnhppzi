@@ -1,26 +1,25 @@
 # **spnhppzi: Bayesian Modeling of Recurrent Event Data with Zero Inflation and Spatial Correlation**
 
-Installation
+## Installation
 
-The spnhppzi package is not yet available on CRAN. You can install it from GitHub using devtools:
+You can install The spnhppzi package from GitHub using devtools:
 
-# Install devtools if not already installed
+```r
+## Install devtools if not already installed
 install.packages("devtools")
 
-# Install spnhppzi from GitHub
+## Install spnhppzi from GitHub
 devtools::install_github("your-username/spnhppzi")
-
-If you have a local version of the package, install it with:
-
-install.packages("path/to/spnhppzi.tar.gz", repos = NULL, type = "source")
-
+```
 After installation, load the package using:
 
+```r
 library(spnhppzi)
+```
 
-The spnhppzi package is designed for modeling recurrent event data that exhibit zero inflation and spatial correlation. It follows a Bayesian approach, implementing hierarchical models to capture complex structures associated with event repetition and spatial dependencies.
+The **spnhppzi** package is designed for modeling recurrent event data that exhibit **zero inflation and spatial correlation**. It follows a **Bayesian approach**, implementing **hierarchical models** to capture **complex structures** associated with event repetition and spatial dependencies.
 
-Spatial modeling is based on the Intrinsic Conditional Autoregressive (ICAR) model, which efficiently incorporates spatial correlation. Additionally, the package provides both parametric and semiparametric models, where Bernstein polynomials are used for modeling the baseline intensity function. This approach enhances the model's flexibility, making it applicable in scenarios where purely parametric models may struggle to adequately capture data complexity.
+Spatial modeling is based on the **Intrinsic Conditional Autoregressive (ICAR) model**, which efficiently incorporates spatial correlation. Additionally, the package provides **both parametric and semiparametric models**, where **Bernstein polynomials** are used for modeling the **baseline intensity function**. This approach enhances the model's flexibility, making it applicable in scenarios where **purely parametric models may struggle to adequately capture data complexity**.
 
 ## **Data Simulation**
 

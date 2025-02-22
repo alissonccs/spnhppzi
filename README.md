@@ -1,6 +1,4 @@
-# **spnhppzi: Bayesian Modeling of Recurrent Event Data with Zero Inflation and Spatial Correlation**
-
-## Installation
+# Installation
 
 You can install The spnhppzi package from GitHub using devtools:
 
@@ -17,7 +15,9 @@ After installation, load the package using:
 library(spnhppzi)
 ```
 
-The **spnhppzi** package is designed for modeling recurrent event data that exhibit **zero inflation and spatial correlation**. It follows a **Bayesian approach**, implementing **hierarchical models** to capture **complex structures** associated with event repetition and spatial dependencies.
+# **spnhppzi: Bayesian Modeling of Recurrent Event Data with Zero Inflation and Spatial Correlation**
+
+The **spnhppzi** package (**Spatial Non-Homogeneous Poisson Process with Zero Inflation**) is designed for modeling recurrent event data that exhibit **zero inflation and spatial correlation**. It follows a **Bayesian approach**, implementing **hierarchical models** to capture **complex structures** associated with event repetition and spatial dependencies.
 
 Spatial modeling is based on the **Intrinsic Conditional Autoregressive (ICAR) model**, which efficiently incorporates spatial correlation. Additionally, the package provides **both parametric and semiparametric models**, where **Bernstein polynomials** are used for modeling the **baseline intensity function**. This approach enhances the model's flexibility, making it applicable in scenarios where **purely parametric models may struggle to adequately capture data complexity**.
 

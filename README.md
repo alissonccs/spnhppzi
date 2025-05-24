@@ -194,10 +194,60 @@ RESULT <- spnhppzi::fit_spnhppzi(
 
 summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
 ```
+### **Example 3: ZI-NHPP-SE Model for Real Data Application**
 
-## **Contributions and Contact**
+This example illustrates the application of the **Zero-Inflated Non-Homogeneous Poisson Process with Spatial Effects (ZI-NHPP-SE)** model to real criminal recidivism data.
 
-Thank you for your interest in **spnhppzi**! If you encounter any issues or have suggestions, feel free to **open an issue** or contact the author via **alisson.ccs2@gmail.com**.
+The model structure and its implementation are based on the methodology presented in the paper:  
+📄 *“The Analysis of Criminal Recidivism: A Hierarchical Model-Based Approach for the Analysis of Zero-Inflated, Spatially Correlated Recurring Event Data”*, accepted for publication in the **Journal of the Royal Statistical Society: Series A (Statistics in Society)**.
+
+In this example, we consider **criminal recidivism events** across different regions, accounting for **spatial dependence** among areas and **excess zeros** (individuals with no recidivism). The model also includes the individual-level covariate sex, used to assess differences in recidivism between males and females.
+The code below reproduces the **ZI-NHPP-SE** model used in the empirical application section of the article.
+
+```r
+# Load the bodily_injury dataset from the package's extdata directory
+df_bodily_injury <- readRDS(system.file("extdata", "df_bodily_injury.RDS", package = "spnhppzi"))
+
+# Load adjacency matrix from package's extdata directory
+Adj_matrix_aplication <- readRDS(system.file("extdata", "Adj_matrix._aplication.RDS", package = "spnhppzi"))
+
+# Build the formula object
+formula2 <- as.list(Formula(
+  spnhppzi::Recur(time = end,
+                  event = as.numeric(status),
+                  id = id1,
+                  SP_ID = SP_ID,
+                  IndRec = IndRec) ~ sexo1 | -1))
+
+# Fit the model
+RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(
+  formula2,
+  df_bodily_injury,
+  baseline = "plp",
+  rnd_efc = TRUE,
+  ZI = TRUE,
+  approach = "BAYES",
+  sp_model = "ICAR",
+  initial = 1,
+  shp_alpha1 = 0.1, scl_alpha1 = 0.1,
+  shp_alpha2 = 0.1, scl_alpha2 = 0.1,
+  mu_beta = 0, sigma_beta = 4,
+  mu_psi = 0, sigma_psi = 4,
+  mu_omega = 0,
+  spatial = 1,
+  nb_mat = Adj_matrix_aplication,
+  shp_tau = 0.01,
+  scl_tau = 0.01,
+  n_iter = 2000,
+  n_cores = 1,
+  n_chains = 2,
+  W_n = 365
+)
+
+# Extract posterior summaries
+RESULT_BAYES_SCOV1_sp_plp <- RESULT_BAYES_SCOV1
+pars_desc_sp_plp <- summary(RESULT_BAYES_SCOV1_sp_plp, pars = c("alpha", "beta", "pii", "tau", "omega"))
+pars_desc_sp_plp <- pars_desc_sp_plp$summary
 
 
 

@@ -79,7 +79,7 @@
 #' @export
 #'
 #' @examples
-#' # EXAMPLE ----
+#' # EXAMPLE 01 ----
 #' # This example illustrates the simplest case: the NHPP model for recurrent event data
 #'
 #' N <- 500
@@ -139,8 +139,8 @@
 #'
 #' summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 #'
-#' # ADDITIONAL EXAMPLE ----
-#' # This example illustrates the SZINHPP model (Spatial Zero-Inflated NHPP) with spatial correlation
+#' # EXAMPLE 02 ----
+#' # This example illustrates the SZI-NHPP-SE model (Semiparametric Zero-Inflated Non-Homogeneous Poisson Process with Spatial Effects)
 #'
 #' # Load adjacency matrix from package's extdata directory
 #' Adj_matrix <- readRDS(system.file("extdata", "Adj_matrix.RDS", package = "spnhppzi"))
@@ -194,7 +194,7 @@
 #'   baseline = "plp"
 #' )
 #'
-#' # Fitting the SZINHPP model
+#' # Fitting the SZI-NHPP-SE model
 #' formula2 <- as.list(Formula(spnhppzi::Recur(end, status, ID, SP_ID, IndRec) ~ X1 + X2 | -1))
 #'
 #' RESULT <- spnhppzi::fit_spnhppzi(
@@ -222,7 +222,45 @@
 #'   h2_gamma = 4
 #' )
 #'
-#' summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))
+#' summary(RESULT$result_stan, pars = c("alpha", "beta", "pii", "tau"))#'
+#'
+#' #Example 03: ZI-NHPP-SE Model (Real Data Application) ----
+#' #This example applies the Zero-Inflated Non-Homogeneous Poisson Process with Spatial Effects (SZI-NHPP-SE) model to real criminal recidivism data, as presented in the application section of the paper accepted in JRSS-A.
+#' #The model includes spatially structured random effects and handles excess zeros. The covariate sex was used to assess differences in recidivism patterns.
+#'
+#' # Load the bodily_injury dataset from the package's extdata directory
+#' df_bodily_injury <- readRDS(system.file("extdata", "df_bodily_injury.RDS", package = "spnhppzi"))
+#'
+#' # Load adjacency matrix from package's extdata directory
+#' Adj_matrix_aplication <- readRDS(system.file("extdata", "Adj_matrix_aplication.RDS", package = "spnhppzi"))
+#'
+#' # Fitting the SZI-NHPP-SE model
+#' formula2=as.list(Formula(spnhppzi::Recur(time=end,event=as.numeric(status),id=id1,SP_ID=SP_ID,IndRec=IndRec)~sexo1|-1))
+#' RESULT_BAYES_SCOV1<- spnhppzi::fit_spnhppzi(formula2,
+#'                                            df_bodily_injury,
+#'                                            baseline = "plp",
+#'                                            rnd_efc = "TRUE",
+#'                                            ZI="TRUE",
+#'                                            approach = "BAYES",
+#'                                            sp_model = "ICAR",
+#'                                            initial=1,
+#'                                            shp_alpha1=0.1,scl_alpha1=0.1,
+#'                                            shp_alpha2=0.1,scl_alpha2=0.1,
+#'                                            mu_beta=0,sigma_beta=4,
+#'                                            mu_psi=0,sigma_psi=4,
+#'                                            mu_omega=0,
+#'                                            spatial=1,
+#'                                            nb_mat=Adj_matrix_aplication,
+#'                                            shp_tau=0.01,
+#'                                            scl_tau=0.01,
+#'                                            n_iter = 2000,
+#'                                            n_cores=1,
+#'                                            n_chains=2,
+#'                                            W_n=365
+#' )
+#' RESULT_BAYES_SCOV1_sp_plp<-RESULT_BAYES_SCOV1
+#' pars_desc_sp_plp<-summary(RESULT_BAYES_SCOV1_sp_plp, pars = c("alpha","beta","pii","tau"))
+#' pars_desc_sp_plp$summary
 ##########################################################################################################################
 fit_spnhppzi<-function(formula,
                        data,

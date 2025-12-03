@@ -29,7 +29,7 @@ The **spnhppzi** package also includes **functions for simulating recurrent even
 
 This repository contains the functions used to generate the results presented in the following article:
 
-📄 **"The Analysis of Criminal Recidivism: A Hierarchical Model-Based Approach for the Analysis of Zero-Inflated, Spatially Correlated Recurrent Events Data"**, available at [Journal of the Royal Statistical Society - Series A]([https://academic.oup.com/jrsssa/advance-article/doi/10.1093/jrsssa/qnaf061/8152038])).
+📄 **"The Analysis of Criminal Recidivism: A Hierarchical Model-Based Approach for the Analysis of Zero-Inflated, Spatially Correlated Recurrent Events Data"**, available at ([Journal of the Royal Statistical Society - Series A]([https://academic.oup.com/jrsssa/advance-article/doi/10.1093/jrsssa/qnaf061/8152038])).
 
 Additional methodological details can be found in the dissertation:
 

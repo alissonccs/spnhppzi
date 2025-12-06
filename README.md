@@ -108,7 +108,7 @@ RESULT_BAYES_SCOV1 <- spnhppzi::fit_spnhppzi(formula2,
 summary(RESULT_BAYES_SCOV1, pars = c("alpha", "beta"))
 ```
 
-### **Example 2: SZINHPP Model with Spatial Correlation**
+### **Example 2: SZI-NHPP-SE Model with Spatial Correlation**
 ```r
 # ADDITIONAL EXAMPLE ----
 # This example illustrates the SZINHPP model (Spatial Zero-Inflated NHPP) with spatial correlation

@@ -389,6 +389,18 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     #set.seed(NULL)
   }
 
+  ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
+  #' @title gen_data2p
+  #' @aliases gen_data2p
+  #' @export
+  #' @description           Gera os tempos de recorrências dos eventos. HURDLE
+  #' @param ID              Identificador dos indivíduos.
+  #' @param N               Número de indivíduos.
+  #' @param dist_int_func   Forma da função de intensidade.  "Weibull" (Lei de potência)
+  #' @param par_int_func    Parâmetros da função de intensidade. Escala e forma (Lei de potência)
+  #' @param rnd_ef          Vetor de efeitos aleatórios.
+  #' @param x               Matriz de covariávies
+  #' @param recurr          Indicador de recorrência.
 
   gen_data2p<-function(ID,
                        N,

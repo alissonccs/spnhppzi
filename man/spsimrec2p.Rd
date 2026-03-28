@@ -7,11 +7,12 @@
 spsimrec2p(
   N,
   spatial = 0,
-  sp_model = c("car", "sparse", "icar"),
+  sp_model = c("car", "sparse", "icar", "bym2"),
   list_area = NULL,
   SP_N = NULL,
   nb_mat = NULL,
   sp_tau = NULL,
+  sp_phi = NULL,
   sp_alpha = NULL,
   x1,
   cov_rec = NULL,

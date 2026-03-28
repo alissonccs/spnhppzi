@@ -262,11 +262,12 @@ spsimrec<-  function(N,
 
 spsimrec2p<-  function(N,
                        spatial = 0,
-                       sp_model = c("car","sparse","icar"),
+                       sp_model = c("car","sparse","icar","bym2"),
                        list_area=NULL,
                        SP_N=NULL,
                        nb_mat=NULL,
                        sp_tau=NULL,
+                       sp_phi=NULL,
                        sp_alpha=NULL,
                        # beta.x = NULL,
                        # x,
@@ -292,6 +293,7 @@ spsimrec2p<-  function(N,
                        sigma_omega=0,
                        baseline = c("plp","polynom")
 ){
+  # source("/home/alisson/spnhppzi/R/Utils_spsimrec.R")
   ID <- c(1:N)
   dist_z <- tolower(dist_z)
   dist_z <- match.arg(dist_z)
@@ -322,7 +324,8 @@ spsimrec2p<-  function(N,
   sp_model<-switch(sp_model,
                    "car" = 1,
                    "sparse"=2,
-                   "icar" = 3)
+                   "icar" = 3,
+                   "bym2" = 4)
 
   # EFEITOS ALEATÓRIOS  ====
   ### Executa funções para gerar efeitos aleatórios ====
@@ -348,6 +351,9 @@ spsimrec2p<-  function(N,
     if (sp_model==3){ #ICAR
       rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1/sp_tau)
     }
+    if (sp_model==4){#BYM2
+      rnd_ef<-bym2_sp_rnd_ef(nb_mat=nb_mat,sp_tau=sp_tau,sp_phi=sp_phi)
+    }
 
     rnd_ef<-as.data.frame(cbind(as.numeric(row.names(nb_mat)),rnd_ef))
     colnames(rnd_ef)<-c("SP_ID","rnd_ef")
@@ -371,8 +377,7 @@ spsimrec2p<-  function(N,
   pi_zi<-recurr$pi_zi
   #print(pi_zi)
   recurr<-recurr$recurr
-  # print(recurr)
-  # print(prop.table(table(recurr))*100)
+  #print(recurr)
   recurr1<-as.data.frame((cbind(ID,recurr,pi_zi)))
   colnames(recurr1)<-c("ID","recurr","pi_zi")
   recurr_out<-list(recurr=recurr, recurr1=recurr1)
@@ -401,31 +406,26 @@ spsimrec2p<-  function(N,
 
     ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
     ### Executa função ====
-    #######################################################################################################
-    input_gen_data_z<-input_gen_data[input_gen_data$recurr==0,]
-    N_Z<-nrow(input_gen_data_z)
-
-    tab <-gen_data2p(ID=input_gen_data_z$ID,N=N_Z,
-                     dist_int_func=dist_int_func,
-                     par_int_func=par_int_func,
-                     fu=input_gen_data_z$fu,
-                     fu_max =fu_max,
-                     x=as.matrix(input_gen_data_z[,2:(1+nr.cov_rec)]),
-                     # x1=x1,
-                     beta_x_rec=beta_x_rec,
-                     tp_rnd_ef= tp_rnd_ef,
-                     rnd_ef=input_gen_data_z$rnd_ef,
-                     # rnd_ef1=rnd_ef1,
-                     recurr=input_gen_data_z$recurr,
-                     # recurr1 = recurr1,
-                     nr.cov_rec=nr.cov_rec,
-                     baseline=baseline)
+    tab <-gen_data(ID=input_gen_data$ID,N=N,
+                   dist_int_func=dist_int_func,
+                   par_int_func=par_int_func,
+                   fu=input_gen_data$fu,
+                   fu_max =fu_max,
+                   x=as.matrix(input_gen_data[,2:(1+nr.cov_rec)]),
+                   # x1=x1,
+                   beta_x_rec=beta_x_rec,
+                   tp_rnd_ef= tp_rnd_ef,
+                   rnd_ef=input_gen_data$rnd_ef,
+                   # rnd_ef1=rnd_ef1,
+                   recurr=input_gen_data$recurr,
+                   # recurr1 = recurr1,
+                   nr.cov_rec=nr.cov_rec,
+                   baseline=baseline)
   }
   #tab <-gen_data(ID, N, dist_int_func, par_int_func, fu, x,rnd_ef)
   # print(head(tab))
-  base<-input_gen_data %>%
-    left_join(tab,by="ID")
-  #######################################################################################################
+  base<-tab %>%
+    left_join(input_gen_data,by="ID")
 
   return(base)
 

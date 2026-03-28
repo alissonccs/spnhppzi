@@ -89,7 +89,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   #' @param nb_mat     Matriz de vizinhança.
   #' @param sig        Parâmetro desvio padrão dos efeitos aleatórios.
 
-  icar_sp_rnd_ef <- function(nb_mat,sig=1){
+  icar_sp_rnd_ef <- function(nb_mat,sig){
     print("ICAR")
     # print(head(nb_mat))
     num <- rowSums(nb_mat)
@@ -108,7 +108,33 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     return(as.vector(rnd_ef))
   }
 
+  bym2_sp_rnd_ef <- function(nb_mat,sp_tau,sp_phi){
+    print("BYM2")
+    sigma_b  <- 1 / sqrt(sp_tau) # Marginal standard deviation
+    n_areas  <- nrow(Adj_matrix)
 
+    # 2. Construct the precision matrix (Q)
+    nn <- rowSums(Adj_matrix)
+    Q  <- Diagonal(n = n_areas, x = nn) - Adj_matrix
+
+    # 3. Scale the ICAR precision matrix
+    # Adding a small constant (1e-5) to the diagonal ensures numerical stability
+    sconstr  <- list(A = matrix(1, 1, nrow(Q)), e = 0) # Sum-to-zero constraint
+    Q_scaled <- inla.scale.model(Q = Q + Diagonal(nrow(Q)) * 1e-5, constr = sconstr)
+
+    # 4. Sample the structured (ICAR) component
+    # Using a precision of 1 because scaling is handled by sigma_b later
+    set.seed(123)
+    u_s <- inla.qsample(n = 1, Q = Q_scaled, constr = sconstr)
+    u_s <- as.numeric(u_s)
+
+    # 5. Sample the unstructured (IID) component
+    v_s <- rnorm(n_areas, mean = 0, sd = 1)
+
+    # 6. Combine to form the BYM2 spatial field
+    rnd_ef <- sigma_b * (sqrt(phi_r) * u_s + sqrt(1 - phi_r) * v_s)
+    return(as.vector(rnd_ef))
+  }
 
 
 

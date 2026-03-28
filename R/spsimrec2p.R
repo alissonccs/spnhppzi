@@ -47,11 +47,12 @@
 # SIMRECEV - SIMULAÇÃO DE EVENTOS RECORRENTES ====
 spsimrec<-  function(N,
                      spatial = 0,
-                     sp_model = c("car","sparse","icar"),
+                     sp_model = c("car","sparse","icar","bym2"),
                      list_area=NULL,
                      SP_N=NULL,
                      nb_mat=NULL,
                      sp_tau=NULL,
+                     sp_phi=NULL,
                      sp_alpha=NULL,
                      # beta.x = NULL,
                      # x,
@@ -108,7 +109,8 @@ spsimrec<-  function(N,
   sp_model<-switch(sp_model,
                    "car" = 1,
                    "sparse"=2,
-                   "icar" = 3)
+                   "icar" = 3,
+                   "bym2" = 4)
 
   # EFEITOS ALEATÓRIOS  ====
   ### Executa funções para gerar efeitos aleatórios ====
@@ -134,6 +136,9 @@ spsimrec<-  function(N,
     if (sp_model==3){ #ICAR
       rnd_ef<-icar_sp_rnd_ef(nb_mat,sig=1/sp_tau)
     }
+    if (sp_model==4){#BYM2
+      rnd_ef<-bym2_sp_rnd_ef(nb_mat=nb_mat,sp_tau=sp_tau,sp_phi=sp_phi)
+      }
 
     rnd_ef<-as.data.frame(cbind(as.numeric(row.names(nb_mat)),rnd_ef))
     colnames(rnd_ef)<-c("SP_ID","rnd_ef")

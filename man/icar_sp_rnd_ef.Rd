@@ -4,7 +4,7 @@
 \alias{icar_sp_rnd_ef}
 \title{icar_sp_rnd_ef}
 \usage{
-icar_sp_rnd_ef(nb_mat, sig = 1)
+icar_sp_rnd_ef(nb_mat, sig)
 }
 \arguments{
 \item{nb_mat}{Matriz de vizinhança.}

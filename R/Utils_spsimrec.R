@@ -108,14 +108,23 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     return(as.vector(rnd_ef))
   }
 
+  ##### ICAR ====
+  #' @title  bym2_sp_rnd_ef
+  #' @aliases  bym2_sp_rnd_ef
+  #' @export
+  #' @description      Gera efeitos aleatórios espaciais utilizando a estrutura do modelo BYM2.
+  #' @param nb_mat     Matriz de vizinhança.
+  #' @param sp_tau     Marginal precision of the spatial effect
+  #' @param sp_phi     Proportion of spatial variance (structured vs unstructured)
+
   bym2_sp_rnd_ef <- function(nb_mat,sp_tau,sp_phi){
     print("BYM2")
     sigma_b  <- 1 / sqrt(sp_tau) # Marginal standard deviation
-    n_areas  <- nrow(Adj_matrix)
+    n_areas  <- nrow(nb_mat)
 
     # 2. Construct the precision matrix (Q)
-    nn <- rowSums(Adj_matrix)
-    Q  <- Diagonal(n = n_areas, x = nn) - Adj_matrix
+    nn <- rowSums(nb_mat)
+    Q  <- Diagonal(n = n_areas, x = nn) - nb_mat
 
     # 3. Scale the ICAR precision matrix
     # Adding a small constant (1e-5) to the diagonal ensures numerical stability
@@ -132,7 +141,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     v_s <- rnorm(n_areas, mean = 0, sd = 1)
 
     # 6. Combine to form the BYM2 spatial field
-    rnd_ef <- sigma_b * (sqrt(phi_r) * u_s + sqrt(1 - phi_r) * v_s)
+    rnd_ef <- sigma_b * (sqrt(sp_phi) * u_s + sqrt(1 - sp_phi) * v_s)
     return(as.vector(rnd_ef))
   }
 

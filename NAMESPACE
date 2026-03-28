@@ -2,6 +2,7 @@
 
 export(CAR.simWmat)
 export(Recur)
+export(bym2_sp_rnd_ef)
 export(car_sp_rnd_ef)
 export(fit_spnhppzi)
 export(gen_data)

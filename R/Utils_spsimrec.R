@@ -133,7 +133,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
     # 4. Sample the structured (ICAR) component
     # Using a precision of 1 because scaling is handled by sigma_b later
-    set.seed(123)
+    # set.seed(123)
     u_s <- inla.qsample(n = 1, Q = Q_scaled, constr = sconstr)
     u_s <- as.numeric(u_s)
 

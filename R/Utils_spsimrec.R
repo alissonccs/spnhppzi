@@ -424,7 +424,8 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     #set.seed(NULL)
   }
 
-  #' ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====  @title gen_data2p
+  #' ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
+  #' @title gen_data2p
   #' @aliases gen_data2p
   #' @export
   #' @description           Gera os tempos de recorrências dos eventos. HURDLE
@@ -435,22 +436,139 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
   #' @param rnd_ef          Vetor de efeitos aleatórios.
   #' @param x               Matriz de covariávies
   #' @param recurr          Indicador de recorrência.
+  # gen_data2p<-function(ID,
+  #                    N,
+  #                    dist_int_func,
+  #                    par_int_func,
+  #                    fu,
+  #                    fu_max,
+  #                    x,
+  #                    # x1,
+  #                    beta_x_rec,
+  #                    tp_rnd_ef,
+  #                    rnd_ef,
+  #                    # rnd_ef1,
+  #                    recurr,
+  #                    # recurr1,
+  #                    nr.cov_rec,
+  #                    baseline){
+  #
+  #   if (dist_int_func == "weibull") { # weibull
+  #     alpha1 <- par_int_func[1]
+  #     alpha2 <- par_int_func[2]
+  #   }
+  #
+  #   ## Cálculo de alpha1_este e exp_eta ====
+  #   # Considera a forma utilizada para introdução de efeitos aleatórios
+  #   if(nr.cov_rec==0){exp_eta=rep(1,N)}
+  #   else if(tp_rnd_ef==0){#{Y_i(t) * \lambda_0(t)* Z_i *exp(\beta^t X_i)}
+  #     exp_eta <- exp(x %*% beta_x_rec) * rnd_ef
+  #   }else{#{Y_i(t) * \lambda_0(t)*exp(\beta^t X_i+\omega_i)}
+  #     exp_eta <- exp(x %*% beta_x_rec + rnd_ef)
+  #   }
+  #   if (baseline==1){
+  #     alpha1_eta <- alpha1*exp_eta
+  #   }
+  #   # print(paste("alpha1_eta: ", dim(alpha1_eta)))
+  #   # print(paste("exp_eta: ", dim(exp_eta)))
+  #   # print(paste("N: ", N))
+  #   #print(alpha2)
+  #
+  #   ## Definição dos tempos de ocorrência dos primeiros eventos ====
+  #
+  #   T<-NULL
+  #   T1<-NULL
+  #   # print(paste("T: ", dim(T)))
+  #   # print(paste("T1: ", dim(T1)))
+  #   # IND<-NULL
+  #   for (i in 1:N) {
+  #     # print(i)
+  #     t<-NULL
+  #     if(recurr[i]==1){
+  #       t<-fu[i]
+  #       T1 <- cbind(ID[i],t)
+  #     }else{
+  #     #print(t)
+  #     # U <- runif(1)
+  #     if (dist_int_func == "weibull") {
+  #       if (baseline == 1) {
+  #
+  #         repeat {
+  #           U <- runif(1)
+  #           t_new <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2)
+  #
+  #           if (t_new < fu[i]) break
+  #         }
+  #
+  #         t <- t_new
+  #       }
+  #     }
+  #     T1 <- cbind(ID[i],t)
+  #
+  #     ## Definição dos tempos de ocorrência dos eventos subsequentes ====
+  #     if (t<fu[i]){
+  #       # print(ID[i])
+  #       # print(recurr[i])
+  #       while (t < fu[i]) {
+  #         U <- runif(1)
+  #         t1 <- t
+  #         if (dist_int_func == "weibull") { # weibull
+  #           if(baseline==1){
+  #             t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
+  #           }
+  #         }
+  #         #print(t)
+  #         if (t >= fu[i]) break
+  #         T1 <- rbind(T1,c(ID[i],t))
+  #         # print(T1)
+  #       }
+  #     }}
+  #     T<-as.data.frame(rbind(T,T1))
+  #     # print(T)
+  #   }
+  #   colnames(T)<-c("ID","time")
+  #   # print(paste("T: ", dim(T)))
+  #
+  #   ## Consolida tabela contendo os dados de saída ====
+  #   tab <-T %>%
+  #     group_by(ID)%>%
+  #     mutate(#individuo = group_indices(),
+  #       ngroup=n(),
+  #       rep=row_number(),
+  #       expand=case_when((ngroup==rep & !(rep==1&(time==0 | time==fu_max)))~2,TRUE~1),
+  #       expand1=expand)%>%
+  #     expandRows("expand") %>%
+  #     mutate(ngroup1=n(),
+  #            IndRec=case_when(ngroup1>1~1, TRUE~0),
+  #            rep1=row_number(),
+  #            begin=case_when(rep1==1~0,TRUE~lag(time)),
+  #            end=case_when(ngroup1==rep1~fu_max, TRUE~time),
+  #            status=case_when(end==fu_max~0,TRUE~1)) %>%
+  #     ungroup() %>%
+  #     # left_join(x1,by="ID") %>%
+  #     # left_join(rnd_ef1,by="ID") %>%
+  #     # left_join(recurr1,by="ID") %>%
+  #     dplyr::select(-c(time,ngroup))
+  #   return(tab)
+  #   #set.seed(NULL)
+  # }
+
   gen_data2p<-function(ID,
-                     N,
-                     dist_int_func,
-                     par_int_func,
-                     fu,
-                     fu_max,
-                     x,
-                     # x1,
-                     beta_x_rec,
-                     tp_rnd_ef,
-                     rnd_ef,
-                     # rnd_ef1,
-                     recurr,
-                     # recurr1,
-                     nr.cov_rec,
-                     baseline){
+                       N,
+                       dist_int_func,
+                       par_int_func,
+                       fu,
+                       fu_max,
+                       x,
+                       # x1,
+                       beta_x_rec,
+                       tp_rnd_ef,
+                       rnd_ef,
+                       # rnd_ef1,
+                       recurr,
+                       # recurr1,
+                       nr.cov_rec,
+                       baseline){
 
     if (dist_int_func == "weibull") { # weibull
       alpha1 <- par_int_func[1]
@@ -475,58 +593,60 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
     ## Definição dos tempos de ocorrência dos primeiros eventos ====
 
-    T<-NULL
-    T1<-NULL
-    # print(paste("T: ", dim(T)))
-    # print(paste("T1: ", dim(T1)))
-    # IND<-NULL
+    T <- NULL
+
     for (i in 1:N) {
-      # print(i)
-      t<-NULL
-      if(recurr[i]==1){
-        t<-fu[i]
-        T1 <- cbind(ID[i],t)
-      }else{
-      #print(t)
-      # U <- runif(1)
-      if (dist_int_func == "weibull") {
-        if (baseline == 1) {
 
-          repeat {
-            U <- runif(1)
-            t_new <- ((-1)*log(U)*(alpha1_eta[i])^(-1))^(1 / alpha2)
+      T1 <- NULL
+      t  <- NULL
 
-            if (t_new < fu[i]) break
-          }
+      if (recurr[i] == 1) {
+
+        # indivíduo sem eventos observados até o follow-up
+        t  <- fu[i]
+        T1 <- data.frame(ID = ID[i], time = t)
+
+      } else {
+
+        # primeiro tempo
+        if (dist_int_func == "weibull" && baseline == 1) {
+
+          # repeat {
+          U <- runif(1)
+          t_new <- ((-1) * log(U) * (alpha1_eta[i])^(-1))^(1 / alpha2)
+
+          if (t_new>fu[i]){
+            t_new<-fu[i]}
+
+          # if (t_new < fu[i]) break
+          # }
 
           t <- t_new
         }
-      }
-      T1 <- cbind(ID[i],t)
 
-      ## Definição dos tempos de ocorrência dos eventos subsequentes ====
-      if (t<fu[i]){
-        # print(ID[i])
-        # print(recurr[i])
+        T1 <- data.frame(ID = ID[i], time = t)
+
+        # tempos subsequentes
         while (t < fu[i]) {
-          U <- runif(1)
+
+          U  <- runif(1)
           t1 <- t
-          if (dist_int_func == "weibull") { # weibull
-            if(baseline==1){
-              t <- ((-1)*log(U)*(alpha1_eta[i])^(-1) + (t1)^(alpha2))^(1 / alpha2)
-            }
+
+          if (dist_int_func == "weibull" && baseline == 1) {
+            t <- ((-1) * log(U) * (alpha1_eta[i])^(-1) + t1^(alpha2))^(1 / alpha2)
           }
-          #print(t)
+
           if (t >= fu[i]) break
-          T1 <- rbind(T1,c(ID[i],t))
-          # print(T1)
+
+          T1 <- rbind(T1, data.frame(ID = ID[i], time = t))
         }
-      }}
-      T<-as.data.frame(rbind(T,T1))
-      # print(T)
+      }
+
+      T <- rbind(T, T1)
     }
-    colnames(T)<-c("ID","time")
-    # print(paste("T: ", dim(T)))
+
+    T <- as.data.frame(T)
+    colnames(T) <- c("ID", "time")
 
     ## Consolida tabela contendo os dados de saída ====
     tab <-T %>%
@@ -551,6 +671,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     return(tab)
     #set.seed(NULL)
   }
+
 
 
   ## TEMPO DE OCORRÊNCIA DOS PRIMIEROS EVENTOS - FUNC INTENSIDADE POLINOMIAL ====

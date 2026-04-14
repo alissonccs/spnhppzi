@@ -2,8 +2,7 @@
 % Please edit documentation in R/Utils_spsimrec.R
 \name{gen_data2p}
 \alias{gen_data2p}
-\title{\subsection{TEMPO DE OCORRÊNCIA DOS EVENTOS ====  @title gen_data2p}{
-}}
+\title{gen_data2p}
 \usage{
 gen_data2p(
   ID,
@@ -39,4 +38,8 @@ gen_data2p(
 \description{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{      Gera os tempos de recorrências dos eventos. HURDLE
 }\if{html}{\out{</div>}}
+}
+\details{
+\subsection{TEMPO DE OCORRÊNCIA DOS EVENTOS ====}{
+}
 }

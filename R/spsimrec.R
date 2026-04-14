@@ -577,7 +577,7 @@ spsimrec2p<-  function(N,
 
     ## TEMPO DE OCORRÊNCIA DOS EVENTOS ====
     ### Executa função ====
-    tab <-gen_data3p(ID=input_gen_data$ID,N=N,
+    tab <-gen_data2p(ID=input_gen_data$ID,N=N,
                      dist_int_func=dist_int_func,
                      par_int_func=par_int_func,
                      fu=input_gen_data$fu,

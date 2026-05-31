@@ -757,7 +757,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
 
           if (t >= fu[i]) break
 
-          T1 <- rbind(T1, data.frame(ID = ID[i], time = t), fu=fu[i])
+          T1 <- rbind(T1, data.frame(ID = ID[i], time = t,  fu=fu[i]))
         }
       }
 
@@ -765,7 +765,7 @@ CAR.simWmat <- function(sp_tau, sp_alpha, nb_mat){
     }
 
     T <- as.data.frame(T)
-    colnames(T) <- c("ID", "time")
+    colnames(T) <- c("ID", "time","fu")
 
     ## Consolida tabela contendo os dados de saída ====
     tab <-T %>%
